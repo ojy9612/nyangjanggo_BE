@@ -1,7 +1,7 @@
-REPOSITORY=/home/ubuntu/hanghae99Homework02
+REPOSITORY=/home/ubuntu/hanghae99_team3
 cd $REPOSITORY
 
-APP_NAME=hanghae99Homework02 #1
+APP_NAME=hanghae99_team3 #1
 JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep 'SNAPSHOT.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
