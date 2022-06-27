@@ -2,12 +2,16 @@ package com.hanghae99_team3.model.board;
 
 
 import com.hanghae99_team3.model.Timestamped;
+import com.hanghae99_team3.model.comment.Comment;
+import com.hanghae99_team3.model.good.Good;
 import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -25,6 +29,22 @@ public class Board extends Timestamped {
 
     private String imgLink;
     private String imgKey;
+
+    @OneToMany(mappedBy = "boards", fetch = FetchType.LAZY, orphanRemoval = true)
+    private final List<Comment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "boards", fetch = FetchType.LAZY, orphanRemoval = true)
+    private final List<Good> goodList = new ArrayList<>();
+
+    public void addComment(Comment comment) {
+        comment.setBoard(this);
+        this.commentList.add(comment);
+    }
+
+    public void addGood(Good good) {
+        good.setBoard(this);
+        this.goodList.add(good);
+    }
 
     @Builder
     public Board(@NotNull String title, @NotNull String content, String imgLink, String imgKey) {
