@@ -1,6 +1,7 @@
 package com.hanghae99_team3.exception;
 
 import com.hanghae99_team3.exception.newException.IdDuplicateException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -24,7 +25,7 @@ public class ApiException extends RuntimeException{
         Map<String, String> errors = new HashMap<>();
         errors.put("IdDuplicateException",e.getMessage());
 
-        return ResponseEntity.badRequest().body(errors);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errors);
     }
 
 }
