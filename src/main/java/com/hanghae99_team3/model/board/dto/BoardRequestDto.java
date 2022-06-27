@@ -1,15 +1,18 @@
-package com.hanghae99_team3.model.board;
+package com.hanghae99_team3.model.board.dto;
 
 
 import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class BoardRequestDto {
 
+    private Long userId;
     private String title;
     private String content;
     private String imgLink;
