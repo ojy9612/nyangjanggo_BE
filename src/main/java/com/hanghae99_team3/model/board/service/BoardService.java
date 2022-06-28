@@ -4,8 +4,8 @@ package com.hanghae99_team3.model.board.service;
 import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.dto.BoardRequestDto;
 import com.hanghae99_team3.model.board.repository.BoardRepository;
-import com.hanghae99_team3.model.member.domain.Member;
-import com.hanghae99_team3.model.member.repository.UserRepository;
+import com.hanghae99_team3.model.member.UserRepository;
+import com.hanghae99_team3.model.member.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -36,13 +36,13 @@ public class BoardService {
 
     }
     @Transactional
-    public Board createBoard(@RequestBody BoardRequestDto boardRequestDto, Member memberDetails){
-        boardRequestDto.setUserId(memberDetails.getId());
-        Member longinMember = userRepository.findById(boardRequestDto.getUserId()).orElseThrow(
+    public Board createBoard(@RequestBody BoardRequestDto boardRequestDto, User userDetails){
+        boardRequestDto.setUserId(userDetails.getId());
+        User longinUser = userRepository.findById(boardRequestDto.getUserId()).orElseThrow(
                 ()-> new IllegalArgumentException("현재 로그인 되어 있지 않습니다")
         );
         Board board = Board.builder()
-                .member(longinMember)
+                .user(longinUser)
                 .title(boardRequestDto.getTitle())
                 .content(boardRequestDto.getContent())
                 .imgLink(boardRequestDto.getImgLink())
@@ -54,7 +54,7 @@ public class BoardService {
     }
 
     @Transactional
-    public Board updateBoard(BoardRequestDto boardRequestDto, Member member, Long boardId) {
+    public Board updateBoard(BoardRequestDto boardRequestDto, User user, Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException("생성된 게시글이 없습니다.")
         );
@@ -64,7 +64,7 @@ public class BoardService {
 
 
     @Transactional
-    public void deleteBoard(Member member, Long boardId) {
+    public void deleteBoard(User user, Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 ()-> new IllegalArgumentException("생성된 게시글이 없습니다.")
         );

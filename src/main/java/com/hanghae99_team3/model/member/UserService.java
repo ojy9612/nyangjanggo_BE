@@ -16,7 +16,7 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 @Service
-public class MemberService {
+public class UserService {
     // Test용
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;

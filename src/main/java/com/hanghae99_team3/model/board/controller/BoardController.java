@@ -5,7 +5,7 @@ import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.dto.BoardRequestDto;
 import com.hanghae99_team3.model.board.dto.BoardResponseDto;
 import com.hanghae99_team3.model.board.service.BoardService;
-import com.hanghae99_team3.model.member.domain.Member;
+import com.hanghae99_team3.model.member.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +23,7 @@ public class BoardController {
 
     @GetMapping("/api/boards/{boardId}")
     public BoardResponseDto getOneBoard(@PathVariable Long boardId) {
-        return new BoardResponseDto(
-                boardService.getOneBoard(boardId)
-        );
+        return new BoardResponseDto(boardService.getOneBoard(boardId));
     }
 
     @GetMapping("/api/boards")
@@ -41,26 +39,19 @@ public class BoardController {
 
 
     @PostMapping("/api/board")
-    public BoardResponseDto createBoard(@RequestBody BoardRequestDto boardRequestDto, @AuthenticationPrincipal Member member) {
-
-
-        return new BoardResponseDto(
-                boardService.createBoard(boardRequestDto, member)
-        );
+    public BoardResponseDto createBoard(@RequestBody BoardRequestDto boardRequestDto, @AuthenticationPrincipal User user) {
+        return new BoardResponseDto(boardService.createBoard(boardRequestDto, user));
 
     }
 
     @PutMapping("/api/board/{boardId}")
-    public BoardResponseDto updateBoard(@RequestBody BoardRequestDto boardRequestDto, @AuthenticationPrincipal Member member, @PathVariable Long boardId) {
-
-        return new BoardResponseDto(
-                boardService.updateBoard(boardRequestDto, member, boardId)
-        );
+    public BoardResponseDto updateBoard(@RequestBody BoardRequestDto boardRequestDto, @AuthenticationPrincipal User user, @PathVariable Long boardId) {
+        return new BoardResponseDto(boardService.updateBoard(boardRequestDto, user, boardId));
     }
 
     @DeleteMapping("/api/board/{boardId}")
-    public void deleteBoard(@AuthenticationPrincipal Member member, @PathVariable Long boardId) {
-        boardService.deleteBoard(member, boardId);
+    public void deleteBoard(@AuthenticationPrincipal User user, @PathVariable Long boardId) {
+        boardService.deleteBoard(user, boardId);
 
     }
 }

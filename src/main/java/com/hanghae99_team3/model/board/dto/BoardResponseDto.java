@@ -26,7 +26,7 @@ public class BoardResponseDto {
 
     public BoardResponseDto(Board board) {
         this.boardId = board.getId();
-        this.userName = board.getMember().getUsername();
+        this.userName = board.getUser().getUsername();
         this.title = board.getTitle();
         this.content = board.getContent();
         this.imgLink = board.getImgLink();

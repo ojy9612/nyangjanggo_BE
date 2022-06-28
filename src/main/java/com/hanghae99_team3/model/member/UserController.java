@@ -14,14 +14,15 @@ import java.util.Map;
 
 
 @RestController
-public class MemberController {
+public class UserController {
 
     //Test
-    private final MemberService memberService;
+    private final UserService userService;
 
     @Autowired
-    public MemberController(MemberService memberService) {
-        this.memberService = memberService;
+    public UserController(UserService userService) {
+
+        this.userService = userService;
     }
 
 
@@ -35,12 +36,12 @@ public class MemberController {
 
     @PostMapping("/join")
     public Long join(@RequestBody SignupMemberDto signupMemberDto) {
-        return memberService.join(signupMemberDto);
+        return userService.join(signupMemberDto);
     }
 
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody LoginMemberDto loginMemberDto) {
-        return memberService.login(loginMemberDto);
+        return userService.login(loginMemberDto);
     }
 
     @PostMapping("/member/memberInfo")
