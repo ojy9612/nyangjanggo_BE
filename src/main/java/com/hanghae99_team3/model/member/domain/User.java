@@ -1,0 +1,134 @@
+package com.hanghae99_team3.model.member.domain;
+
+import com.sun.istack.NotNull;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
+
+@Getter
+@Entity
+@NoArgsConstructor
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "MEMBER_ID", nullable = false)
+    private Long id;
+
+//    @Column(unique = true, nullable = false)
+//    private String oAuth2Id;
+
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @Setter
+    private String password;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    @Column
+    private String userImg;
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRole role;
+
+    @org.jetbrains.annotations.NotNull
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
+
+    @Column
+    private String providerId;
+
+
+    @Builder(builderClassName = "UserDetailRegister", builderMethodName = "userDetailRegister")
+    public User(String username, String password, String email, UserRole role) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+    }
+
+    @Builder(builderClassName = "OAuth2Register", builderMethodName = "oauth2Register")
+    public User(String username, String password, String email, String userImg, UserRole role, AuthProvider provider, String providerId) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.userImg = userImg;
+        this.role = role;
+        this.authProvider = provider;
+        this.providerId = providerId;
+    }
+
+    public User update(String username, String userImg) {
+        this.username = username;
+        this.userImg = userImg;
+        return this;
+    }
+
+    public User(@NotNull String username) {
+        this.username = username;
+        this.role = UserRole.USER;
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", userImg='" + userImg + '\'' +
+                ", role=" + role +
+                ", authProvider=" + authProvider +
+                ", providerId='" + providerId + '\'' +
+                '}';
+    }
+    //
+//    /**
+//     *UserDetails Methods
+//     */
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        UserRole role = this.role;
+//        String authority = role.getAuthority();
+//
+//        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);
+//        Collection<GrantedAuthority> authorities = new ArrayList<>();
+//        authorities.add(simpleGrantedAuthority);
+//        return authorities;
+//    }
+//
+//    @Override
+//    public String getPassword() {
+//        return null;
+//    }
+//
+//    @Override
+//    public String getUsername() {
+//        return username;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonLocked() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isCredentialsNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isEnabled() {
+//        return true;
+//    }
+}
