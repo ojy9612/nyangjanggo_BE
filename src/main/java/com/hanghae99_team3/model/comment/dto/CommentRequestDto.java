@@ -1,9 +1,9 @@
-package com.hanghae99_team3.model.comment;
+package com.hanghae99_team3.model.comment.dto;
 
-import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 @NoArgsConstructor
 @Getter

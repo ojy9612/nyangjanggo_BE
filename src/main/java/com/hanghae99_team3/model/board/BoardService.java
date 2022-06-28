@@ -1,9 +1,7 @@
-package com.hanghae99_team3.model.board.service;
+package com.hanghae99_team3.model.board;
 
 
-import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.dto.BoardRequestDto;
-import com.hanghae99_team3.model.board.repository.BoardRepository;
 import com.hanghae99_team3.model.member.UserRepository;
 import com.hanghae99_team3.model.member.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +48,6 @@ public class BoardService {
                 .build();
 
         return boardRepository.save(board);
-
     }
 
     @Transactional

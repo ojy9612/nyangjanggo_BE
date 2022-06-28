@@ -1,7 +1,7 @@
 package com.hanghae99_team3.model.board.dto;
 
 
-import com.hanghae99_team3.model.board.domain.Board;
+import com.hanghae99_team3.model.board.Board;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
