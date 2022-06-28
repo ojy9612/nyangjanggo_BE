@@ -5,7 +5,7 @@ import com.hanghae99_team3.model.Timestamped;
 import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.good.Good;
 import com.hanghae99_team3.model.board.dto.BoardRequestDto;
-import com.hanghae99_team3.model.member.domain.Member;
+import com.hanghae99_team3.model.member.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,16 +26,20 @@ public class Board extends Timestamped {
     @Column(name = "BOARD_ID", nullable = false)
     private  Long id;
 
+    @Column
     private String title;
 
+    @Column
     private String content;
 
+    @Column
     private String imgLink;
+    @Column
     private String imgKey;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", nullable = false)
-    private Member member;
+    private User user;
 
     @OneToMany(mappedBy = "boards", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<Comment> commentList = new ArrayList<>();
@@ -43,19 +47,19 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "boards", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<Good> goodList = new ArrayList<>();
 
-//    public void addComment(Comment comment) {
-//        comment.setBoard(this);
-//        this.commentList.add(comment);
-//    }
-//
-//    public void addGood(Good good) {
-//        good.setBoard(this);
-//        this.goodList.add(good);
-//    }
+    public void addComment(Comment comment) {
+        comment.setBoard(this);
+        this.commentList.add(comment);
+    }
+
+    public void addGood(Good good) {
+        good.setBoard(this);
+        this.goodList.add(good);
+    }
 
     @Builder
-    public Board(@NotNull Member member, @NotNull String title, @NotNull String content, String imgLink, String imgKey) {
-        this.member = member;
+    public Board(@NotNull User user, @NotNull String title, @NotNull String content, String imgLink, String imgKey) {
+        this.user = user;
         this.title = title;
         this.content = content;
         this.imgLink = imgLink;
