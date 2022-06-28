@@ -1,6 +1,6 @@
 package com.hanghae99_team3.security.oauth2;
 
-import com.hanghae99_team3.model.member.dto.UserDto;
+import com.hanghae99_team3.model.user.dto.UserDto;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 

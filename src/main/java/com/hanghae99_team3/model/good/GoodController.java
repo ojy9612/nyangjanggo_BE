@@ -1,6 +1,6 @@
 package com.hanghae99_team3.model.good;
 
-import com.hanghae99_team3.model.member.domain.User;
+import com.hanghae99_team3.model.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

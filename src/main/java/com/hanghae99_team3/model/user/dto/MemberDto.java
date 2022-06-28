@@ -1,4 +1,4 @@
-package com.hanghae99_team3.model.member.dto;
+package com.hanghae99_team3.model.user.dto;
 
 
 import lombok.Builder;

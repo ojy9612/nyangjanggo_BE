@@ -1,9 +1,8 @@
-package com.hanghae99_team3.model.member.dto;
+package com.hanghae99_team3.model.user.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Getter
 @NoArgsConstructor

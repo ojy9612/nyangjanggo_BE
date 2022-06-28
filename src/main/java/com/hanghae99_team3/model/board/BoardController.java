@@ -3,7 +3,7 @@ package com.hanghae99_team3.model.board;
 
 import com.hanghae99_team3.model.board.dto.BoardRequestDto;
 import com.hanghae99_team3.model.board.dto.BoardResponseDto;
-import com.hanghae99_team3.model.member.domain.User;
+import com.hanghae99_team3.model.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

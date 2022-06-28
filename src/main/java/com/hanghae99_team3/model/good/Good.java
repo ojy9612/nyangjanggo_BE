@@ -2,7 +2,7 @@ package com.hanghae99_team3.model.good;
 
 import com.hanghae99_team3.model.TimestampedOnlyCreated;
 import com.hanghae99_team3.model.board.Board;
-import com.hanghae99_team3.model.member.domain.User;
+import com.hanghae99_team3.model.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

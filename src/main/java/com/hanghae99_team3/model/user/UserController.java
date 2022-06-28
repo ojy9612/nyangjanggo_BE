@@ -1,9 +1,9 @@
-package com.hanghae99_team3.model.member;
+package com.hanghae99_team3.model.user;
 
-import com.hanghae99_team3.model.member.domain.UserRole;
-import com.hanghae99_team3.model.member.dto.LoginMemberDto;
-import com.hanghae99_team3.model.member.dto.SignupMemberDto;
-import com.hanghae99_team3.model.member.dto.UserInfoDto;
+import com.hanghae99_team3.model.user.domain.UserRole;
+import com.hanghae99_team3.model.user.dto.LoginMemberDto;
+import com.hanghae99_team3.model.user.dto.SignupMemberDto;
+import com.hanghae99_team3.model.user.dto.UserInfoDto;
 import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

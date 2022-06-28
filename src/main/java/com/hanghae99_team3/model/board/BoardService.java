@@ -2,8 +2,8 @@ package com.hanghae99_team3.model.board;
 
 
 import com.hanghae99_team3.model.board.dto.BoardRequestDto;
-import com.hanghae99_team3.model.member.UserRepository;
-import com.hanghae99_team3.model.member.domain.User;
+import com.hanghae99_team3.model.user.UserRepository;
+import com.hanghae99_team3.model.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;

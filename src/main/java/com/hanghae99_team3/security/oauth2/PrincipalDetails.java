@@ -1,6 +1,6 @@
 package com.hanghae99_team3.security.oauth2;
 
-import com.hanghae99_team3.model.member.domain.User;
+import com.hanghae99_team3.model.user.domain.User;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;

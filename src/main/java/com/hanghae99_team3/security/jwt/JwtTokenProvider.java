@@ -1,6 +1,6 @@
 package com.hanghae99_team3.security.jwt;
 
-import com.hanghae99_team3.model.member.domain.UserRole;
+import com.hanghae99_team3.model.user.domain.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;

@@ -2,7 +2,7 @@ package com.hanghae99_team3.model.comment;
 
 import com.hanghae99_team3.model.comment.dto.CommentRequestDto;
 import com.hanghae99_team3.model.comment.dto.CommentResponseDto;
-import com.hanghae99_team3.model.member.domain.User;
+import com.hanghae99_team3.model.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

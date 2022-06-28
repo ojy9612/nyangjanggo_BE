@@ -4,8 +4,8 @@ import com.hanghae99_team3.exception.newException.IdDuplicateException;
 import com.hanghae99_team3.model.board.Board;
 import com.hanghae99_team3.model.board.BoardRepository;
 import com.hanghae99_team3.model.comment.dto.CommentRequestDto;
-import com.hanghae99_team3.model.member.UserRepository;
-import com.hanghae99_team3.model.member.domain.User;
+import com.hanghae99_team3.model.user.UserRepository;
+import com.hanghae99_team3.model.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
