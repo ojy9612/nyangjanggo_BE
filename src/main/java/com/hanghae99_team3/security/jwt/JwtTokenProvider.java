@@ -1,6 +1,5 @@
 package com.hanghae99_team3.security.jwt;
 
-import com.hanghae99_team3.model.member.domain.Member;
 import com.hanghae99_team3.model.member.domain.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -54,6 +53,7 @@ public class JwtTokenProvider {
 
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
+
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
