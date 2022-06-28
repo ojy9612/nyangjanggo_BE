@@ -15,7 +15,6 @@ import java.util.List;
 
 @Getter
 @Entity
-@Table(name = "boards")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board extends Timestamped {
 
@@ -39,10 +38,10 @@ public class Board extends Timestamped {
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "boards", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<Comment> commentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "boards", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<Good> goodList = new ArrayList<>();
 
     public void addComment(Comment comment) {

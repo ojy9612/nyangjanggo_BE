@@ -22,8 +22,8 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    @Value("{jwt.secretKey}")
-    private String secretKey;
+
+    private String secretKey = "hanghae99";
 
 
     // 토큰 유효시간 30분
