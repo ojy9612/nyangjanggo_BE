@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
+//@Repository
 public interface GoodRepositpory extends JpaRepository<Good, Long> {
 
     Optional<Good> findByBoardAndUser(Board board, User user);
