@@ -1,7 +1,7 @@
 //Test
-package com.hanghae99_team3.model.member.dto;
+package com.hanghae99_team3.model.user.dto;
 
-import com.hanghae99_team3.model.member.domain.UserRole;
+import com.hanghae99_team3.model.user.domain.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

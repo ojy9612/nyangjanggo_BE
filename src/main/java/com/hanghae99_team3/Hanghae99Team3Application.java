@@ -16,7 +16,7 @@ public class Hanghae99Team3Application {
     }
 
     @PostConstruct
-    public void started() { // db시간 맞추기
+    public void started() { // db 시간 맞추기
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
     }
 

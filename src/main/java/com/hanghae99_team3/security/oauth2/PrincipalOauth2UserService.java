@@ -1,9 +1,9 @@
 package com.hanghae99_team3.security.oauth2;
 
-import com.hanghae99_team3.model.member.domain.AuthProvider;
-import com.hanghae99_team3.model.member.domain.User;
-import com.hanghae99_team3.model.member.domain.UserRole;
-import com.hanghae99_team3.model.member.UserRepository;
+import com.hanghae99_team3.model.user.domain.AuthProvider;
+import com.hanghae99_team3.model.user.domain.User;
+import com.hanghae99_team3.model.user.domain.UserRole;
+import com.hanghae99_team3.model.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

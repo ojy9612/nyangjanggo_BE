@@ -1,9 +1,9 @@
-package com.hanghae99_team3.model.member;
+package com.hanghae99_team3.model.user;
 
 
-import com.hanghae99_team3.model.member.domain.User;
-import com.hanghae99_team3.model.member.dto.LoginMemberDto;
-import com.hanghae99_team3.model.member.dto.SignupMemberDto;
+import com.hanghae99_team3.model.user.domain.User;
+import com.hanghae99_team3.model.user.dto.LoginMemberDto;
+import com.hanghae99_team3.model.user.dto.SignupMemberDto;
 import com.hanghae99_team3.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

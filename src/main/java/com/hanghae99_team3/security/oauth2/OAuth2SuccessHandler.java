@@ -1,8 +1,8 @@
 package com.hanghae99_team3.security.oauth2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hanghae99_team3.model.member.domain.User;
-import com.hanghae99_team3.model.member.domain.UserRole;
+import com.hanghae99_team3.model.user.domain.User;
+import com.hanghae99_team3.model.user.domain.UserRole;
 import com.hanghae99_team3.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
