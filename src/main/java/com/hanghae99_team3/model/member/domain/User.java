@@ -1,5 +1,6 @@
 package com.hanghae99_team3.model.member.domain;
 
+import com.hanghae99_team3.model.board.domain.Board;
 import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -42,6 +45,9 @@ public class User {
 
     @Column
     private String providerId;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Board> boardList = new ArrayList<>();
 
 
     @Builder(builderClassName = "UserDetailRegister", builderMethodName = "userDetailRegister")
