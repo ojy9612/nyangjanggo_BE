@@ -36,10 +36,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         OAuth2UserInfo oAuth2UserInfo = null;
         String provider = userRequest.getClientRegistration().getRegistrationId();
 
-        if(provider.equals("google")){
-//            oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
-        }
-        else if(provider.equals("naver")){
+        if(provider.equals("naver")){
 //            oAuth2UserInfo = new NaverUserInfo(oAuth2User.getAttributes());
         }
         else if(provider.equals("kakao")){	//추가
@@ -49,7 +46,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         String providerId = oAuth2UserInfo.getProviderId();
         String username = provider+"_"+providerId;  			// 사용자가 입력한 적은 없지만 만들어준다
-
+        String userImg = oAuth2UserInfo.getUserImg();
         String uuid = UUID.randomUUID().toString().substring(0, 6);
         String password = passwordEncoder.encode("패스워드"+uuid);  // 사용자가 입력한 적은 없지만 만들어준다
 
@@ -63,7 +60,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         //DB에 없는 사용자라면 회원처리
         if (member.isEmpty()) {
             User newUser = User.oauth2Register()
-                    .username(username).password(password).email(email).role(role)
+                    .username(username).password(password).email(email).userImg(userImg).role(role)
                     .provider(AuthProvider.kakao).providerId(providerId)
                     .build();
             userRepository.save(newUser);
