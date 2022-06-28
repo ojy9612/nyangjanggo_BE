@@ -29,7 +29,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
     runtimeOnly 'com.h2database:h2'
-//    implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
+    implementation'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.jetbrains:annotations:23.0.0' // @NotNUll
 }
 
 tasks.named('test') {

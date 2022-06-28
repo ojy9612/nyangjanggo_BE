@@ -1,16 +1,14 @@
 package com.hanghae99_team3.model.member;
 
-import com.hanghae99_team3.model.member.domain.Member;
 import com.hanghae99_team3.model.member.domain.UserRole;
 import com.hanghae99_team3.model.member.dto.LoginMemberDto;
 import com.hanghae99_team3.model.member.dto.SignupMemberDto;
 import com.hanghae99_team3.model.member.dto.UserInfoDto;
-import com.hanghae99_team3.model.member.service.MemberService;
+import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -26,6 +24,15 @@ public class MemberController {
         this.memberService = memberService;
     }
 
+
+//    @GetMapping("/login/oauth2/code/kakao")
+//    public String kakaoLogin(@RequestParam String code) {
+//        // authorizedCode: 카카오 서버로부터 받은 인가 코드
+//        System.out.println("code = " + code);
+//
+//        return "redirect:/";
+//    }
+
     @PostMapping("/join")
     public Long join(@RequestBody SignupMemberDto signupMemberDto) {
         return memberService.join(signupMemberDto);
@@ -37,9 +44,25 @@ public class MemberController {
     }
 
     @PostMapping("/member/memberInfo")
-    public UserInfoDto getUserInfo(@AuthenticationPrincipal Member userDetails) {
-        String username = userDetails.getUsername();
-        UserRole roles = userDetails.getRoles();
+    public UserInfoDto getUserInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        System.out.println("principalDetails = " + principalDetails);
+        String username = principalDetails.getUsername();
+        UserRole roles = principalDetails.getUser().getRole();
         return new UserInfoDto(username, roles);
     }
+
+    @GetMapping("/loginInfo")
+    @ResponseBody
+    public String loginInfo(Authentication authentication, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        String result = "";
+
+        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+        if(principal.getUser().getAuthProvider() == null) {
+            result = result + "Form 로그인 : " + principal;
+        }else{
+            result = result + "OAuth2 로그인 : " + principal;
+        }
+        return result;
+    }
+
 }
