@@ -43,11 +43,11 @@ public class AwsS3Service {
 
             try(InputStream inputStream = file.getInputStream()) {
                 // 파일 유효성 검사
-                Tika tika = new Tika();
-                String detectedFile = tika.detect(inputStream);
-                if(!(detectedFile.startsWith("image"))){
-                    throw new IllegalArgumentException("AwsS3 : 올바른 이미지 파일을 올려주세요.");
-                }
+//                Tika tika = new Tika();
+//                String detectedFile = tika.detect(inputStream);
+//                if(!(detectedFile.startsWith("image"))){
+//                    throw new IllegalArgumentException("AwsS3 : 올바른 이미지 파일을 올려주세요.");
+//                }
 
                 // 업로드
                 amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)

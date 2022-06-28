@@ -5,6 +5,7 @@ import com.hanghae99_team3.model.board.dto.BoardRequestDto;
 import com.hanghae99_team3.model.s3.AwsS3Service;
 import com.hanghae99_team3.model.user.UserRepository;
 import com.hanghae99_team3.model.user.domain.User;
+import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -38,14 +39,11 @@ public class BoardService {
 
     }
     @Transactional
-    public Board createBoard(@RequestBody BoardRequestDto boardRequestDto, User userDetails){
-        User longinUser = userRepository.findById(userDetails.getId()).orElseThrow(
-                ()-> new IllegalArgumentException("현재 로그인 되어 있지 않습니다")
-        );
+    public Board createBoard(BoardRequestDto boardRequestDto, PrincipalDetails userDetails){
+        User longinUser = userDetails.getUser();
 
         // img 확인
         awsS3Service.uploadFile(boardRequestDto.getImgFile()).forEach(log::info);
-
 
         Board board = Board.builder()
                 .user(longinUser)
@@ -57,7 +55,7 @@ public class BoardService {
     }
 
     @Transactional
-    public Board updateBoard(BoardRequestDto boardRequestDto, User user, Long boardId) {
+    public Board updateBoard(BoardRequestDto boardRequestDto, PrincipalDetails user, Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException("생성된 게시글이 없습니다.")
         );
@@ -67,7 +65,7 @@ public class BoardService {
 
 
     @Transactional
-    public void deleteBoard(User user, Long boardId) {
+    public void deleteBoard(PrincipalDetails user, Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 ()-> new IllegalArgumentException("생성된 게시글이 없습니다.")
         );
