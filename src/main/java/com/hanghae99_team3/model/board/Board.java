@@ -1,6 +1,8 @@
 package com.hanghae99_team3.model.board;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.hanghae99_team3.model.Timestamped;
 import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.good.Good;
@@ -16,6 +18,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Board extends Timestamped {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,17 +31,12 @@ public class Board extends Timestamped {
     @Column
     private String content;
 
-    @Column
-    private String imgLink;
-    @Column
-    private String imgKey;
 
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER, orphanRemoval = true)
     private final List<Comment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)

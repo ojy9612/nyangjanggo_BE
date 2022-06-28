@@ -1,5 +1,7 @@
 package com.hanghae99_team3.model.user.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.hanghae99_team3.model.board.Board;
 import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.good.Good;
@@ -16,6 +18,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class User {
 
     @Id
@@ -41,7 +44,6 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRole role;
 
-    @org.jetbrains.annotations.NotNull
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
@@ -58,8 +60,8 @@ public class User {
     private final List<Good> goodList = new ArrayList<>();
 
     public void addBoard(Board board) {
-        board.setUser(this);
         this.boardList.add(board);
+        board.setUser(this);
     }
 
     public void addComment(Comment comment) {
