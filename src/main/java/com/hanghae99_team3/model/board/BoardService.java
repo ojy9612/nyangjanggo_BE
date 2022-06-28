@@ -2,9 +2,11 @@ package com.hanghae99_team3.model.board;
 
 
 import com.hanghae99_team3.model.board.dto.BoardRequestDto;
+import com.hanghae99_team3.model.s3.AwsS3Service;
 import com.hanghae99_team3.model.user.UserRepository;
 import com.hanghae99_team3.model.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BoardService {
 
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final AwsS3Service awsS3Service;
 
 
     public Board getOneBoard(Long boardId){
@@ -38,6 +42,11 @@ public class BoardService {
         User longinUser = userRepository.findById(userDetails.getId()).orElseThrow(
                 ()-> new IllegalArgumentException("현재 로그인 되어 있지 않습니다")
         );
+
+        // img 확인
+        awsS3Service.uploadFile(boardRequestDto.getImgFile()).forEach(log::info);
+
+
         Board board = Board.builder()
                 .user(longinUser)
                 .title(boardRequestDto.getTitle())

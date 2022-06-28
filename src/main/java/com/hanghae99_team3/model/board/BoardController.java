@@ -24,30 +24,35 @@ public class BoardController {
 
     @GetMapping("/api/boards")
     public List<BoardResponseDto> getAllBoards() {
-        List<Board> boardList = boardService.getAllBoards();
         List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
-        for (Board board : boardList) {
+        boardService.getAllBoards().forEach(board -> {
             boardResponseDtoList.add(new BoardResponseDto(board));
-        }
-        return boardResponseDtoList;
+        });
 
+        return boardResponseDtoList;
     }
 
 
     @PostMapping("/api/board")
-    public BoardResponseDto createBoard(@RequestBody BoardRequestDto boardRequestDto, @AuthenticationPrincipal User user) {
-        return new BoardResponseDto(boardService.createBoard(boardRequestDto, user));
+    public BoardResponseDto createBoard(@ModelAttribute BoardRequestDto boardRequestDto,
+                                        @AuthenticationPrincipal User user) {
 
+        return new BoardResponseDto(boardService.createBoard(boardRequestDto, user));
     }
 
     @PutMapping("/api/board/{boardId}")
-    public BoardResponseDto updateBoard(@RequestBody BoardRequestDto boardRequestDto, @AuthenticationPrincipal User user, @PathVariable Long boardId) {
+    public BoardResponseDto updateBoard(@ModelAttribute BoardRequestDto boardRequestDto,
+                                        @AuthenticationPrincipal User user,
+                                        @PathVariable Long boardId) {
+
         return new BoardResponseDto(boardService.updateBoard(boardRequestDto, user, boardId));
     }
 
     @DeleteMapping("/api/board/{boardId}")
-    public void deleteBoard(@AuthenticationPrincipal User user, @PathVariable Long boardId) {
-        boardService.deleteBoard(user, boardId);
+    public void deleteBoard(@AuthenticationPrincipal User user,
+                            @PathVariable Long boardId) {
 
+        boardService.deleteBoard(user, boardId);
     }
+
 }
