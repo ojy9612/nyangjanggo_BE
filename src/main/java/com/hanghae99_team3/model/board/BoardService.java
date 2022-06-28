@@ -35,16 +35,13 @@ public class BoardService {
     }
     @Transactional
     public Board createBoard(@RequestBody BoardRequestDto boardRequestDto, User userDetails){
-        boardRequestDto.setUserId(userDetails.getId());
-        User longinUser = userRepository.findById(boardRequestDto.getUserId()).orElseThrow(
+        User longinUser = userRepository.findById(userDetails.getId()).orElseThrow(
                 ()-> new IllegalArgumentException("현재 로그인 되어 있지 않습니다")
         );
         Board board = Board.builder()
                 .user(longinUser)
                 .title(boardRequestDto.getTitle())
                 .content(boardRequestDto.getContent())
-                .imgLink(boardRequestDto.getImgLink())
-                .imgKey(boardRequestDto.getImgKey())
                 .build();
 
         return boardRepository.save(board);
