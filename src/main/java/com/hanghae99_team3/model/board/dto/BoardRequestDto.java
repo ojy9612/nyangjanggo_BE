@@ -5,25 +5,24 @@ import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Getter
-@Setter
 @NoArgsConstructor
 public class BoardRequestDto {
 
-    private Long userId;
     private String title;
     private String content;
-    private String imgLink;
-    private String imgKey;
+    private List<MultipartFile> imgFile;
+
 
     @Builder
-    public BoardRequestDto(@NotNull String title, @NotNull String content, String imgLink, String imgKey) {
+    public BoardRequestDto(@NotNull String title, @NotNull String content, List<MultipartFile> imgFile) {
         this.title = title;
         this.content = content;
-        this.imgLink = imgLink;
-        this.imgKey = imgKey;
+        this.imgFile = imgFile;
     }
 
 }

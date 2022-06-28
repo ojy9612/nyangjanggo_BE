@@ -1,6 +1,8 @@
 package com.hanghae99_team3.model.member.domain;
 
-import com.hanghae99_team3.model.board.domain.Board;
+import com.hanghae99_team3.model.board.Board;
+import com.hanghae99_team3.model.comment.Comment;
+import com.hanghae99_team3.model.good.Good;
 import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,8 +49,28 @@ public class User {
     private String providerId;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Board> boardList = new ArrayList<>();
+    private final List<Board> boardList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    private final List<Comment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    private final List<Good> goodList = new ArrayList<>();
+
+    public void addBoard(Board board) {
+        board.setUser(this);
+        this.boardList.add(board);
+    }
+
+    public void addComment(Comment comment) {
+        comment.setUser(this);
+        this.commentList.add(comment);
+    }
+
+    public void addGood(Good good) {
+        good.setUser(this);
+        this.goodList.add(good);
+    }
 
     @Builder(builderClassName = "UserDetailRegister", builderMethodName = "userDetailRegister")
     public User(String username, String password, String email, UserRole role) {
@@ -93,6 +115,8 @@ public class User {
                 ", providerId='" + providerId + '\'' +
                 '}';
     }
+
+
     //
 //    /**
 //     *UserDetails Methods

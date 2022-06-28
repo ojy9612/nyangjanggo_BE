@@ -1,10 +1,8 @@
-package com.hanghae99_team3.model.board.controller;
+package com.hanghae99_team3.model.board;
 
 
-import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.dto.BoardRequestDto;
 import com.hanghae99_team3.model.board.dto.BoardResponseDto;
-import com.hanghae99_team3.model.board.service.BoardService;
 import com.hanghae99_team3.model.member.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,9 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardController {
 
-
     private final BoardService boardService;
-
 
     @GetMapping("/api/boards/{boardId}")
     public BoardResponseDto getOneBoard(@PathVariable Long boardId) {

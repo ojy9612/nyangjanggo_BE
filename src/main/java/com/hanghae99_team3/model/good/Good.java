@@ -1,12 +1,13 @@
 package com.hanghae99_team3.model.good;
 
 import com.hanghae99_team3.model.TimestampedOnlyCreated;
-import com.hanghae99_team3.model.board.domain.Board;
-import com.sun.istack.NotNull;
+import com.hanghae99_team3.model.board.Board;
+import com.hanghae99_team3.model.member.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 
@@ -23,11 +24,14 @@ public class Good extends TimestampedOnlyCreated {
     @ManyToOne(fetch = FetchType.LAZY)
     private Board board;
 
-//    private Member member;
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
     @Builder
-    public Good(@NotNull Board board) {
+    public Good(@NotNull Board board, @NotNull User user) {
         board.addGood(this);
+        user.addGood(this);
     }
 
 }
