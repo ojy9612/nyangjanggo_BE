@@ -7,7 +7,6 @@ import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -30,7 +29,6 @@ public class User {
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Setter
     private String password;
 
     @Column(unique = true, nullable = false)
@@ -42,7 +40,6 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRole role;
 
-    @org.jetbrains.annotations.NotNull
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 

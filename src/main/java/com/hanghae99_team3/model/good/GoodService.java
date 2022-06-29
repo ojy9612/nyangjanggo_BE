@@ -2,7 +2,10 @@ package com.hanghae99_team3.model.good;
 
 import com.hanghae99_team3.model.board.Board;
 import com.hanghae99_team3.model.board.BoardRepository;
+import com.hanghae99_team3.model.user.UserRepository;
+import com.hanghae99_team3.model.user.UserService;
 import com.hanghae99_team3.model.user.domain.User;
+import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +20,12 @@ public class GoodService {
     private final GoodRepositpory goodRepositpory;
     private final BoardRepository boardRepository;
 
-    public void createAndRemoveGood(User userDetails, Long boardId) {
-        User user = userDetails;
+    private final UserRepository userRepository;
+
+    public void createAndRemoveGood(PrincipalDetails principalDetails, Long boardId) {
+        User user = userRepository.findByEmail(principalDetails.getUsername()).orElseThrow(
+                () -> new IllegalArgumentException("유저 정보가 없습니다."));
+
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException(BOARD_NOT_FOUND));
 

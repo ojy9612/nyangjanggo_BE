@@ -19,8 +19,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Component
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
-//    private final TokenService tokenService;
-    private final UserRequestMapper userRequestMapper;
+
     private final ObjectMapper objectMapper;
     private final JwtTokenProvider jwtTokenProvider;
 

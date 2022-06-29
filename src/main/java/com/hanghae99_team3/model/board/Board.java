@@ -1,10 +1,13 @@
 package com.hanghae99_team3.model.board;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.hanghae99_team3.model.Timestamped;
 import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.good.Good;
 import com.hanghae99_team3.model.board.dto.BoardRequestDto;
+import com.hanghae99_team3.model.images.Images;
 import com.hanghae99_team3.model.user.domain.User;
 import lombok.*;
 import org.jetbrains.annotations.NotNull;
@@ -16,10 +19,10 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Board extends Timestamped {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "BOARD_ID", nullable = false)
     private  Long id;
 
     @Column
@@ -28,14 +31,8 @@ public class Board extends Timestamped {
     @Column
     private String content;
 
-    @Column
-    private String imgLink;
-    @Column
-    private String imgKey;
-
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
@@ -43,6 +40,9 @@ public class Board extends Timestamped {
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<Good> goodList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
+    private final List<Images> imagesList = new ArrayList<>();
 
     public void addComment(Comment comment) {
         comment.setBoard(this);
@@ -52,6 +52,11 @@ public class Board extends Timestamped {
     public void addGood(Good good) {
         good.setBoard(this);
         this.goodList.add(good);
+    }
+
+    public void addImages(Images images) {
+        images.setBoard(this);
+        this.imagesList.add(images);
     }
 
     @Builder

@@ -23,7 +23,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
 
     @Autowired
-    public PrincipalOauth2UserService(UserRepository userRepository, @Lazy BCryptPasswordEncoder passwordEncoder) {
+    public PrincipalOauth2UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -46,7 +46,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         String providerId = oAuth2UserInfo.getProviderId();
         String username = provider+"_"+providerId;  			// 사용자가 입력한 적은 없지만 만들어준다
-        String userImg = oAuth2UserInfo.getUserImg();
+//        String userImg = oAuth2UserInfo.getUserImg();
+        String userImg = "";
         String uuid = UUID.randomUUID().toString().substring(0, 6);
         String password = passwordEncoder.encode("패스워드"+uuid);  // 사용자가 입력한 적은 없지만 만들어준다
 
@@ -54,11 +55,11 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         UserRole role = UserRole.USER;
 
 
-        Optional<User> member = userRepository.findByEmail(email);
+        Optional<User> user = userRepository.findByEmail(email);
 //        Member byUsername = (Member) member;
 
         //DB에 없는 사용자라면 회원처리
-        if (member.isEmpty()) {
+        if (user.isEmpty()) {
             User newUser = User.oauth2Register()
                     .username(username).password(password).email(email).userImg(userImg).role(role)
                     .provider(AuthProvider.kakao).providerId(providerId)
@@ -67,6 +68,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             return new PrincipalDetails(newUser, oAuth2UserInfo);
         }
 
-        return new PrincipalDetails(member.get(), oAuth2UserInfo);
+        return new PrincipalDetails(user.get(), oAuth2UserInfo);
     }
 }
