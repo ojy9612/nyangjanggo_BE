@@ -3,9 +3,9 @@ package com.hanghae99_team3.security.oauth2;
 import java.util.Map;
 
 public class KakaoUserInfo implements OAuth2UserInfo{
-    private Map<String, Object> attributes;
-    private Map<String, Object> attributesAccount;
-    private Map<String, Object> attributesProfile;
+    private final Map<String, Object> attributes;
+    private final Map<String, Object> attributesAccount;
+    private final Map<String, Object> attributesProfile;
 
     public KakaoUserInfo(Map<String, Object> attributes) {
         /*
@@ -51,5 +51,20 @@ public class KakaoUserInfo implements OAuth2UserInfo{
     @Override
     public String getName() {
         return attributesProfile.get("nickname").toString();
+    }
+
+    @Override
+    public String getUserImg() {
+        return attributesProfile.get("thumbnail_image_url").toString();
+    }
+
+
+    @Override
+    public String toString() {
+        return "KakaoUserInfo{" +
+                "attributes=" + attributes +
+                ", attributesAccount=" + attributesAccount +
+                ", attributesProfile=" + attributesProfile +
+                '}';
     }
 }

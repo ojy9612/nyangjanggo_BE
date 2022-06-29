@@ -16,7 +16,7 @@ import java.util.Map;
 @ToString
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
-    private User user;
+    private final User user;
     private OAuth2UserInfo oAuth2UserInfo;
 
     //UserDetails: Form 로그인
@@ -41,8 +41,10 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+//        return user.getPassword();
+        return null;
     }
+
 
     @Override
     public String getUsername() {

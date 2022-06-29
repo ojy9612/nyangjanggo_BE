@@ -1,7 +1,5 @@
 package com.hanghae99_team3.model.user.domain;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.hanghae99_team3.model.board.Board;
 import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.good.Good;
@@ -9,7 +7,6 @@ import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,7 +15,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+@Table(name = "Users")
 public class User {
 
     @Id
@@ -32,7 +29,6 @@ public class User {
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Setter
     private String password;
 
     @Column(unique = true, nullable = false)

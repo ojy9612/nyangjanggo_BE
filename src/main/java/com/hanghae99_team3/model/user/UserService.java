@@ -5,6 +5,7 @@ import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.dto.LoginMemberDto;
 import com.hanghae99_team3.model.user.dto.SignupMemberDto;
 import com.hanghae99_team3.security.jwt.JwtTokenProvider;
+import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,10 @@ public class UserService {
 
 //    private final PasswordEncoder passwordEncoder;
 
+
+    public String update(PrincipalDetails principalDetails) {
+        return "img 업데이트 관련 작업중";
+    }
 
     public Long join(SignupMemberDto memberDto) {
         String username = memberDto.getUsername();
@@ -43,5 +48,11 @@ public class UserService {
 
         token.put("Access-Token", jwtTokenProvider.createToken(user.getUsername(), user.getRole()));
         return token;
+    }
+
+
+
+    public String deleteUser(PrincipalDetails principalDetails) {
+        return "작업필요";
     }
 }
