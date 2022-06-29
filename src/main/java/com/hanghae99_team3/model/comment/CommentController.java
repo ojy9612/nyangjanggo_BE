@@ -2,7 +2,7 @@ package com.hanghae99_team3.model.comment;
 
 import com.hanghae99_team3.model.comment.dto.CommentRequestDto;
 import com.hanghae99_team3.model.comment.dto.CommentResponseDto;
-import com.hanghae99_team3.model.user.domain.User;
+import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,7 +17,7 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
 
-    @GetMapping("/api/board/{boardId}/comment")
+    @GetMapping("/api/board/{boardId}/comments")
     public List<CommentResponseDto> getAllComment(@PathVariable Long boardId){
         List<Comment> commentList = commentService.getAllComment(boardId);
 
@@ -31,32 +31,32 @@ public class CommentController {
     }
 
     @PostMapping("/api/board/{boardId}/comment")
-    public CommentResponseDto createComment(@AuthenticationPrincipal User userDetails,
-                                            CommentRequestDto commentRequestDto,
+    public CommentResponseDto createComment(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                            @RequestBody CommentRequestDto commentRequestDto,
                                             @PathVariable Long boardId){
 
         return new CommentResponseDto(
-                commentService.createComment(userDetails,commentRequestDto,boardId)
+                commentService.createComment(principalDetails,commentRequestDto,boardId)
         );
     }
 
     @PutMapping("/api/board/{boardId}/comment/{commentId}")
-    public CommentResponseDto updateComment(@AuthenticationPrincipal User userDetails,
-                                            CommentRequestDto commentRequestDto,
+    public CommentResponseDto updateComment(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                            @RequestBody CommentRequestDto commentRequestDto,
                                             @PathVariable Long boardId,
                                             @PathVariable Long commentId){
 
         return new CommentResponseDto(
-                commentService.updateComment(userDetails,commentRequestDto,boardId,commentId)
+                commentService.updateComment(principalDetails,commentRequestDto,boardId,commentId)
         );
     }
 
     @DeleteMapping("/api/board/{boardId}/comment/{commentId}")
-    public void removeComment(@AuthenticationPrincipal User userDetails,
+    public void removeComment(@AuthenticationPrincipal PrincipalDetails principalDetails,
                               @PathVariable Long boardId,
                               @PathVariable Long commentId){
 
-        commentService.removeComment(userDetails,boardId,commentId);
+        commentService.removeComment(principalDetails,boardId,commentId);
     }
 
 }
