@@ -21,6 +21,7 @@ public class BoardResponseDto {
     private String username;
     private String userImg;
     private String title;
+    private String subTitle;
     private String content;
     private List<ImagesResponseDto> imgList;
     private int commentCount;
@@ -33,9 +34,7 @@ public class BoardResponseDto {
 
         List<ImagesResponseDto> imagesResponseDtoList = new ArrayList<>();
 
-        imagesList.forEach(images -> {
-            imagesResponseDtoList.add(new ImagesResponseDto(images));
-        });
+        imagesList.forEach(images -> imagesResponseDtoList.add(new ImagesResponseDto(images)));
 
         return imagesResponseDtoList;
     }
@@ -45,6 +44,7 @@ public class BoardResponseDto {
         this.username = board.getUser().getUsername();
         this.userImg = board.getUser().getUserImg();
         this.title = board.getTitle();
+        this.subTitle = board.getSubTitle();
         this.content = board.getContent();
         this.imgList = makeImagesList(board.getImagesList());
         this.commentCount = board.getCommentList().size();

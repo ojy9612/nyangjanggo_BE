@@ -4,7 +4,6 @@ import com.hanghae99_team3.model.board.Board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -13,7 +12,7 @@ public class ImagesService {
 
     private final ImagesRepository imagesRepository;
 
-    public List<String> createImages(List<List<String>> s3Lists, Board board){
+    public void createImages(List<List<String>> s3Lists, Board board){
 
         List<String> imageKey = s3Lists.get(0);
         List<String> imageLink = s3Lists.get(1);
@@ -30,7 +29,6 @@ public class ImagesService {
             }
         }
 
-        return imageLink;
     }
 
 }
