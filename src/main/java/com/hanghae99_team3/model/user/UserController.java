@@ -1,13 +1,17 @@
 package com.hanghae99_team3.model.user;
 
+import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.domain.UserRole;
 import com.hanghae99_team3.model.user.dto.LoginMemberDto;
 import com.hanghae99_team3.model.user.dto.SignupMemberDto;
 import com.hanghae99_team3.model.user.dto.UserInfoDto;
+import com.hanghae99_team3.model.user.dto.UserResDto;
 import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -21,18 +25,30 @@ public class UserController {
 
     @Autowired
     public UserController(UserService userService) {
-
         this.userService = userService;
     }
 
 
-//    @GetMapping("/login/oauth2/code/kakao")
-//    public String kakaoLogin(@RequestParam String code) {
-//        // authorizedCode: 카카오 서버로부터 받은 인가 코드
-//        System.out.println("code = " + code);
-//
-//        return "redirect:/";
-//    }
+    @GetMapping("api/user")
+    public UserResDto getUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return new UserResDto(principalDetails.getUser().getUsername(), principalDetails.getUser().getUserImg());
+    }
+
+    @PutMapping("api/user")
+    public String updateUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return userService.update(principalDetails);
+    }
+
+    @DeleteMapping("api/user")
+    public String deleteUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return userService.deleteUser(principalDetails);
+    }
+
+    @RequestMapping("/auth")
+    public Authentication auth() {
+        return SecurityContextHolder.getContext()
+                .getAuthentication();
+    }
 
     @PostMapping("/join")
     public Long join(@RequestBody SignupMemberDto signupMemberDto) {
@@ -52,9 +68,17 @@ public class UserController {
         return new UserInfoDto(username, roles);
     }
 
+//    @PostMapping("/member/memberInfo1")
+//    public UserInfoDto getUserInfo1(@AuthenticationPrincipal UserDetails userDetails) {
+//        System.out.println("userDetails = " + userDetails);
+//        String username = userDetails.getUsername();
+//        UserRole roles = UserRole.USER;
+//        return new UserInfoDto(username, roles);
+//    }
+
     @GetMapping("/loginInfo")
     @ResponseBody
-    public String loginInfo(Authentication authentication, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public String loginInfo(Authentication authentication){
         String result = "";
 
         PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
