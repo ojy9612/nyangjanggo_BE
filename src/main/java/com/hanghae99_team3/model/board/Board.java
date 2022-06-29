@@ -36,7 +36,7 @@ public class Board extends Timestamped {
     private String content;
 
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)

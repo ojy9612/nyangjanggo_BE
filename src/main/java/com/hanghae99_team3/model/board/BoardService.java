@@ -1,9 +1,8 @@
 package com.hanghae99_team3.model.board;
 
 
-import com.hanghae99_team3.exception.ErrorMessage;
 import com.hanghae99_team3.model.board.dto.BoardRequestDto;
-import com.hanghae99_team3.model.images.ImagesRepository;
+import com.hanghae99_team3.model.board.dto.BoardResponseDto;
 import com.hanghae99_team3.model.images.ImagesService;
 import com.hanghae99_team3.model.s3.AwsS3Service;
 import com.hanghae99_team3.model.user.UserRepository;
@@ -11,12 +10,10 @@ import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
 
 @Slf4j
 @Service
@@ -30,21 +27,22 @@ public class BoardService {
     private final ImagesService imagesService;
 
 
-    public Board getOneBoard(Long boardId){
+    public Board getOneBoard(Long boardId) {
         return boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException("해당 계정이 존재하지 않습니다.")
         );
     }
 
 
-    public List<Board> getAllBoards(){
-
-        return boardRepository.findAll(Sort.by(Sort.Direction.DESC,"createdAt"));
+    public Page<BoardResponseDto> getAllBoards(Pageable pageable) {
+        return boardRepository.findAll(pageable)
+                .map(BoardResponseDto::new);
 
 
     }
+
     @Transactional
-    public Board createBoard(BoardRequestDto boardRequestDto, PrincipalDetails userDetails){
+    public Board createBoard(BoardRequestDto boardRequestDto, PrincipalDetails userDetails) {
         User longinUser = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
                 () -> new IllegalArgumentException("유저 정보가 없습니다."));
 
@@ -55,7 +53,7 @@ public class BoardService {
                 .boardRequestDto(boardRequestDto)
                 .build();
 
-        imagesService.createImages(awsS3Service.uploadFile(boardRequestDto.getImgFileList()),board);
+        imagesService.createImages(awsS3Service.uploadFile(boardRequestDto.getImgFileList()), board);
 
         return boardRepository.save(board);
     }
@@ -73,7 +71,7 @@ public class BoardService {
     @Transactional
     public void deleteBoard(PrincipalDetails user, Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
-                ()-> new IllegalArgumentException("생성된 게시글이 없습니다.")
+                () -> new IllegalArgumentException("생성된 게시글이 없습니다.")
         );
         boardRepository.delete(board);
     }

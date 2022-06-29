@@ -47,7 +47,7 @@ public class User {
     @Column
     private String providerId;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
     private final List<Board> boardList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
