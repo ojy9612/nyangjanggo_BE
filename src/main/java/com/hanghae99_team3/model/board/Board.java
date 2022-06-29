@@ -29,6 +29,9 @@ public class Board extends Timestamped {
     private String title;
 
     @Column
+    private String subTitle;
+
+    @Column
     private String content;
 
     @Setter
@@ -60,13 +63,16 @@ public class Board extends Timestamped {
     }
 
     @Builder
-    public Board(@NotNull User user, @NotNull String title, @NotNull String content) {
+    public Board(@NotNull User user,
+                 @NotNull BoardRequestDto boardRequestDto) {
         user.addBoard(this);
-        this.title = title;
-        this.content = content;
+        this.title = boardRequestDto.getTitle();
+        this.subTitle = boardRequestDto.getSubTitle();
+        this.content = boardRequestDto.getContent();
     }
     public void update(@NotNull BoardRequestDto boardRequestDto){
         this.title = boardRequestDto.getTitle();
+        this.subTitle = boardRequestDto.getSubTitle();
         this.content = boardRequestDto.getContent();
 
     }
