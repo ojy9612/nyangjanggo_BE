@@ -52,8 +52,7 @@ public class BoardService {
 
         Board board = Board.builder()
                 .user(longinUser)
-                .title(boardRequestDto.getTitle())
-                .content(boardRequestDto.getContent())
+                .boardRequestDto(boardRequestDto)
                 .build();
 
         imagesService.createImages(awsS3Service.uploadFile(boardRequestDto.getImgFileList()),board);

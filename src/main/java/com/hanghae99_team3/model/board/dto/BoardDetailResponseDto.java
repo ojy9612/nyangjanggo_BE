@@ -23,6 +23,7 @@ public class BoardDetailResponseDto {
     private String username;
     private String userImg;
     private String title;
+    private String subTitle;
     private String content;
     private List<CommentResponseDto> commentList;
     private List<GoodResponseDto> goodList;
@@ -34,9 +35,7 @@ public class BoardDetailResponseDto {
 
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
-        commentList.forEach(comment -> {
-            commentResponseDtoList.add(new CommentResponseDto(comment));
-        });
+        commentList.forEach(comment -> commentResponseDtoList.add(new CommentResponseDto(comment)));
 
         return commentResponseDtoList;
     }
@@ -45,9 +44,7 @@ public class BoardDetailResponseDto {
 
         List<GoodResponseDto> goodResponseDtoList = new ArrayList<>();
 
-        goodList.forEach(good -> {
-            goodResponseDtoList.add(new GoodResponseDto(good));
-        });
+        goodList.forEach(good -> goodResponseDtoList.add(new GoodResponseDto(good)));
 
         return goodResponseDtoList;
     }
@@ -56,9 +53,7 @@ public class BoardDetailResponseDto {
 
         List<ImagesResponseDto> imagesResponseDtoList = new ArrayList<>();
 
-        imagesList.forEach(images -> {
-            imagesResponseDtoList.add(new ImagesResponseDto(images));
-        });
+        imagesList.forEach(images -> imagesResponseDtoList.add(new ImagesResponseDto(images)));
 
         return imagesResponseDtoList;
     }
@@ -68,6 +63,7 @@ public class BoardDetailResponseDto {
         this.username = board.getUser().getUsername();
         this.userImg = board.getUser().getUserImg();
         this.title = board.getTitle();
+        this.subTitle = board.getSubTitle();
         this.content = board.getContent();
         this.commentList = makeCommentList(board.getCommentList());
         this.goodList = makeGoodList(board.getGoodList());
