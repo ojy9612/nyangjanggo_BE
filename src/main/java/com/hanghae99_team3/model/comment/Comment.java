@@ -1,5 +1,7 @@
 package com.hanghae99_team3.model.comment;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.hanghae99_team3.model.Timestamped;
 import com.hanghae99_team3.model.board.Board;
 import com.hanghae99_team3.model.comment.dto.CommentRequestDto;
@@ -15,6 +17,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Comment extends Timestamped {
 
     @Id

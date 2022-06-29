@@ -40,7 +40,6 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRole role;
 
-    @org.jetbrains.annotations.NotNull
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
@@ -57,8 +56,8 @@ public class User {
     private final List<Good> goodList = new ArrayList<>();
 
     public void addBoard(Board board) {
-        board.setUser(this);
         this.boardList.add(board);
+        board.setUser(this);
     }
 
     public void addComment(Comment comment) {
