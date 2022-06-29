@@ -56,8 +56,8 @@ public class User {
     private final List<Good> goodList = new ArrayList<>();
 
     public void addBoard(Board board) {
-        this.boardList.add(board);
         board.setUser(this);
+        this.boardList.add(board);
     }
 
     public void addComment(Comment comment) {

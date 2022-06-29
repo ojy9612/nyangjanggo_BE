@@ -7,6 +7,7 @@ import com.hanghae99_team3.model.Timestamped;
 import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.good.Good;
 import com.hanghae99_team3.model.board.dto.BoardRequestDto;
+import com.hanghae99_team3.model.images.Images;
 import com.hanghae99_team3.model.user.domain.User;
 import lombok.*;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,6 @@ import java.util.List;
 public class Board extends Timestamped {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "BOARD_ID", nullable = false)
     private  Long id;
 
     @Column
@@ -31,16 +31,18 @@ public class Board extends Timestamped {
     @Column
     private String content;
 
-
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<Comment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<Good> goodList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
+    private final List<Images> imagesList = new ArrayList<>();
 
     public void addComment(Comment comment) {
         comment.setBoard(this);
@@ -50,6 +52,11 @@ public class Board extends Timestamped {
     public void addGood(Good good) {
         good.setBoard(this);
         this.goodList.add(good);
+    }
+
+    public void addImages(Images images) {
+        images.setBoard(this);
+        this.imagesList.add(images);
     }
 
     @Builder

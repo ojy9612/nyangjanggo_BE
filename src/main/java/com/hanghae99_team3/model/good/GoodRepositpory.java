@@ -9,7 +9,6 @@ import java.util.Optional;
 
 
 public interface GoodRepositpory extends JpaRepository<Good, Long> {
-
     Optional<Good> findByBoardAndUser(Board board, User user);
 
 }

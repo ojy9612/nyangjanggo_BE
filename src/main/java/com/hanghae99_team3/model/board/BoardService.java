@@ -1,7 +1,10 @@
 package com.hanghae99_team3.model.board;
 
 
+import com.hanghae99_team3.exception.ErrorMessage;
 import com.hanghae99_team3.model.board.dto.BoardRequestDto;
+import com.hanghae99_team3.model.images.ImagesRepository;
+import com.hanghae99_team3.model.images.ImagesService;
 import com.hanghae99_team3.model.s3.AwsS3Service;
 import com.hanghae99_team3.model.user.UserRepository;
 import com.hanghae99_team3.model.user.domain.User;
@@ -24,6 +27,8 @@ public class BoardService {
     private final UserRepository userRepository;
     private final AwsS3Service awsS3Service;
 
+    private final ImagesService imagesService;
+
 
     public Board getOneBoard(Long boardId){
         return boardRepository.findById(boardId).orElseThrow(
@@ -40,16 +45,18 @@ public class BoardService {
     }
     @Transactional
     public Board createBoard(BoardRequestDto boardRequestDto, PrincipalDetails userDetails){
-        User longinUser = userDetails.getUser();
+        User longinUser = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
+                () -> new IllegalArgumentException("유저 정보가 없습니다."));
 
         // img 확인
-        awsS3Service.uploadFile(boardRequestDto.getImgFile()).forEach(log::info);
 
         Board board = Board.builder()
                 .user(longinUser)
                 .title(boardRequestDto.getTitle())
                 .content(boardRequestDto.getContent())
                 .build();
+
+        imagesService.createImages(awsS3Service.uploadFile(boardRequestDto.getImgFileList()),board);
 
         return boardRepository.save(board);
     }

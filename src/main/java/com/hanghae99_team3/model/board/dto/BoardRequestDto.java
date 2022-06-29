@@ -14,12 +14,12 @@ public class BoardRequestDto {
 
     private String title;
     private String content;
-    private List<MultipartFile> imgFile;
+    private List<MultipartFile> imgFileList;
 
     public BoardRequestDto(@NotNull String title,@NotNull String content, List<MultipartFile> imgFile) {
         this.title = title;
         this.content = content;
-        this.imgFile = imgFile;
+        this.imgFileList = imgFile;
     }
 
 }
