@@ -11,12 +11,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CommentResponseDto {
     private String username;
+    private String userImg;
     private String comment;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
     public CommentResponseDto(@NotNull Comment comment) {
         this.username = comment.getUser().getUsername();
+        this.userImg = comment.getUser().getUserImg();
         this.comment = comment.getContent();
         this.createdAt = comment.getCreatedAt();
         this.modifiedAt = comment.getModifiedAt();
