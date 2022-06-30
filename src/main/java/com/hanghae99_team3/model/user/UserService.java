@@ -4,6 +4,7 @@ package com.hanghae99_team3.model.user;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.dto.LoginMemberDto;
 import com.hanghae99_team3.model.user.dto.SignupMemberDto;
+import com.hanghae99_team3.model.user.dto.UserReqDto;
 import com.hanghae99_team3.security.jwt.JwtTokenProvider;
 import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,11 @@ public class UserService {
 //    private final PasswordEncoder passwordEncoder;
 
 
-    public String update(PrincipalDetails principalDetails) {
-        return "img 업데이트 관련 작업중";
+    public String update(UserReqDto userReqDto, PrincipalDetails principalDetails) {
+        User user = userRepository.findByEmail(principalDetails.getUsername()).orElseThrow(
+                () -> new IllegalArgumentException("유저 정보가 없습니다."));
+         // 빌더로
+        return "작업중";
     }
 
     public Long join(SignupMemberDto memberDto) {

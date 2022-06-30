@@ -47,6 +47,9 @@ public class User {
     @Column
     private String providerId;
 
+    @Column
+    private String userDescription = "";
+
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
     private final List<Board> boardList = new ArrayList<>();
 
@@ -98,9 +101,10 @@ public class User {
         this.providerId = providerId;
     }
 
-    public User update(String username, String userImg) {
+    public User update(String username, String userImg, String userDescription) {
         this.username = username;
         this.userImg = userImg;
+        this.userDescription = userDescription;
         return this;
     }
 

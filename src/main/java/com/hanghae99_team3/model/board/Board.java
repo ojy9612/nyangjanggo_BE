@@ -20,7 +20,6 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Board extends Timestamped {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

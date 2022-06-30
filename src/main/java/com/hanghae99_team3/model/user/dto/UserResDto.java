@@ -12,4 +12,5 @@ import lombok.Setter;
 public class UserResDto {
     private String username;
     private String userImg;
+    private String userDescription;
 }

@@ -78,8 +78,9 @@ public class AwsS3Service {
         return returnForm;
     }
 
-    public void deleteFile(String fileName) {
-        if (! fileName.equals("")){
+    public void deleteFile(String imgUrl) {
+        if (!imgUrl.equals("")) {
+            String fileName = imgUrl.split("/")[3];
             amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
         }
     }
