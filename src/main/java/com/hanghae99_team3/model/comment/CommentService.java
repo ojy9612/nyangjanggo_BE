@@ -6,6 +6,7 @@ import com.hanghae99_team3.model.board.BoardRepository;
 import com.hanghae99_team3.model.comment.dto.CommentRequestDto;
 import com.hanghae99_team3.model.user.UserRepository;
 import com.hanghae99_team3.model.user.domain.User;
+import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,8 +32,10 @@ public class CommentService {
     }
 
     @Transactional
-    public Comment createComment(User userDetails, CommentRequestDto commentRequestDto, Long boardId) {
-        User user = userDetails;
+    public Comment createComment(PrincipalDetails principalDetails, CommentRequestDto commentRequestDto, Long boardId) {
+        User user = userRepository.findByEmail(principalDetails.getUsername()).orElseThrow(
+                () -> new IllegalArgumentException("유저 정보가 없습니다."));
+
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException(BOARD_NOT_FOUND));
 
@@ -45,8 +48,10 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public Comment updateComment(User userDetails, CommentRequestDto commentRequestDto, Long boardId, Long commentId) {
-        User user = userDetails;
+    public Comment updateComment(PrincipalDetails principalDetails, CommentRequestDto commentRequestDto, Long boardId, Long commentId) {
+        User user = userRepository.findByEmail(principalDetails.getUsername()).orElseThrow(
+                () -> new IllegalArgumentException("유저 정보가 없습니다."));
+
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException(BOARD_NOT_FOUND));
 
@@ -60,8 +65,10 @@ public class CommentService {
 
     }
 
-    public void removeComment(User userDetails, Long boardId, Long commentId) {
-        User user = userDetails;
+    public void removeComment(PrincipalDetails principalDetails, Long boardId, Long commentId) {
+        User user = userRepository.findByEmail(principalDetails.getUsername()).orElseThrow(
+                () -> new IllegalArgumentException("유저 정보가 없습니다."));
+
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException(BOARD_NOT_FOUND));
 

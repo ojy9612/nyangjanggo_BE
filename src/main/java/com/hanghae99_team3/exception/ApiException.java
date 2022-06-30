@@ -24,7 +24,7 @@ public class ApiException extends RuntimeException{
     @ExceptionHandler(S3UploadFailedException.class)
     public ResponseEntity<Map<String, String>> handleS3UploadFailedException(S3UploadFailedException e){
         Map<String, String> errors = new HashMap<>();
-        errors.put("IdDuplicateException",e.getMessage());
+        errors.put("S3UploadFailedException",e.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }

@@ -2,6 +2,7 @@ package com.hanghae99_team3.model.user.domain;
 
 import com.hanghae99_team3.model.board.Board;
 import com.hanghae99_team3.model.comment.Comment;
+import com.hanghae99_team3.model.fridge.Fridge;
 import com.hanghae99_team3.model.good.Good;
 import com.sun.istack.NotNull;
 import lombok.Builder;
@@ -46,7 +47,7 @@ public class User {
     @Column
     private String providerId;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
     private final List<Board> boardList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
@@ -55,9 +56,12 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<Good> goodList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    private final List<Fridge> fridgeList = new ArrayList<>();
+
     public void addBoard(Board board) {
-        this.boardList.add(board);
         board.setUser(this);
+        this.boardList.add(board);
     }
 
     public void addComment(Comment comment) {
@@ -68,6 +72,11 @@ public class User {
     public void addGood(Good good) {
         good.setUser(this);
         this.goodList.add(good);
+    }
+
+    public void addFridge(Fridge fridge) {
+        fridge.setUser(this);
+        this.fridgeList.add(fridge);
     }
 
     @Builder(builderClassName = "UserDetailRegister", builderMethodName = "userDetailRegister")
