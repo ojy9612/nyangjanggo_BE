@@ -22,17 +22,13 @@ public class Images extends Timestamped {
     @Column
     private String imageLink;
 
-    @Column
-    private String imageKey;
-
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     private Board board;
 
     @Builder
-    public Images(@NotNull String imageLink,@NotNull String imageKey,@NotNull Board board) {
+    public Images(@NotNull String imageLink,@NotNull Board board) {
         this.imageLink = imageLink;
-        this.imageKey = imageKey;
         board.addImages(this);
     }
 

@@ -1,18 +1,17 @@
 package com.hanghae99_team3.model.board;
 
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.hanghae99_team3.model.Timestamped;
+import com.hanghae99_team3.model.board.dto.BoardRequestDto;
 import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.good.Good;
-import com.hanghae99_team3.model.board.dto.BoardRequestDto;
 import com.hanghae99_team3.model.images.Images;
 import com.hanghae99_team3.model.resource.Resource;
 import com.hanghae99_team3.model.user.domain.User;
 import lombok.*;
-import org.jetbrains.annotations.NotNull;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 

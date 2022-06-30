@@ -21,6 +21,7 @@ public class BoardRequestDto {
 
     // 이미지는 없어도 전송할 수 있지만 비어있는 값이 와야하므로(List size 는 1)
     // List<MultipartFile>는 null 이 되면 안됨.
+    @Builder
     public BoardRequestDto(@NotNull String title,
                            @NotNull String subTitle,
                            @NotNull String content,

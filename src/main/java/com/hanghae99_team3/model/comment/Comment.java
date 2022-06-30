@@ -17,7 +17,6 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Comment extends Timestamped {
 
     @Id

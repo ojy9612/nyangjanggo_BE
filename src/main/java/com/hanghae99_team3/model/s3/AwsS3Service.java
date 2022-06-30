@@ -27,6 +27,9 @@ public class AwsS3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    @Value("${cloud.aws.region.static}")
+    private String region;
+
     private final AmazonS3 amazonS3;
 
     private static final String DIR = "team3";
@@ -34,8 +37,7 @@ public class AwsS3Service {
 
     private static final String OBJECTLINK = "https://hanhae99homework2.s3.ap-northeast-2.amazonaws.com/";
 
-    public List<List<String>> uploadFile(List<MultipartFile> multipartFiles) {
-        List<String> fileKeyList = new ArrayList<>();
+    public List<String> uploadFile(List<MultipartFile> multipartFiles) {
         List<String> fileLinkList = new ArrayList<>();
 
         // forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
@@ -63,19 +65,13 @@ public class AwsS3Service {
                     throw new S3UploadFailedException("S3파일 업로드 실패, bucket 에 남겨진 이미지를 확인하세요.");
                 }
 
-                fileKeyList.add(amazonS3.getObject(bucket,fileName).getKey());
                 fileLinkList.add(OBJECTLINK + amazonS3.getObject(bucket,fileName).getKey());
             } else {
-                fileKeyList.add("");
                 fileLinkList.add("");
             }
         });
 
-        List<List<String>> returnForm = new ArrayList<>();
-        returnForm.add(fileKeyList);
-        returnForm.add(fileLinkList);
-
-        return returnForm;
+        return fileLinkList;
     }
 
     public void deleteFile(String imgUrl) {
