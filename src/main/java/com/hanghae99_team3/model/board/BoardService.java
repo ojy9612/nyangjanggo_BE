@@ -53,7 +53,7 @@ public class BoardService {
                 .boardRequestDto(boardRequestDto)
                 .build();
 
-        imagesService.createImages(awsS3Service.uploadFile(boardRequestDto.getImgFileList()), board);
+//        imagesService.createImages(awsS3Service.uploadFile(boardRequestDto.getImgFileList()), board);
 
         return boardRepository.save(board);
     }
