@@ -1,16 +1,18 @@
 package com.hanghae99_team3.model.user.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class UserResDto {
+public class UserReqDto {
     private String username;
-    private String userImg;
+    private List<MultipartFile> userImg;
     private String userDescription;
+    private String imgUrl;
 }

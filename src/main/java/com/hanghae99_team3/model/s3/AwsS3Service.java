@@ -74,8 +74,9 @@ public class AwsS3Service {
         return fileLinkList;
     }
 
-    public void deleteFile(String fileName) {
-        if (! fileName.equals("")){
+    public void deleteFile(String imgUrl) {
+        if (imgUrl.startsWith("https://hanhae99homework2")) {
+            String fileName = DIR + "/" + imgUrl.split("/")[4];
             amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
         }
     }
