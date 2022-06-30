@@ -4,6 +4,7 @@ import com.hanghae99_team3.model.board.Board;
 import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.fridge.Fridge;
 import com.hanghae99_team3.model.good.Good;
+import com.hanghae99_team3.model.user.dto.UserReqDto;
 import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -100,10 +101,10 @@ public class User {
         this.providerId = providerId;
     }
 
-    public User update(String username, String userImg, String userDescription) {
-        this.username = username;
-        this.userImg = userImg;
-        this.userDescription = userDescription;
+    public User update(UserReqDto userDto) {
+        this.username = userDto.getUsername();
+        this.userImg = userDto.getImgUrl();
+        this.userDescription = userDto.getUserDescription();
         return this;
     }
 

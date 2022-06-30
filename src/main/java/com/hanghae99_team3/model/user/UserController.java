@@ -36,13 +36,13 @@ public class UserController {
     }
 
     @PutMapping("api/user")
-    public String updateUser(@ModelAttribute UserReqDto userDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return userService.update(userDto, principalDetails);
+    public void updateUser(@ModelAttribute UserReqDto userDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        userService.update(userDto, principalDetails);
     }
 
     @DeleteMapping("api/user")
-    public String deleteUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return userService.deleteUser(principalDetails);
+    public void deleteUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        userService.deleteUser(principalDetails);
     }
 
     @RequestMapping("/auth")
