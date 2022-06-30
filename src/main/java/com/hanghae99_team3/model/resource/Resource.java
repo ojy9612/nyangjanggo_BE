@@ -1,7 +1,6 @@
 package com.hanghae99_team3.model.resource;
 
 import com.hanghae99_team3.model.board.Board;
-import com.hanghae99_team3.model.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
