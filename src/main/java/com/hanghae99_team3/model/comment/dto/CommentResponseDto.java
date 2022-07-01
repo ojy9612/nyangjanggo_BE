@@ -10,14 +10,14 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class CommentResponseDto {
-    private String username;
+    private String nickname;
     private String userImg;
     private String comment;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
     public CommentResponseDto(@NotNull Comment comment) {
-        this.username = comment.getUser().getUsername();
+        this.nickname = comment.getUser().getNickname();
         this.userImg = comment.getUser().getUserImg();
         this.comment = comment.getContent();
         this.createdAt = comment.getCreatedAt();

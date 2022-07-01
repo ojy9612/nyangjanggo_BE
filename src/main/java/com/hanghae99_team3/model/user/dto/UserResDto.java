@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResDto {
-    private String username;
+    private String nickname;
     private String userImg;
     private String userDescription;
 }

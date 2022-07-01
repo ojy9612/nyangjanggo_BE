@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class UserReqDto {
-    private String username;
+    private String nickname;
     private List<MultipartFile> userImg;
     private String userDescription;
     private String imgUrl;

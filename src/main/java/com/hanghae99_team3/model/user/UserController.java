@@ -29,9 +29,9 @@ public class UserController {
     @GetMapping("api/user")
     public UserResDto getUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         return new UserResDto(
-                principalDetails.getUser().getUsername(),
-                principalDetails.getUser().getUserImg(),
-                principalDetails.getUser().getUserDescription()
+                principalDetails.getNickname(),
+                principalDetails.getUserImg(),
+                principalDetails.getUserDescription()
         );
     }
 
@@ -51,21 +51,21 @@ public class UserController {
                 .getAuthentication();
     }
 
-    @PostMapping("/join")
-    public Long join(@RequestBody SignupMemberDto signupMemberDto) {
-        return userService.join(signupMemberDto);
-    }
+//    @PostMapping("/join")
+//    public Long join(@RequestBody SignupMemberDto signupMemberDto) {
+//        return userService.join(signupMemberDto);
+//    }
 
-    @PostMapping("/login")
-    public Map<String, String> login(@RequestBody LoginMemberDto loginMemberDto) {
-        return userService.login(loginMemberDto);
-    }
+//    @PostMapping("/login")
+//    public Map<String, String> login(@RequestBody LoginMemberDto loginMemberDto) {
+//        return userService.login(loginMemberDto);
+//    }
 
     @PostMapping("/member/memberInfo")
     public UserInfoDto getUserInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         System.out.println("principalDetails = " + principalDetails);
         String username = principalDetails.getUsername();
-        UserRole roles = principalDetails.getUser().getRole();
+        UserRole roles = principalDetails.getRole();
         return new UserInfoDto(username, roles);
     }
 
@@ -83,7 +83,7 @@ public class UserController {
         String result = "";
 
         PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-        if(principal.getUser().getAuthProvider() == null) {
+        if(principal.getAuthProvider() == null) {
             result = result + "Form 로그인 : " + principal;
         }else{
             result = result + "OAuth2 로그인 : " + principal;

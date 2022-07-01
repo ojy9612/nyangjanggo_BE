@@ -8,11 +8,11 @@ import org.jetbrains.annotations.NotNull;
 @NoArgsConstructor
 public class GoodResponseDto {
 
-    private String username;
+    private String nickname;
     private String userImg;
 
     public GoodResponseDto(@NotNull Good good) {
-        this.username = good.getUser().getUsername();
+        this.nickname = good.getUser().getNickname();
         this.userImg = good.getUser().getUserImg();
     }
 }

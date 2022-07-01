@@ -39,10 +39,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
 
         String providerId = oAuth2UserInfo.getProviderId();
-        String username = provider + "_" +providerId;  			// 사용자가 입력한 적은 없지만 만들어준다. Default username
+        String nickname = provider + "_" +providerId;  			// 사용자가 입력한 적은 없지만 만들어준다. Default username
         String userImg = oAuth2UserInfo.getUserImg();
-//        String name = oAuth2UserInfo.getName();
-//        System.out.println("name = " + name);
+
         String uuid = UUID.randomUUID().toString().substring(0, 6);
         String password = passwordEncoder.encode("패스워드"+uuid);  // 사용자가 입력한 적은 없지만 만들어준다
 
@@ -55,7 +54,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         //DB에 없는 사용자라면 회원처리
         if (user.isEmpty()) {
             User newUser = User.oauth2Register()
-                    .username(username).password(password).email(email).userImg(userImg).role(role)
+                    .nickname(nickname).password(password).email(email).userImg(userImg).role(role)
                     .provider(AuthProvider.valueOf(provider)).providerId(providerId)
                     .build();
             userRepository.save(newUser);

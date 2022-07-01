@@ -1,7 +1,6 @@
 package com.hanghae99_team3.security.oauth2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.domain.UserRole;
 import com.hanghae99_team3.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +26,11 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        User user = principalDetails.getUser();
+
 
         // 최초 로그인이라면 회원가입 처리를 한다.
 
-        String token = jwtTokenProvider.createToken(user.getEmail(), UserRole.USER);
+        String token = jwtTokenProvider.createToken(principalDetails.getUsername(), UserRole.USER);
         log.info("{}", token);
 
         writeTokenResponse(response, token);

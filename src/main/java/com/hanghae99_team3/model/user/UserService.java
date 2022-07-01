@@ -49,26 +49,26 @@ public class UserService {
         userRepository.deleteById(user.getId());
     }
 
-    public Long join(SignupMemberDto memberDto) {
-        String username = memberDto.getUsername();
-        Optional<User> found = userRepository.findByEmail(username);
-        if (found.isPresent()) {
-            throw new IllegalArgumentException("중복된 사용자 ID 가 존재합니다.");
-        }
+//    public Long join(SignupMemberDto memberDto) {
+//        String username = memberDto.getUsername();
+//        Optional<User> found = userRepository.findByEmail(username);
+//        if (found.isPresent()) {
+//            throw new IllegalArgumentException("중복된 사용자 ID 가 존재합니다.");
+//        }
+//
+//        User user = new User(username);
+//        return userRepository.save(user).getId();
+//    }
 
-        User user = new User(username);
-        return userRepository.save(user).getId();
-    }
-
-    public Map<String, String> login(LoginMemberDto memberDto) {
-        Map<String, String> token = new HashMap<>();
-
-        User user = userRepository.findByEmail(memberDto.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 username 입니다."));
-
-        token.put("Access-Token", jwtTokenProvider.createToken(user.getUsername(), user.getRole()));
-        return token;
-    }
+//    public Map<String, String> login(LoginMemberDto memberDto) {
+//        Map<String, String> token = new HashMap<>();
+//
+//        User user = userRepository.findByEmail(memberDto.getUsername())
+//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 username 입니다."));
+//
+//        token.put("Access-Token", jwtTokenProvider.createToken(user.getEmail(), user.getRole()));
+//        return token;
+//    }
 
 
 

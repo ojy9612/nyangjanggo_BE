@@ -55,7 +55,7 @@ public class CommentService {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException(BOARD_NOT_FOUND));
 
-        if (board.getUser().getUsername().equals(user.getUsername()) ){
+        if (board.getUser().getEmail().equals(user.getEmail()) ){
             Comment comment = commentRepository.findById(commentId).orElseThrow(
                     ()-> new IllegalArgumentException(COMMENT_NOT_FOUND));
 
@@ -72,7 +72,7 @@ public class CommentService {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException(BOARD_NOT_FOUND));
 
-        if (board.getUser().getUsername().equals(user.getUsername()) ){
+        if (board.getUser().getEmail().equals(user.getEmail()) ){
             Comment comment = commentRepository.findById(commentId).orElseThrow(
                     ()-> new IllegalArgumentException(COMMENT_NOT_FOUND));
 
