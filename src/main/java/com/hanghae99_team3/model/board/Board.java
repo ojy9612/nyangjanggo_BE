@@ -101,4 +101,3 @@ public class Board extends Timestamped {
     }
 
 }
-

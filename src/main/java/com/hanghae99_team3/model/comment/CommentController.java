@@ -5,30 +5,26 @@ import com.hanghae99_team3.model.comment.dto.CommentResponseDto;
 import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-public class CommentController {
+public class
+
+CommentController {
     private final CommentService commentService;
 
     @GetMapping("/api/board/{boardId}/comments")
-    public List<CommentResponseDto> getAllComment(@PathVariable Long boardId){
-        List<Comment> commentList = commentService.getAllComment(boardId);
-
-        List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
-
-        for (Comment comment: commentList){
-            commentResponseDtoList.add(new CommentResponseDto(comment));
-        }
-
-        return commentResponseDtoList;
+    public Page<CommentResponseDto> getAllComment(@PageableDefault(size = 3) @PathVariable Long boardId, Pageable pageable){
+        return commentService.getAllComment(boardId, pageable);
     }
+
+
 
     @PostMapping("/api/board/{boardId}/comment")
     public CommentResponseDto createComment(@AuthenticationPrincipal PrincipalDetails principalDetails,

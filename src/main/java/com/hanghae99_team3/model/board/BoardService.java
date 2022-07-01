@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.hanghae99_team3.exception.ErrorMessage.ID_DUPLICATE;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -33,6 +35,7 @@ public class BoardService {
     private final RecipeStepService recipeStepService;
 
 
+
     public Board getOneBoard(Long boardId) {
         return boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException("해당 계정이 존재하지 않습니다.")
@@ -40,11 +43,17 @@ public class BoardService {
     }
 
 
+
     public Page<BoardResponseDto> getAllBoards(Pageable pageable) {
-        return boardRepository.findAll(pageable)
+
+
+        Page<Board> all = boardRepository.findAll(pageable);
+        List<Board> content1 = all.getContent();
+        Page<BoardResponseDto> map1 = boardRepository.findAll(pageable)
                 .map(BoardResponseDto::new);
+        List<BoardResponseDto> content = map1.getContent();
 
-
+        return map1;
     }
 
     @Transactional
