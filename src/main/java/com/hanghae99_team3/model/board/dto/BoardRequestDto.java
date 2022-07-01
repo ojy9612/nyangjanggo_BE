@@ -16,12 +16,12 @@ public class BoardRequestDto {
 
     private String title;
     private String subTitle;
-    private MultipartFile frontImageLink;
+    private MultipartFile mainImageFile;
     private String content;
 
+    private List<MultipartFile> imgFileList;
     private List<ResourceRequestDto> resourceRequestDtoList;
     private List<RecipeStepRequestDto> recipeStepRequestDtoList;
-    private List<MultipartFile> imgFileList;
 
     /*
     이미지는 없어도 전송할 수 있지만 비어있는 값이 와야함.(List size 는 1)
@@ -30,14 +30,14 @@ public class BoardRequestDto {
     @Builder
     public BoardRequestDto(@NotNull String title,
                            @NotNull String subTitle,
-                           @NotNull MultipartFile frontImageLink,
+                           @NotNull MultipartFile mainImageFile,
                            @NotNull String content,
                            @NotNull List<ResourceRequestDto> resourceRequestDtoList,
                            @NotNull List<RecipeStepRequestDto> recipeStepRequestDtoList,
                            @NotNull List<MultipartFile> imgFile) {
         this.title = title;
         this.subTitle = subTitle;
-        this.frontImageLink = frontImageLink;
+        this.mainImageFile = mainImageFile;
         this.content = content;
         this.resourceRequestDtoList = resourceRequestDtoList;
         this.recipeStepRequestDtoList = recipeStepRequestDtoList;

@@ -1,8 +1,10 @@
 package com.hanghae99_team3.model.images;
 
 import com.hanghae99_team3.model.board.Board;
+import com.hanghae99_team3.model.s3.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -11,14 +13,15 @@ import java.util.List;
 public class ImagesService {
 
     private final ImagesRepository imagesRepository;
+    private final AwsS3Service awsS3Service;
 
-    public void createImages(List<String> s3Lists, Board board) {
+    public void createImages(List<MultipartFile> multipartFileList, Board board) {
 
-
-        s3Lists.forEach(imageLink -> {
-            if (!imageLink.equals("")) {
+        multipartFileList.forEach(multipartFile -> {
+            String imgLink = awsS3Service.uploadFile(multipartFile);
+            if (!imgLink.equals("")) {
                 Images images = Images.builder()
-                        .imageLink(imageLink)
+                        .imageLink(imgLink)
                         .board(board)
                         .build();
 
@@ -28,4 +31,11 @@ public class ImagesService {
 
     }
 
+    public void removeImages(Board board) {
+        List<Images> imagesList = imagesRepository.findAllByBoard(board);
+
+        imagesList.forEach(images -> awsS3Service.deleteFile(images.getImageLink()));
+
+        imagesRepository.deleteAll(imagesList);
+    }
 }

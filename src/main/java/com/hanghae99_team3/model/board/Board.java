@@ -32,6 +32,9 @@ public class Board extends Timestamped {
     private String subTitle;
 
     @Column
+    private String mainImage;
+
+    @Column
     private String content;
 
     @Setter
@@ -80,17 +83,22 @@ public class Board extends Timestamped {
 
     @Builder
     public Board(@NotNull User user,
-                 @NotNull BoardRequestDto boardRequestDto) {
+                 @NotNull BoardRequestDto boardRequestDto,
+                 String mainImage) {
         user.addBoard(this);
         this.title = boardRequestDto.getTitle();
         this.subTitle = boardRequestDto.getSubTitle();
         this.content = boardRequestDto.getContent();
+        this.mainImage = mainImage;
     }
-    public void update(@NotNull BoardRequestDto boardRequestDto){
+
+    public void update(@NotNull BoardRequestDto boardRequestDto,
+                       String mainImage){
         this.title = boardRequestDto.getTitle();
         this.subTitle = boardRequestDto.getSubTitle();
         this.content = boardRequestDto.getContent();
-
+        this.mainImage = mainImage;
     }
+
 }
 

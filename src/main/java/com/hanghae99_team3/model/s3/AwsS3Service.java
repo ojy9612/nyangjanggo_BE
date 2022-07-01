@@ -43,27 +43,7 @@ public class AwsS3Service {
         // forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
         multipartFiles.forEach(file -> {
             if(file.getContentType() != null){
-                String fileName = createFileName(file.getOriginalFilename(),DIR);
-                ObjectMetadata objectMetadata = new ObjectMetadata();
-                objectMetadata.setContentLength(file.getSize());
-                objectMetadata.setContentType(file.getContentType());
-
-                try(InputStream inputStream = file.getInputStream()) {
-                    // 파일 유효성 검사
-                    Tika tika = new Tika();
-                    String detectedFile = tika.detect(file.getBytes());  // getBytes() 사용시 느려질 수 있음
-                    if(!(detectedFile.startsWith("image"))){
-                        throw new IllegalArgumentException("AwsS3 : 올바른 이미지 파일을 올려주세요.");
-                    }
-
-                    // 업로드
-                    amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-                            .withCannedAcl(CannedAccessControlList.PublicRead));
-
-
-                } catch(IOException e) {
-                    throw new S3UploadFailedException("S3파일 업로드 실패, bucket 에 남겨진 이미지를 확인하세요.");
-                }
+                String fileName = putFile(file);
 
                 fileLinkList.add(OBJECTLINK + amazonS3.getObject(bucket,fileName).getKey());
             } else {
@@ -73,6 +53,43 @@ public class AwsS3Service {
 
         return fileLinkList;
     }
+
+    public String uploadFile(MultipartFile multipartFile) {
+        // forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
+
+        if(multipartFile.getContentType() != null){
+            String fileName = putFile(multipartFile);
+            return OBJECTLINK + amazonS3.getObject(bucket,fileName).getKey();
+        } else {
+            return "";
+        }
+
+    }
+
+    private String putFile(MultipartFile multipartFile){
+        String fileName = createFileName(multipartFile.getOriginalFilename(),DIR);
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(multipartFile.getSize());
+        objectMetadata.setContentType(multipartFile.getContentType());
+
+        try(InputStream inputStream = multipartFile.getInputStream()) {
+            // 파일 유효성 검사
+            Tika tika = new Tika();
+            String detectedFile = tika.detect(multipartFile.getBytes());  // getBytes() 사용시 느려질 수 있음
+            if(!(detectedFile.startsWith("image"))){
+                throw new IllegalArgumentException("AwsS3 : 올바른 이미지 파일을 올려주세요.");
+            }
+
+            // 업로드
+            amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+
+            return fileName;
+        } catch(IOException e) {
+            throw new S3UploadFailedException("S3파일 업로드 실패, bucket 에 남겨진 이미지를 확인하세요.");
+        }
+    }
+
 
     public void deleteFile(String imgUrl) {
         if (imgUrl.startsWith("https://hanhae99homework2")) {
