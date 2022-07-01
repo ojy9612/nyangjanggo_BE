@@ -8,12 +8,15 @@ import com.hanghae99_team3.model.good.Good;
 import com.hanghae99_team3.model.good.GoodResponseDto;
 import com.hanghae99_team3.model.images.Images;
 import com.hanghae99_team3.model.images.ImagesResponseDto;
+import com.hanghae99_team3.model.recipestep.dto.RecipeStepResponseDto;
+import com.hanghae99_team3.model.resource.dto.ResourceResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -25,38 +28,14 @@ public class BoardDetailResponseDto {
     private String title;
     private String subTitle;
     private String content;
+    private List<ImagesResponseDto> imgList;
+    private List<ResourceResponseDto> resourceResponseDtoList;
+    private List<RecipeStepResponseDto> recipeStepResponseDtoList;
     private List<CommentResponseDto> commentList;
     private List<GoodResponseDto> goodList;
-    private List<ImagesResponseDto> imgList;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    private List<CommentResponseDto> makeCommentList(List<Comment> commentList){
-
-        List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
-
-        commentList.forEach(comment -> commentResponseDtoList.add(new CommentResponseDto(comment)));
-
-        return commentResponseDtoList;
-    }
-
-    private List<GoodResponseDto> makeGoodList(List<Good> goodList){
-
-        List<GoodResponseDto> goodResponseDtoList = new ArrayList<>();
-
-        goodList.forEach(good -> goodResponseDtoList.add(new GoodResponseDto(good)));
-
-        return goodResponseDtoList;
-    }
-
-    private List<ImagesResponseDto> makeImagesList(List<Images> imagesList){
-
-        List<ImagesResponseDto> imagesResponseDtoList = new ArrayList<>();
-
-        imagesList.forEach(images -> imagesResponseDtoList.add(new ImagesResponseDto(images)));
-
-        return imagesResponseDtoList;
-    }
 
     public BoardDetailResponseDto(Board board) {
         this.boardId = board.getId();
@@ -65,9 +44,11 @@ public class BoardDetailResponseDto {
         this.title = board.getTitle();
         this.subTitle = board.getSubTitle();
         this.content = board.getContent();
-        this.commentList = makeCommentList(board.getCommentList());
-        this.goodList = makeGoodList(board.getGoodList());
-        this.imgList = makeImagesList(board.getImagesList());
+        this.imgList = board.getImagesList().stream().map(ImagesResponseDto::new).collect(Collectors.toList());
+        this.resourceResponseDtoList = board.getResourceList().stream().map(ResourceResponseDto::new).collect(Collectors.toList());
+        this.recipeStepResponseDtoList = board.getRecipeStepList().stream().map(RecipeStepResponseDto::new).collect(Collectors.toList());
+        this.commentList = board.getCommentList().stream().map(CommentResponseDto::new).collect(Collectors.toList());
+        this.goodList = board.getGoodList().stream().map(GoodResponseDto::new).collect(Collectors.toList());
         this.createdAt = board.getCreatedAt();
         this.modifiedAt = board.getModifiedAt();
     }
