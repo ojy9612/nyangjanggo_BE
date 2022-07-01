@@ -27,10 +27,13 @@ public class UserService {
     private final AwsS3Service awsS3Service;
 //    private final PasswordEncoder passwordEncoder;
 
+    public User findUserByAuthEmail(PrincipalDetails principalDetails) {
+        return userRepository.findByEmail(principalDetails.getUsername()).orElseThrow(
+                () -> new IllegalArgumentException("유저 정보가 없습니다."));
+    }
 
     public void update(UserReqDto userReqDto, PrincipalDetails principalDetails) {
-        User user = userRepository.findByEmail(principalDetails.getUsername()).orElseThrow(
-                () -> new IllegalArgumentException("유저 정보가 없습니다."));
+        User user = findUserByAuthEmail(principalDetails);
         //기존 이미지 삭제
         awsS3Service.deleteFile(user.getUserImg());
         //s3에 이미지 저장
@@ -42,8 +45,7 @@ public class UserService {
     }
 
     public void deleteUser(PrincipalDetails principalDetails) {
-        User user = userRepository.findByEmail(principalDetails.getUsername()).orElseThrow(
-                () -> new IllegalArgumentException("유저 정보가 없습니다."));
+        User user = findUserByAuthEmail(principalDetails);
         //기존 이미지 삭제
         awsS3Service.deleteFile(user.getUserImg());
         userRepository.deleteById(user.getId());
