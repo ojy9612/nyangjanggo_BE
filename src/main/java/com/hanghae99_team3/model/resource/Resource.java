@@ -1,6 +1,7 @@
 package com.hanghae99_team3.model.resource;
 
 import com.hanghae99_team3.model.board.Board;
+import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,13 +33,10 @@ public class Resource {
     private Board board;
 
     @Builder
-    public Resource(@NotNull String resourceName,
-                  @NotNull String num,
-                  @NotNull String category,
-                  @NotNull Board board) {
-        this.resourceName = resourceName;
-        this.num = num;
-        this.category = category;
+    public Resource(@NotNull ResourceRequestDto resourceRequestDto,Board board) {
+        this.resourceName = resourceRequestDto.getResourceName();
+        this.num = resourceRequestDto.getAmount();
+        this.category = resourceRequestDto.getCategory();
         board.addResource(this);
     }
 

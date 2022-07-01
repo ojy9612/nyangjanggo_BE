@@ -1,11 +1,14 @@
 package com.hanghae99_team3.model.board;
 
 
+import com.hanghae99_team3.exception.newException.IdDuplicateException;
 import com.hanghae99_team3.model.board.dto.BoardRequestDto;
 import com.hanghae99_team3.model.board.dto.BoardResponseDto;
 import com.hanghae99_team3.model.images.ImagesService;
+import com.hanghae99_team3.model.recipestep.RecipeStepService;
+import com.hanghae99_team3.model.resource.ResourceService;
 import com.hanghae99_team3.model.s3.AwsS3Service;
-import com.hanghae99_team3.model.user.UserRepository;
+import com.hanghae99_team3.model.user.UserService;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -15,16 +18,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.hanghae99_team3.exception.ErrorMessage.ID_DUPLICATE;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class BoardService {
 
     private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final AwsS3Service awsS3Service;
-
     private final ImagesService imagesService;
+    private final ResourceService resourceService;
+    private final RecipeStepService recipeStepService;
 
 
     public Board getOneBoard(Long boardId) {
@@ -42,38 +48,68 @@ public class BoardService {
     }
 
     @Transactional
-    public Board createBoard(BoardRequestDto boardRequestDto, PrincipalDetails userDetails) {
-        User longinUser = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
-                () -> new IllegalArgumentException("유저 정보가 없습니다."));
+    public Board createBoard(BoardRequestDto boardRequestDto, PrincipalDetails principalDetails) {
+        User user = userService.findUserByAuthEmail(principalDetails);
 
 
         Board board = Board.builder()
-                .user(longinUser)
+                .user(user)
                 .boardRequestDto(boardRequestDto)
+                .mainImage(awsS3Service.uploadFile(boardRequestDto.getMainImageFile()))
                 .build();
 
-        imagesService.createImages(
-                awsS3Service.uploadFile(boardRequestDto.getImgFileList()), board
-        );
+        recipeStepService.createRecipeStep(boardRequestDto.getRecipeStepRequestDtoList(),board);
+
+        resourceService.createResource(boardRequestDto.getResourceRequestDtoList(),board);
+
+        imagesService.createImages(boardRequestDto.getImgFileList(), board);
 
         return boardRepository.save(board);
     }
 
     @Transactional
-    public Board updateBoard(BoardRequestDto boardRequestDto, PrincipalDetails user, Long boardId) {
+    public Board updateBoard(BoardRequestDto boardRequestDto, PrincipalDetails principalDetails, Long boardId) {
+        User user = userService.findUserByAuthEmail(principalDetails);
+
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException("생성된 게시글이 없습니다.")
         );
-        board.update(boardRequestDto);
-        return board;
+
+        if (user.getId().equals(board.getUser().getId())){
+
+            recipeStepService.removeRecipeStep(board);
+            recipeStepService.createRecipeStep(boardRequestDto.getRecipeStepRequestDtoList(),board);
+
+            resourceService.removeResource(board);
+            resourceService.createResource(boardRequestDto.getResourceRequestDtoList(),board);
+
+            imagesService.removeImages(board);
+            imagesService.createImages(boardRequestDto.getImgFileList(), board);
+
+            awsS3Service.deleteFile(board.getMainImage());
+            board.update(boardRequestDto, awsS3Service.uploadFile(boardRequestDto.getMainImageFile()));
+            return board;
+        } else{
+            throw new IdDuplicateException(ID_DUPLICATE);
+        }
+
     }
 
 
     @Transactional
-    public void deleteBoard(PrincipalDetails user, Long boardId) {
+    public void deleteBoard(PrincipalDetails principalDetails, Long boardId) {
+        User user = userService.findUserByAuthEmail(principalDetails);
+
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException("생성된 게시글이 없습니다.")
         );
-        boardRepository.delete(board);
+
+        if (user.getId().equals(board.getUser().getId())){
+            boardRepository.delete(board);
+        } else{
+            throw new IdDuplicateException(ID_DUPLICATE);
+        }
+
     }
+
 }

@@ -39,38 +39,38 @@ class CommentControllerTest {
     @DisplayName("댓글 기능 Test")
     class CommentTest {
 
-        @BeforeEach
-        void setUp(){
-            //given
-            baseUser = User.userDetailRegister()
-                    .email("email@test.com")
-                    .password("password!")
-                    .username("nickname")
-                    .role(UserRole.USER)
-                    .build();
-
-            basePrincipalDetails = new PrincipalDetails(baseUser);
-
-            List<MultipartFile> baseMultipaerFileList = new ArrayList<>();
-
-
-            BoardRequestDto boardRequestDto = BoardRequestDto.builder()
-                    .title("제목")
-                    .subTitle("부제목")
-                    .content("내용")
-                    .resourceInfos()
-                    .imgFile()
-                    .build();
-
-            baseBoard = Board.builder()
-                    .boardRequestDto(boardRequestDto)
-                    .user(baseUser)
-                    .build();
-
-            //when
-            userRepository.save(baseUser);
-            boardRepository.save(baseBoard);
-        }
+//        @BeforeEach
+//        void setUp(){
+//            //given
+//            baseUser = User.userDetailRegister()
+//                    .email("email@test.com")
+//                    .password("password!")
+//                    .username("nickname")
+//                    .role(UserRole.USER)
+//                    .build();
+//
+//            basePrincipalDetails = new PrincipalDetails(baseUser);
+//
+//            List<MultipartFile> baseMultipaerFileList = new ArrayList<>();
+//
+//
+//            BoardRequestDto boardRequestDto = BoardRequestDto.builder()
+//                    .title("제목")
+//                    .subTitle("부제목")
+//                    .content("내용")
+//                    .resourceInfos()
+//                    .imgFile()
+//                    .build();
+//
+//            baseBoard = Board.builder()
+//                    .boardRequestDto(boardRequestDto)
+//                    .user(baseUser)
+//                    .build();
+//
+//            //when
+//            userRepository.save(baseUser);
+//            boardRepository.save(baseBoard);
+//        }
 
         @Nested
         @DisplayName("성공 테스트")

@@ -3,6 +3,7 @@ package com.hanghae99_team3.model.recipestep;
 
 import com.hanghae99_team3.model.Timestamped;
 import com.hanghae99_team3.model.board.Board;
+import com.hanghae99_team3.model.recipestep.dto.RecipeStepRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,6 @@ public class RecipeStep extends Timestamped {
     private Integer stepNum;
     @Column
     private String content;
-
     @Column
     private String imageLink;
 
@@ -33,9 +33,11 @@ public class RecipeStep extends Timestamped {
     private Board board;
 
     @Builder
-    public RecipeStep(@NotNull Integer stepNum,@NotNull String content,@NotNull String imageLink,@NotNull Board board) {
-        this.stepNum = stepNum;
-        this.content = content;
+    public RecipeStep(@NotNull RecipeStepRequestDto recipeStepRequestDto,
+                      String imageLink,
+                      @NotNull Board board) {
+        this.stepNum = recipeStepRequestDto.getStepNum();
+        this.content = recipeStepRequestDto.getStepContent();
         this.imageLink = imageLink;
         board.addRecipeStep(this);
     }
