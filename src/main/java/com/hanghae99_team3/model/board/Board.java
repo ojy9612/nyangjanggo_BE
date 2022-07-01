@@ -1,17 +1,18 @@
 package com.hanghae99_team3.model.board;
 
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.hanghae99_team3.model.Timestamped;
+import com.hanghae99_team3.model.board.dto.BoardRequestDto;
 import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.good.Good;
-import com.hanghae99_team3.model.board.dto.BoardRequestDto;
 import com.hanghae99_team3.model.images.Images;
+import com.hanghae99_team3.model.recipestep.RecipeStep;
+import com.hanghae99_team3.model.resource.Resource;
 import com.hanghae99_team3.model.user.domain.User;
 import lombok.*;
-import org.jetbrains.annotations.NotNull;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,6 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Board extends Timestamped {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +35,7 @@ public class Board extends Timestamped {
     private String content;
 
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
@@ -46,6 +46,12 @@ public class Board extends Timestamped {
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<Images> imagesList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
+    private final List<Resource> resourceList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
+    private final List<RecipeStep> recipeStepList = new ArrayList<>();
 
     public void addComment(Comment comment) {
         comment.setBoard(this);
@@ -60,6 +66,16 @@ public class Board extends Timestamped {
     public void addImages(Images images) {
         images.setBoard(this);
         this.imagesList.add(images);
+    }
+
+    public void addResource(Resource resource) {
+        resource.setBoard(this);
+        this.resourceList.add(resource);
+    }
+
+    public void addRecipeStep(RecipeStep recipeStep) {
+        recipeStep.setBoard(this);
+        this.recipeStepList.add(recipeStep);
     }
 
     @Builder

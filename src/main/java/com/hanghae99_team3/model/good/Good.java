@@ -16,7 +16,6 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Good extends TimestampedOnlyCreated {
 
     @Id

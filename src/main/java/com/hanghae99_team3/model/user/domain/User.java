@@ -2,7 +2,9 @@ package com.hanghae99_team3.model.user.domain;
 
 import com.hanghae99_team3.model.board.Board;
 import com.hanghae99_team3.model.comment.Comment;
+import com.hanghae99_team3.model.fridge.Fridge;
 import com.hanghae99_team3.model.good.Good;
+import com.hanghae99_team3.model.user.dto.UserReqDto;
 import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,14 +22,13 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "USER_ID", nullable = false)
     private Long id;
 
 //    @Column(unique = true, nullable = false)
 //    private String oAuth2Id;
 
     @Column(unique = true, nullable = false)
-    private String username;
+    private String nickname;
 
     private String password;
 
@@ -46,7 +47,10 @@ public class User {
     @Column
     private String providerId;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    @Column
+    private String userDescription = "";
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
     private final List<Board> boardList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
@@ -54,6 +58,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<Good> goodList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    private final List<Fridge> fridgeList = new ArrayList<>();
 
     public void addBoard(Board board) {
         board.setUser(this);
@@ -70,17 +77,22 @@ public class User {
         this.goodList.add(good);
     }
 
+    public void addFridge(Fridge fridge) {
+        fridge.setUser(this);
+        this.fridgeList.add(fridge);
+    }
+
     @Builder(builderClassName = "UserDetailRegister", builderMethodName = "userDetailRegister")
-    public User(String username, String password, String email, UserRole role) {
-        this.username = username;
+    public User(String nickname, String password, String email, UserRole role) {
+        this.nickname = nickname;
         this.password = password;
         this.email = email;
         this.role = role;
     }
 
     @Builder(builderClassName = "OAuth2Register", builderMethodName = "oauth2Register")
-    public User(String username, String password, String email, String userImg, UserRole role, AuthProvider provider, String providerId) {
-        this.username = username;
+    public User(String nickname, String password, String email, String userImg, UserRole role, AuthProvider provider, String providerId) {
+        this.nickname = nickname;
         this.password = password;
         this.email = email;
         this.userImg = userImg;
@@ -89,74 +101,16 @@ public class User {
         this.providerId = providerId;
     }
 
-    public User update(String username, String userImg) {
-        this.username = username;
-        this.userImg = userImg;
+    public User update(UserReqDto userDto) {
+        this.nickname = userDto.getNickname();
+        this.userImg = userDto.getImgUrl();
+        this.userDescription = userDto.getUserDescription();
         return this;
     }
 
-    public User(@NotNull String username) {
-        this.username = username;
+    public User(@NotNull String nickname) {
+        this.nickname = nickname;
         this.role = UserRole.USER;
     }
 
-    @Override
-    public String toString() {
-        return "Member{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", userImg='" + userImg + '\'' +
-                ", role=" + role +
-                ", authProvider=" + authProvider +
-                ", providerId='" + providerId + '\'' +
-                '}';
-    }
-
-
-    //
-//    /**
-//     *UserDetails Methods
-//     */
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        UserRole role = this.role;
-//        String authority = role.getAuthority();
-//
-//        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);
-//        Collection<GrantedAuthority> authorities = new ArrayList<>();
-//        authorities.add(simpleGrantedAuthority);
-//        return authorities;
-//    }
-//
-//    @Override
-//    public String getPassword() {
-//        return null;
-//    }
-//
-//    @Override
-//    public String getUsername() {
-//        return username;
-//    }
-//
-//    @Override
-//    public boolean isAccountNonExpired() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isAccountNonLocked() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isCredentialsNonExpired() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isEnabled() {
-//        return true;
-//    }
 }

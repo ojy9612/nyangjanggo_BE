@@ -1,4 +1,5 @@
-package com.hanghae99_team3.model.images;
+package com.hanghae99_team3.model.recipestep;
+
 
 import com.hanghae99_team3.model.Timestamped;
 import com.hanghae99_team3.model.board.Board;
@@ -6,18 +7,23 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Entity
 @NoArgsConstructor
-public class Images extends Timestamped {
+public class RecipeStep extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
+    private Integer stepNum;
+    @Column
+    private String content;
 
     @Column
     private String imageLink;
@@ -27,9 +33,11 @@ public class Images extends Timestamped {
     private Board board;
 
     @Builder
-    public Images(@NotNull String imageLink,@NotNull Board board) {
+    public RecipeStep(@NotNull Integer stepNum,@NotNull String content,@NotNull String imageLink,@NotNull Board board) {
+        this.stepNum = stepNum;
+        this.content = content;
         this.imageLink = imageLink;
-        board.addImages(this);
+        board.addRecipeStep(this);
     }
 
 }

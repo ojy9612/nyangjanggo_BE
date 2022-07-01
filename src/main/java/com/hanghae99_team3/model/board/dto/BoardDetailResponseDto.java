@@ -20,7 +20,7 @@ import java.util.List;
 public class BoardDetailResponseDto {
 
     private Long boardId;
-    private String username;
+    private String nickname;
     private String userImg;
     private String title;
     private String subTitle;
@@ -60,7 +60,7 @@ public class BoardDetailResponseDto {
 
     public BoardDetailResponseDto(Board board) {
         this.boardId = board.getId();
-        this.username = board.getUser().getUsername();
+        this.nickname = board.getUser().getNickname();
         this.userImg = board.getUser().getUserImg();
         this.title = board.getTitle();
         this.subTitle = board.getSubTitle();
