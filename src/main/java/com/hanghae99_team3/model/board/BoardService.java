@@ -46,7 +46,6 @@ public class BoardService {
         User longinUser = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
                 () -> new IllegalArgumentException("유저 정보가 없습니다."));
 
-        // img 확인
 
         Board board = Board.builder()
                 .user(longinUser)
