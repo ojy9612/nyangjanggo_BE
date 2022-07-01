@@ -29,10 +29,11 @@ public class BoardController {
 
 
     @PostMapping("/api/board")
-    public BoardResponseDto createBoard(@ModelAttribute BoardRequestDto boardRequestDto,
+    public BoardRequestDto/*BoardResponseDto*/ createBoard(@ModelAttribute BoardRequestDto boardRequestDto,
                                         @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        return new BoardResponseDto(boardService.createBoard(boardRequestDto, principalDetails));
+        return boardRequestDto;
+//        return new BoardResponseDto(boardService.createBoard(boardRequestDto, principalDetails));
     }
 
     @PutMapping("/api/board/{boardId}")

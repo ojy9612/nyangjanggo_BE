@@ -6,6 +6,7 @@ import com.hanghae99_team3.model.board.dto.BoardRequestDto;
 import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.good.Good;
 import com.hanghae99_team3.model.images.Images;
+import com.hanghae99_team3.model.recipestep.RecipeStep;
 import com.hanghae99_team3.model.resource.Resource;
 import com.hanghae99_team3.model.user.domain.User;
 import lombok.*;
@@ -49,6 +50,9 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<Resource> resourceList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
+    private final List<RecipeStep> recipeStepList = new ArrayList<>();
+
     public void addComment(Comment comment) {
         comment.setBoard(this);
         this.commentList.add(comment);
@@ -68,6 +72,12 @@ public class Board extends Timestamped {
         resource.setBoard(this);
         this.resourceList.add(resource);
     }
+
+    public void addRecipeStep(RecipeStep recipeStep) {
+        recipeStep.setBoard(this);
+        this.recipeStepList.add(recipeStep);
+    }
+
     @Builder
     public Board(@NotNull User user,
                  @NotNull BoardRequestDto boardRequestDto) {
