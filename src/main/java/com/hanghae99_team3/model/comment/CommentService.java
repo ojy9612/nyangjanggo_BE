@@ -4,14 +4,16 @@ import com.hanghae99_team3.exception.newException.IdDuplicateException;
 import com.hanghae99_team3.model.board.Board;
 import com.hanghae99_team3.model.board.BoardRepository;
 import com.hanghae99_team3.model.comment.dto.CommentRequestDto;
+import com.hanghae99_team3.model.comment.dto.CommentResponseDto;
 import com.hanghae99_team3.model.user.UserRepository;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 import static com.hanghae99_team3.exception.ErrorMessage.*;
 
@@ -23,12 +25,14 @@ public class CommentService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
-    public List<Comment> getAllComment(Long boardId) {
+    public Page<CommentResponseDto> getAllComment(Long boardId, Pageable pageable) {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException(BOARD_NOT_FOUND));
+        return commentRepository.findAllByBoard(board,pageable)
+                .map(CommentResponseDto::new);
 
-        // TODO : 페이징 처리 후 넘기기
-        return board.getCommentList();
+
+
     }
 
     @Transactional
