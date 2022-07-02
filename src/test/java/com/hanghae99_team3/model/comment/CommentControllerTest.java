@@ -2,25 +2,16 @@ package com.hanghae99_team3.model.comment;
 
 import com.hanghae99_team3.model.board.Board;
 import com.hanghae99_team3.model.board.BoardRepository;
-import com.hanghae99_team3.model.board.dto.BoardRequestDto;
-import com.hanghae99_team3.model.user.UserRepository;
+import com.hanghae99_team3.model.user.repository.UserRepository;
 import com.hanghae99_team3.model.user.domain.User;
-import com.hanghae99_team3.model.user.domain.UserRole;
 import com.hanghae99_team3.security.oauth2.PrincipalDetails;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class CommentControllerTest {

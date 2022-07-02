@@ -5,7 +5,7 @@ import com.hanghae99_team3.model.board.Board;
 import com.hanghae99_team3.model.board.BoardRepository;
 import com.hanghae99_team3.model.comment.dto.CommentRequestDto;
 import com.hanghae99_team3.model.comment.dto.CommentResponseDto;
-import com.hanghae99_team3.model.user.UserRepository;
+import com.hanghae99_team3.model.user.repository.UserRepository;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import lombok.RequiredArgsConstructor;

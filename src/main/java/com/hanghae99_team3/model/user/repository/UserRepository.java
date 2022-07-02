@@ -1,4 +1,4 @@
-package com.hanghae99_team3.model.user;
+package com.hanghae99_team3.model.user.repository;
 
 import com.hanghae99_team3.model.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
