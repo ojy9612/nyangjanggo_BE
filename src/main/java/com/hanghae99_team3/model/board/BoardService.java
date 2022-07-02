@@ -25,6 +25,7 @@ import static com.hanghae99_team3.exception.ErrorMessage.BOARD_NOT_FOUND;
 import static com.hanghae99_team3.exception.ErrorMessage.ID_DUPLICATE;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -61,10 +62,10 @@ public class BoardService {
     }
 
 
-    public Board createBoardStepStart(PrincipalDetails principalDetails) {
+    public Optional<Board> createBoardStepStart(PrincipalDetails principalDetails) {
         User user = userService.findUserByAuthEmail(principalDetails);
 
-        return boardRepository.findByUserAndStatusStartsWith(user,"step").orElse(null);
+        return boardRepository.findByUserAndStatusStartsWith(user,"step");
     }
 
     @Transactional
