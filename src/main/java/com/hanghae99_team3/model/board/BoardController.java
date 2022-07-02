@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,9 +34,10 @@ public class BoardController {
     @PostMapping(value = "/api/board/step/0")
     public BoardResponseDto createBoardStepStart(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        return new BoardResponseDto(
-                boardService.createBoardStepStart(principalDetails)
-        );
+        Optional<Board> optionalBoard = boardService.createBoardStepStart(principalDetails);
+
+        return optionalBoard.map(BoardResponseDto::new).orElse(null);
+
     }
 
     @PostMapping(value = "/api/board/step/1")
@@ -63,7 +65,6 @@ public class BoardController {
 
     @PostMapping(value = "/api/board/step/-1")
     public void createBoardStepEnd(@RequestParam Long boardId,@AuthenticationPrincipal PrincipalDetails principalDetails) {
-
 
         boardService.createBoardStepEnd(boardId, principalDetails);
 
