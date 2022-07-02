@@ -2,7 +2,9 @@ package com.hanghae99_team3.model.board;
 
 
 import com.hanghae99_team3.exception.newException.IdDuplicateException;
-import com.hanghae99_team3.model.board.dto.BoardRequestDto;
+import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepMain;
+import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepRecipe;
+import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepResource;
 import com.hanghae99_team3.model.board.dto.BoardResponseDto;
 import com.hanghae99_team3.model.images.ImagesService;
 import com.hanghae99_team3.model.recipestep.RecipeStepService;
@@ -17,10 +19,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import static com.hanghae99_team3.exception.ErrorMessage.BOARD_NOT_FOUND;
 import static com.hanghae99_team3.exception.ErrorMessage.ID_DUPLICATE;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -38,7 +43,7 @@ public class BoardService {
 
     public Board getOneBoard(Long boardId) {
         return boardRepository.findById(boardId).orElseThrow(
-                () -> new IllegalArgumentException("해당 계정이 존재하지 않습니다.")
+                () -> new IllegalArgumentException(BOARD_NOT_FOUND)
         );
     }
 
@@ -56,53 +61,94 @@ public class BoardService {
         return map1;
     }
 
-    @Transactional
-    public Board createBoard(BoardRequestDto boardRequestDto, PrincipalDetails principalDetails) {
+
+    public Optional<Board> createBoardStepStart(PrincipalDetails principalDetails) {
         User user = userService.findUserByAuthEmail(principalDetails);
 
+        return boardRepository.findByUserAndStatusStartsWith(user,"step");
+    }
+
+    @Transactional
+    public void createBoardStepMain(BoardRequestDtoStepMain boardRequestDtoStepMain, PrincipalDetails principalDetails) {
+        User user = userService.findUserByAuthEmail(principalDetails);
 
         Board board = Board.builder()
                 .user(user)
-                .boardRequestDto(boardRequestDto)
-                .mainImage(awsS3Service.uploadFile(boardRequestDto.getMainImageFile()))
+                .mainImage(awsS3Service.uploadFile(boardRequestDtoStepMain.getMainImageFile()))
+                .status("step 1")
                 .build();
 
-        recipeStepService.createRecipeStep(boardRequestDto.getRecipeStepRequestDtoList(),board);
-
-        resourceService.createResource(boardRequestDto.getResourceRequestDtoList(),board);
-
-        imagesService.createImages(boardRequestDto.getImgFileList(), board);
-
-        return boardRepository.save(board);
+        boardRepository.save(board);
     }
 
     @Transactional
-    public Board updateBoard(BoardRequestDto boardRequestDto, PrincipalDetails principalDetails, Long boardId) {
+    public void createBoardStepResource(BoardRequestDtoStepResource boardRequestDtoStepResource, PrincipalDetails principalDetails) {
+        User user = userService.findUserByAuthEmail(principalDetails);
+
+        Board board = boardRepository.findById(boardRequestDtoStepResource.getBoardId()).orElseThrow(
+                () -> new IllegalArgumentException(BOARD_NOT_FOUND)
+        );
+
+        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
+
+        resourceService.createResource(boardRequestDtoStepResource.getResourceRequestDtoList(),board);
+
+        board.setStatus("step 2");
+    }
+
+    @Transactional
+    public void createBoardStepRecipe(BoardRequestDtoStepRecipe boardRequestDtoStepRecipe, MultipartFile multipartFile, PrincipalDetails principalDetails) {
+        User user = userService.findUserByAuthEmail(principalDetails);
+
+        Board board = boardRepository.findById(boardRequestDtoStepRecipe.getBoardId()).orElseThrow(
+                () -> new IllegalArgumentException(BOARD_NOT_FOUND)
+        );
+
+        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
+
+        recipeStepService.createRecipeStep(boardRequestDtoStepRecipe.getRecipeStepRequestDto(), awsS3Service.uploadFile(multipartFile), board);
+    }
+
+    @Transactional
+    public void createBoardStepEnd(Long boardId, PrincipalDetails principalDetails) {
         User user = userService.findUserByAuthEmail(principalDetails);
 
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new IllegalArgumentException("생성된 게시글이 없습니다.")
+                () -> new IllegalArgumentException(BOARD_NOT_FOUND)
         );
 
-        if (user.getId().equals(board.getUser().getId())){
+        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
 
-            recipeStepService.removeRecipeStep(board);
-            recipeStepService.createRecipeStep(boardRequestDto.getRecipeStepRequestDtoList(),board);
-
-            resourceService.removeResource(board);
-            resourceService.createResource(boardRequestDto.getResourceRequestDtoList(),board);
-
-            imagesService.removeImages(board);
-            imagesService.createImages(boardRequestDto.getImgFileList(), board);
-
-            awsS3Service.deleteFile(board.getMainImage());
-            board.update(boardRequestDto, awsS3Service.uploadFile(boardRequestDto.getMainImageFile()));
-            return board;
-        } else{
-            throw new IdDuplicateException(ID_DUPLICATE);
-        }
-
+        board.setStatus("complete");
     }
+
+//    @Transactional
+//    public Board updateBoard(BoardRequestDtoStep0 boardRequestDtoStepZero, PrincipalDetails principalDetails, Long boardId) {
+//        User user = userService.findUserByAuthEmail(principalDetails);
+//
+//        Board board = boardRepository.findById(boardId).orElseThrow(
+//                () -> new IllegalArgumentException("생성된 게시글이 없습니다.")
+//        );
+//
+//        if (user.getId().equals(board.getUser().getId())){
+//
+//            recipeStepService.removeRecipeStep(board);
+//            recipeStepService.createRecipeStep(boardRequestDtoStepZero.getRecipeStepRequestDtoList(),board);
+//
+//            resourceService.removeResource(board);
+//            resourceService.createResource(boardRequestDtoStepZero.getResourceRequestDtoList(),board);
+//
+//            imagesService.removeImages(board);
+//            imagesService.createImages(boardRequestDtoStepZero.getImgFileList(), board);
+//
+//            awsS3Service.deleteFile(board.getMainImage());
+//            board.update(boardRequestDtoStepZero, awsS3Service.uploadFile(boardRequestDtoStepZero.getMainImageFile()));
+//            return board;
+//        } else{
+//            throw new IdDuplicateException(ID_DUPLICATE);
+//        }
+//
+//    }
 
 
     @Transactional
@@ -110,7 +156,7 @@ public class BoardService {
         User user = userService.findUserByAuthEmail(principalDetails);
 
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new IllegalArgumentException("생성된 게시글이 없습니다.")
+                () -> new IllegalArgumentException(BOARD_NOT_FOUND)
         );
 
         if (user.getId().equals(board.getUser().getId())){

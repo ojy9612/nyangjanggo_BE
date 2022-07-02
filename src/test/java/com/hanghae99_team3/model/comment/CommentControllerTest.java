@@ -2,6 +2,11 @@ package com.hanghae99_team3.model.comment;
 
 import com.hanghae99_team3.model.board.Board;
 import com.hanghae99_team3.model.board.BoardRepository;
+import com.hanghae99_team3.model.images.Images;
+import com.hanghae99_team3.model.images.ImagesRepository;
+import com.hanghae99_team3.model.recipestep.RecipeStep;
+import com.hanghae99_team3.model.recipestep.RecipeStepRepository;
+import com.hanghae99_team3.model.s3.AwsS3Service;
 import com.hanghae99_team3.model.user.repository.UserRepository;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.security.oauth2.PrincipalDetails;
@@ -13,14 +18,23 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
 @SpringBootTest
 class CommentControllerTest {
+    @Autowired
+    AwsS3Service awsS3Service;
 
     @Autowired
     UserRepository userRepository;
 
     @Autowired
     BoardRepository boardRepository;
+
+    @Autowired
+    ImagesRepository imagesRepository;
+    RecipeStepRepository recipeStepRepository;
 
     User baseUser;
     PrincipalDetails basePrincipalDetails;
@@ -71,6 +85,20 @@ class CommentControllerTest {
             @Transactional
             @DisplayName("댓글 생성")
             void CreateComment(){
+//                List<String> allObject = awsS3Service.getAllObject().get(0);
+//
+//                allObject.forEach(imageLink -> {
+//                    Optional<Images> optionalImages1 = imagesRepository.findByImageLink(imageLink);
+//                    Optional<Board> optionalImages2 = boardRepository.findByMainImage(imageLink);
+//                    Optional<RecipeStep> optionalImages3 = recipeStepRepository.findByImageLink(imageLink);
+//
+//                    if (optionalImages1.isEmpty() && optionalImages2.isEmpty() && optionalImages3.isEmpty()){
+//                        awsS3Service.deleteFile(imageLink);
+//                    }
+//                });
+
+
+
                 //given
 //                Comment comment = Comment.builder()
 //                        .board()

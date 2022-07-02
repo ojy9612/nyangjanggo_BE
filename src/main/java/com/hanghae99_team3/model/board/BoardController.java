@@ -1,9 +1,7 @@
 package com.hanghae99_team3.model.board;
 
 
-import com.hanghae99_team3.model.board.dto.BoardDetailResponseDto;
-import com.hanghae99_team3.model.board.dto.BoardRequestDto;
-import com.hanghae99_team3.model.board.dto.BoardResponseDto;
+import com.hanghae99_team3.model.board.dto.*;
 import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,6 +9,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,21 +31,52 @@ public class BoardController {
     }
 
 
-    @PostMapping("/api/board")
-    public BoardRequestDto/*BoardResponseDto*/ createBoard(@ModelAttribute BoardRequestDto boardRequestDto,
-                                        @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    @PostMapping(value = "/api/board/step/0")
+    public BoardResponseDto createBoardStepStart(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        return boardRequestDto;
-//        return new BoardResponseDto(boardService.createBoard(boardRequestDto, principalDetails));
+        Optional<Board> optionalBoard = boardService.createBoardStepStart(principalDetails);
+
+        return optionalBoard.map(BoardResponseDto::new).orElse(null);
+
     }
 
-    @PutMapping("/api/board/{boardId}")
-    public BoardResponseDto updateBoard(@ModelAttribute BoardRequestDto boardRequestDto,
-                                        @AuthenticationPrincipal PrincipalDetails principalDetails,
-                                        @PathVariable Long boardId) {
+    @PostMapping(value = "/api/board/step/1")
+    public void createBoardStepMain(@RequestBody BoardRequestDtoStepMain boardRequestDtoStepMain,
+                                                @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        return new BoardResponseDto(boardService.updateBoard(boardRequestDto, principalDetails, boardId));
+        boardService.createBoardStepMain(boardRequestDtoStepMain, principalDetails);
+
     }
+    @PostMapping(value = "/api/board/step/2")
+    public void createBoardStepResource(@RequestBody BoardRequestDtoStepResource boardRequestDtoStepResource,
+                                                    @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        boardService.createBoardStepResource(boardRequestDtoStepResource, principalDetails);
+
+    }
+    @PostMapping(value = "/api/board/step/3")
+    public void createBoardStepRecipe(@RequestBody BoardRequestDtoStepRecipe boardRequestDtoStepRecipe,
+                                                  @RequestPart MultipartFile multipartFile,
+                                                  @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        boardService.createBoardStepRecipe(boardRequestDtoStepRecipe, multipartFile, principalDetails);
+
+    }
+
+    @PostMapping(value = "/api/board/step/-1")
+    public void createBoardStepEnd(@RequestParam Long boardId,@AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        boardService.createBoardStepEnd(boardId, principalDetails);
+
+    }
+
+//    @PutMapping("/api/board/{boardId}")
+//    public BoardResponseDto updateBoard(@ModelAttribute BoardRequestDtoStep0 boardRequestDtoStepZero,
+//                                        @AuthenticationPrincipal PrincipalDetails principalDetails,
+//                                        @PathVariable Long boardId) {
+//
+//        return new BoardResponseDto(boardService.updateBoard(boardRequestDtoStepZero, principalDetails, boardId));
+//    }
 
     @DeleteMapping("/api/board/{boardId}")
     public void deleteBoard(@AuthenticationPrincipal PrincipalDetails principalDetails,

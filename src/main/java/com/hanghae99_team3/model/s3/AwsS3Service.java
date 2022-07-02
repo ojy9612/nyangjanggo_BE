@@ -1,12 +1,10 @@
 package com.hanghae99_team3.model.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import com.hanghae99_team3.exception.newException.S3UploadFailedException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -19,7 +17,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AwsS3Service {
@@ -32,7 +32,7 @@ public class AwsS3Service {
 
     private final AmazonS3 amazonS3;
 
-    private static final String DIR = "team3";
+    private static final String DIR = "team3/";
     // https://hanhae99homework2.s3.ap-northeast-2.amazonaws.com/team3/c4a3f43f-3276-4e70-81ae-0719749e6bb0_.jpg
 
     private static final String OBJECTLINK = "https://hanhae99homework2.s3.ap-northeast-2.amazonaws.com/";
@@ -67,7 +67,7 @@ public class AwsS3Service {
     }
 
     private String putFile(MultipartFile multipartFile){
-        String fileName = createFileName(multipartFile.getOriginalFilename(),DIR);
+        String fileName = createFileName(multipartFile.getOriginalFilename());
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(multipartFile.getSize());
         objectMetadata.setContentType(multipartFile.getContentType());
@@ -93,13 +93,13 @@ public class AwsS3Service {
 
     public void deleteFile(String imgUrl) {
         if (imgUrl.startsWith("https://hanhae99homework2")) {
-            String fileName = DIR + "/" + imgUrl.split("/")[4];
+            String fileName = DIR + imgUrl.split("/")[4];
             amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
         }
     }
 
-    private String createFileName(String fileName,String dirName) { // 먼저 파일 업로드 시, 파일명을 난수화하기 위해 random으로 돌립니다.
-        return dirName + "/" + UUID.randomUUID().toString().concat("_" + getFileExtension(fileName));
+    private String createFileName(String fileName) { // 먼저 파일 업로드 시, 파일명을 난수화하기 위해 random으로 돌립니다.
+        return DIR + UUID.randomUUID().toString().concat("_" + getFileExtension(fileName));
     }
 
     private String getFileExtension(String fileName) { // file 형식이 잘못된 경우를 확인하기 위해 만들어진 로직이며, 파일 타입과 상관없이 업로드할 수 있게 하기 위해 .의 존재 유무만 판단하였습니다.
@@ -108,6 +108,26 @@ public class AwsS3Service {
         } catch (StringIndexOutOfBoundsException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ") 입니다.");
         }
+    }
+
+    public List<List<String>> getAllObject(){
+        ObjectListing objectListing = amazonS3.listObjects(bucket,DIR);
+
+        List<List<String>> keyList = new ArrayList<>();
+
+        do {
+
+            List<S3ObjectSummary> summaries = objectListing.getObjectSummaries();
+
+            List<String> collects = summaries.stream().map(s3ObjectSummary -> OBJECTLINK + s3ObjectSummary.getKey()).collect(Collectors.toList());
+            keyList.add(collects);
+
+
+            objectListing = amazonS3.listNextBatchOfObjects(objectListing);
+
+        }while (objectListing.isTruncated());
+
+        return keyList;
     }
 
 }

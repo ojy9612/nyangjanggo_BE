@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 
@@ -14,12 +13,10 @@ import javax.validation.constraints.NotNull;
 public class RecipeStepRequestDto {
     private Integer stepNum;
     private String stepContent;
-    private MultipartFile image;
 
     @Builder
-    public RecipeStepRequestDto(@NotNull Integer stepNum, @NotNull String stepContent, MultipartFile image) {
+    public RecipeStepRequestDto(@NotNull Integer stepNum, @NotNull String stepContent) {
         this.stepNum = stepNum;
         this.stepContent = stepContent;
-        this.image = image;
     }
 }

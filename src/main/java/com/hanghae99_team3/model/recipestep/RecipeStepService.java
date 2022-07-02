@@ -15,17 +15,18 @@ public class RecipeStepService {
     private final RecipeStepRepository recipeStepRepository;
     private final AwsS3Service awsS3Service;
 
-    public void createRecipeStep(List<RecipeStepRequestDto> recipeStepRequestDtoList,
+    public void createRecipeStep(RecipeStepRequestDto recipeStepRequestDto,
+                                 String imageLink,
                                  Board board) {
-        recipeStepRequestDtoList.forEach(recipeStepRequestDto -> {
-            RecipeStep recipeStep = RecipeStep.builder()
-                    .recipeStepRequestDto(recipeStepRequestDto)
-                    .imageLink(awsS3Service.uploadFile(recipeStepRequestDto.getImage()))
-                    .board(board)
-                    .build();
 
-            recipeStepRepository.save(recipeStep);
-        });
+        RecipeStep recipeStep = RecipeStep.builder()
+                .recipeStepRequestDto(recipeStepRequestDto)
+                .board(board)
+                .imageLink(imageLink)
+                .build();
+
+        recipeStepRepository.save(recipeStep);
+
     }
 
     public void removeRecipeStep(Board board) {
