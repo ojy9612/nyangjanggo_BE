@@ -23,12 +23,12 @@ import java.util.stream.Collectors;
 public class BoardDetailResponseDto {
 
     private Long boardId;
+    private String status;
     private String nickname;
     private String userImg;
     private String title;
     private String subTitle;
     private String content;
-    private List<ImagesResponseDto> imgList;
     private List<ResourceResponseDto> resourceResponseDtoList;
     private List<RecipeStepResponseDto> recipeStepResponseDtoList;
     private List<CommentResponseDto> commentList;
@@ -39,12 +39,12 @@ public class BoardDetailResponseDto {
 
     public BoardDetailResponseDto(Board board) {
         this.boardId = board.getId();
+        this.status = board.getStatus();
         this.nickname = board.getUser().getNickname();
         this.userImg = board.getUser().getUserImg();
         this.title = board.getTitle();
         this.subTitle = board.getSubTitle();
         this.content = board.getContent();
-        this.imgList = board.getImagesList().stream().map(ImagesResponseDto::new).collect(Collectors.toList());
         this.resourceResponseDtoList = board.getResourceList().stream().map(ResourceResponseDto::new).collect(Collectors.toList());
         this.recipeStepResponseDtoList = board.getRecipeStepList().stream().map(RecipeStepResponseDto::new).collect(Collectors.toList());
         this.commentList = board.getCommentList().stream().map(CommentResponseDto::new).collect(Collectors.toList());

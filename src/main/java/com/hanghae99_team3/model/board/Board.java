@@ -2,7 +2,9 @@ package com.hanghae99_team3.model.board;
 
 
 import com.hanghae99_team3.model.Timestamped;
-import com.hanghae99_team3.model.board.dto.BoardRequestDto;
+import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepMain;
+import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepRecipe;
+import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepResource;
 import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.good.Good;
 import com.hanghae99_team3.model.images.Images;
@@ -38,6 +40,10 @@ public class Board extends Timestamped {
     private String content;
 
     @Setter
+    @Column
+    private String status;
+
+    @Setter
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
@@ -47,8 +53,10 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<Good> goodList = new ArrayList<>();
 
+/*
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<Images> imagesList = new ArrayList<>();
+*/
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<Resource> resourceList = new ArrayList<>();
@@ -66,10 +74,12 @@ public class Board extends Timestamped {
         this.goodList.add(good);
     }
 
+/*
     public void addImages(Images images) {
         images.setBoard(this);
         this.imagesList.add(images);
     }
+*/
 
     public void addResource(Resource resource) {
         resource.setBoard(this);
@@ -83,21 +93,26 @@ public class Board extends Timestamped {
 
     @Builder
     public Board(@NotNull User user,
-                 @NotNull BoardRequestDto boardRequestDto,
-                 String mainImage) {
+                 BoardRequestDtoStepMain boardRequestDtoStepMain,
+                 String mainImage,
+                 String status) {
         user.addBoard(this);
-        this.title = boardRequestDto.getTitle();
-        this.subTitle = boardRequestDto.getSubTitle();
-        this.content = boardRequestDto.getContent();
+        this.title = boardRequestDtoStepMain.getTitle();
+        this.subTitle = boardRequestDtoStepMain.getSubTitle();
+        this.content = boardRequestDtoStepMain.getContent();
         this.mainImage = mainImage;
+        this.status = status;
     }
 
-    public void update(@NotNull BoardRequestDto boardRequestDto,
-                       String mainImage){
-        this.title = boardRequestDto.getTitle();
-        this.subTitle = boardRequestDto.getSubTitle();
-        this.content = boardRequestDto.getContent();
-        this.mainImage = mainImage;
-    }
+
+//    public void update(@NotNull BoardRequestDtoStep0 boardRequestDtoStepZero,
+//                       String mainImage,
+//                       String status){
+//        this.title = boardRequestDtoStepZero.getTitle();
+//        this.subTitle = boardRequestDtoStepZero.getSubTitle();
+//        this.content = boardRequestDtoStepZero.getContent();
+//        this.mainImage = mainImage;
+//        this.status = status;
+//    }
 
 }

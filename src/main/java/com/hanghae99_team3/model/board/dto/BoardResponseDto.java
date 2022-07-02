@@ -29,7 +29,6 @@ public class BoardResponseDto {
     private String mainImg;
     private int commentCount;
     private int goodCount;
-    private List<ImagesResponseDto> imgList;
     private List<ResourceResponseDto> resourceResponseDtoList;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
@@ -45,7 +44,6 @@ public class BoardResponseDto {
         this.mainImg = board.getMainImage();
         this.commentCount = board.getCommentList().size();
         this.goodCount = board.getGoodList().size();
-        this.imgList = board.getImagesList().stream().map(ImagesResponseDto::new).collect(Collectors.toList());
         this.resourceResponseDtoList = board.getResourceList().stream().map(ResourceResponseDto::new).collect(Collectors.toList());
         this.createdAt = board.getCreatedAt();
         this.modifiedAt = board.getModifiedAt();
