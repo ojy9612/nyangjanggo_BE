@@ -3,19 +3,15 @@ package com.hanghae99_team3.model.user;
 
 import com.hanghae99_team3.model.s3.AwsS3Service;
 import com.hanghae99_team3.model.user.domain.User;
-import com.hanghae99_team3.model.user.dto.LoginMemberDto;
-import com.hanghae99_team3.model.user.dto.SignupMemberDto;
 import com.hanghae99_team3.model.user.dto.UserReqDto;
+import com.hanghae99_team3.model.user.repository.UserRepository;
 import com.hanghae99_team3.security.jwt.JwtTokenProvider;
 import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Transactional
 @RequiredArgsConstructor
