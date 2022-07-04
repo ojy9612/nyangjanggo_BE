@@ -6,7 +6,6 @@ import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepMain;
 import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepRecipe;
 import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepResource;
 import com.hanghae99_team3.model.board.dto.BoardResponseDto;
-import com.hanghae99_team3.model.images.ImagesService;
 import com.hanghae99_team3.model.recipestep.RecipeStepService;
 import com.hanghae99_team3.model.resource.ResourceService;
 import com.hanghae99_team3.model.s3.AwsS3Service;
@@ -21,11 +20,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import static com.hanghae99_team3.exception.ErrorMessage.BOARD_NOT_FOUND;
-import static com.hanghae99_team3.exception.ErrorMessage.ID_DUPLICATE;
-
 import java.util.List;
 import java.util.Optional;
+
+import static com.hanghae99_team3.exception.ErrorMessage.BOARD_NOT_FOUND;
+import static com.hanghae99_team3.exception.ErrorMessage.ID_DUPLICATE;
 
 @Slf4j
 @Service
@@ -35,19 +34,19 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserService userService;
     private final AwsS3Service awsS3Service;
-    private final ImagesService imagesService;
     private final ResourceService resourceService;
     private final RecipeStepService recipeStepService;
 
 
-
-    public Board getOneBoard(Long boardId) {
+    public Board findBoardById (Long boardId) {
         return boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException(BOARD_NOT_FOUND)
         );
     }
 
-
+    public Board getOneBoard(Long boardId) {
+        return this.findBoardById(boardId);
+    }
 
     public Page<BoardResponseDto> getAllBoards(Pageable pageable) {
 
@@ -69,12 +68,13 @@ public class BoardService {
     }
 
     @Transactional
-    public void createBoardStepMain(BoardRequestDtoStepMain boardRequestDtoStepMain, PrincipalDetails principalDetails) {
+    public void createBoardStepMain(BoardRequestDtoStepMain boardRequestDtoStepMain, MultipartFile multipartFile, PrincipalDetails principalDetails) {
         User user = userService.findUserByAuthEmail(principalDetails);
 
         Board board = Board.builder()
                 .user(user)
-                .mainImage(awsS3Service.uploadFile(boardRequestDtoStepMain.getMainImageFile()))
+                .boardRequestDtoStepMain(boardRequestDtoStepMain)
+                .mainImage(awsS3Service.uploadFile(multipartFile))
                 .status("step 1")
                 .build();
 

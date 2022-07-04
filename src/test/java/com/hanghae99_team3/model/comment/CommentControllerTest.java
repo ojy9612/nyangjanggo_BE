@@ -7,7 +7,7 @@ import com.hanghae99_team3.model.images.ImagesRepository;
 import com.hanghae99_team3.model.recipestep.RecipeStep;
 import com.hanghae99_team3.model.recipestep.RecipeStepRepository;
 import com.hanghae99_team3.model.s3.AwsS3Service;
-import com.hanghae99_team3.model.user.UserRepository;
+import com.hanghae99_team3.model.user.repository.UserRepository;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import org.junit.jupiter.api.DisplayName;

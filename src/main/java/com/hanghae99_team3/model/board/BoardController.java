@@ -11,9 +11,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Optional;
-
 @RestController
 @RequiredArgsConstructor
 public class BoardController {
@@ -34,37 +31,40 @@ public class BoardController {
     @PostMapping(value = "/api/board/step/0")
     public BoardResponseDto createBoardStepStart(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        Optional<Board> optionalBoard = boardService.createBoardStepStart(principalDetails);
-
-        return optionalBoard.map(BoardResponseDto::new).orElse(null);
+        return boardService.createBoardStepStart(principalDetails)
+                .map(BoardResponseDto::new).orElse(null);
 
     }
 
     @PostMapping(value = "/api/board/step/1")
-    public void createBoardStepMain(@RequestBody BoardRequestDtoStepMain boardRequestDtoStepMain,
-                                                @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public void createBoardStepMain(@RequestPart BoardRequestDtoStepMain boardRequestDtoStepMain,
+                                    @RequestPart MultipartFile multipartFile,
+                                    @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        boardService.createBoardStepMain(boardRequestDtoStepMain, principalDetails);
+        boardService.createBoardStepMain(boardRequestDtoStepMain, multipartFile, principalDetails);
 
     }
+
     @PostMapping(value = "/api/board/step/2")
     public void createBoardStepResource(@RequestBody BoardRequestDtoStepResource boardRequestDtoStepResource,
-                                                    @AuthenticationPrincipal PrincipalDetails principalDetails) {
+                                        @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         boardService.createBoardStepResource(boardRequestDtoStepResource, principalDetails);
 
     }
+
     @PostMapping(value = "/api/board/step/3")
-    public void createBoardStepRecipe(@RequestBody BoardRequestDtoStepRecipe boardRequestDtoStepRecipe,
-                                                  @RequestPart MultipartFile multipartFile,
-                                                  @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public void createBoardStepRecipe(@RequestPart BoardRequestDtoStepRecipe boardRequestDtoStepRecipe,
+                                      @RequestPart MultipartFile multipartFile,
+                                      @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         boardService.createBoardStepRecipe(boardRequestDtoStepRecipe, multipartFile, principalDetails);
 
     }
 
     @PostMapping(value = "/api/board/step/-1")
-    public void createBoardStepEnd(@RequestParam Long boardId,@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public void createBoardStepEnd(@RequestPart Long boardId,
+                                   @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         boardService.createBoardStepEnd(boardId, principalDetails);
 

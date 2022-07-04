@@ -77,9 +77,9 @@ public class WebSecurityConfig {
 //                .oauth2Login()
 //                    .successHandler(oAuth2SuccessHandler)
 //                    .userInfoEndpoint().userService(oAuth2UserService);
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/user/**").hasAnyAuthority("USER_TOKEN")
-                .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
+                    .antMatchers("/admin/**").hasRole("ADMIN")
+                    .antMatchers("/user/**").hasAnyAuthority("USER_TOKEN")
+                    .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
                 .and()
                     .oauth2Login()
                     .successHandler(oAuth2SuccessHandler);
