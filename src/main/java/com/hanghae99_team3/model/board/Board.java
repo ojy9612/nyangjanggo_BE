@@ -3,11 +3,8 @@ package com.hanghae99_team3.model.board;
 
 import com.hanghae99_team3.model.Timestamped;
 import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepMain;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepRecipe;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepResource;
 import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.good.Good;
-import com.hanghae99_team3.model.images.Images;
 import com.hanghae99_team3.model.recipestep.RecipeStep;
 import com.hanghae99_team3.model.resource.Resource;
 import com.hanghae99_team3.model.user.domain.User;
@@ -93,9 +90,9 @@ public class Board extends Timestamped {
 
     @Builder
     public Board(@NotNull User user,
-                 BoardRequestDtoStepMain boardRequestDtoStepMain,
-                 String mainImage,
-                 String status) {
+                 @NotNull BoardRequestDtoStepMain boardRequestDtoStepMain,
+                 @NotNull String mainImage,
+                 @NotNull String status) {
         user.addBoard(this);
         this.title = boardRequestDtoStepMain.getTitle();
         this.subTitle = boardRequestDtoStepMain.getSubTitle();

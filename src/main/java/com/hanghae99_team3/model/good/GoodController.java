@@ -1,6 +1,5 @@
 package com.hanghae99_team3.model.good;
 
-import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

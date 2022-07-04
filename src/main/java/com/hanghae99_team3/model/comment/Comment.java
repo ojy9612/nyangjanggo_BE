@@ -1,7 +1,5 @@
 package com.hanghae99_team3.model.comment;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.hanghae99_team3.model.Timestamped;
 import com.hanghae99_team3.model.board.Board;
 import com.hanghae99_team3.model.comment.dto.CommentRequestDto;
@@ -10,9 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
