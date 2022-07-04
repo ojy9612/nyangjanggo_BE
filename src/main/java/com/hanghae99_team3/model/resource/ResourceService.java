@@ -25,7 +25,7 @@ public class ResourceService {
         });
     }
 
-    public void removeResource(Board board) {
+    public void removeAllResource(Board board) {
         resourceRepository.deleteAllByBoard(board);
     }
 }
