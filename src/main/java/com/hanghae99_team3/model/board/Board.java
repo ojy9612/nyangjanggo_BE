@@ -101,15 +101,13 @@ public class Board extends Timestamped {
         this.status = status;
     }
 
+    public void updateStepMain(BoardRequestDtoStepMain boardRequestDtoStepMain,
+                               String mainImage) {
+        this.title = boardRequestDtoStepMain.getTitle();
+        this.subTitle = boardRequestDtoStepMain.getSubTitle();
+        this.content = boardRequestDtoStepMain.getContent();
+        this.mainImage = mainImage;
+    }
 
-//    public void update(@NotNull BoardRequestDtoStep0 boardRequestDtoStepZero,
-//                       String mainImage,
-//                       String status){
-//        this.title = boardRequestDtoStepZero.getTitle();
-//        this.subTitle = boardRequestDtoStepZero.getSubTitle();
-//        this.content = boardRequestDtoStepZero.getContent();
-//        this.mainImage = mainImage;
-//        this.status = status;
-//    }
 
 }

@@ -37,28 +37,28 @@ public class BoardController {
     }
 
     @PostMapping(value = "/api/board/step/1")
-    public void createBoardStepMain(@RequestPart BoardRequestDtoStepMain boardRequestDtoStepMain,
+    public Long createBoardStepMain(@RequestPart BoardRequestDtoStepMain boardRequestDtoStepMain,
                                     @RequestPart MultipartFile multipartFile,
                                     @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        boardService.createBoardStepMain(boardRequestDtoStepMain, multipartFile, principalDetails);
+        return boardService.createBoardStepMain(boardRequestDtoStepMain, multipartFile, principalDetails);
 
     }
 
     @PostMapping(value = "/api/board/step/2")
-    public void createBoardStepResource(@RequestBody BoardRequestDtoStepResource boardRequestDtoStepResource,
+    public Long createBoardStepResource(@RequestBody BoardRequestDtoStepResource boardRequestDtoStepResource,
                                         @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        boardService.createBoardStepResource(boardRequestDtoStepResource, principalDetails);
+        return boardService.createBoardStepResource(boardRequestDtoStepResource, principalDetails);
 
     }
 
     @PostMapping(value = "/api/board/step/3")
-    public void createBoardStepRecipe(@RequestPart BoardRequestDtoStepRecipe boardRequestDtoStepRecipe,
+    public Long createBoardStepRecipe(@RequestPart BoardRequestDtoStepRecipe boardRequestDtoStepRecipe,
                                       @RequestPart MultipartFile multipartFile,
                                       @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        boardService.createBoardStepRecipe(boardRequestDtoStepRecipe, multipartFile, principalDetails);
+        return boardService.createBoardStepRecipe(boardRequestDtoStepRecipe, multipartFile, principalDetails);
 
     }
 
@@ -70,13 +70,37 @@ public class BoardController {
 
     }
 
-//    @PutMapping("/api/board/{boardId}")
-//    public BoardResponseDto updateBoard(@ModelAttribute BoardRequestDtoStep0 boardRequestDtoStepZero,
-//                                        @AuthenticationPrincipal PrincipalDetails principalDetails,
-//                                        @PathVariable Long boardId) {
-//
-//        return new BoardResponseDto(boardService.updateBoard(boardRequestDtoStepZero, principalDetails, boardId));
-//    }
+    @PutMapping("/api/board/step/1")
+    public Long updateBoardStepMain(@RequestPart Long boardId,
+                                    @RequestPart BoardRequestDtoStepMain boardRequestDtoStepMain,
+                                    @RequestPart MultipartFile multipartFile,
+                                    @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        return boardService.updateBoardStepMain(boardRequestDtoStepMain, multipartFile, principalDetails,boardId);
+    }
+
+    @PutMapping("/api/board/step/2")
+    public Long updateBoardStepResource(@RequestPart BoardRequestDtoStepResource boardRequestDtoStepResource,
+                                        @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        return boardService.updateBoardStepResource(boardRequestDtoStepResource, principalDetails);
+    }
+
+    @PutMapping("/api/board/step/3")
+    public Long updateBoardStepRecipe(@RequestPart BoardRequestDtoStepRecipe boardRequestDtoStepRecipe,
+                                      @RequestPart MultipartFile multipartFile,
+                                      @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        return boardService.updateBoardStepRecipe(boardRequestDtoStepRecipe, multipartFile,principalDetails);
+    }
+
+    @DeleteMapping("/api/board/step/3")
+    public void deleteRecipeStep(@RequestPart Long boardId,
+                                 @RequestPart Integer stepNum,
+                                 @AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        boardService.deleteRecipeStep(boardId,stepNum,principalDetails);
+    }
 
     @DeleteMapping("/api/board/{boardId}")
     public void deleteBoard(@AuthenticationPrincipal PrincipalDetails principalDetails,
