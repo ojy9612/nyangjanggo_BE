@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -16,7 +17,7 @@ public class BoardRequestDtoStepResource {
     private List<ResourceRequestDto> resourceRequestDtoList;
 
     @Builder
-    public BoardRequestDtoStepResource(Long boardId,
+    public BoardRequestDtoStepResource(@NotNull Long boardId,
                                        List<ResourceRequestDto> resourceRequestDtoList ) {
         this.boardId = boardId;
         this.resourceRequestDtoList = resourceRequestDtoList;

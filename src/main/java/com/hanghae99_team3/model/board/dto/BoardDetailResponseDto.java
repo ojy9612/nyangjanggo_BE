@@ -2,19 +2,14 @@ package com.hanghae99_team3.model.board.dto;
 
 
 import com.hanghae99_team3.model.board.Board;
-import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.comment.dto.CommentResponseDto;
-import com.hanghae99_team3.model.good.Good;
 import com.hanghae99_team3.model.good.GoodResponseDto;
-import com.hanghae99_team3.model.images.Images;
-import com.hanghae99_team3.model.images.ImagesResponseDto;
 import com.hanghae99_team3.model.recipestep.dto.RecipeStepResponseDto;
 import com.hanghae99_team3.model.resource.dto.ResourceResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
