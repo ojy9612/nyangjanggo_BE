@@ -3,8 +3,8 @@ package com.hanghae99_team3.model.comment.dto;
 import com.hanghae99_team3.model.comment.Comment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter

@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @NoArgsConstructor
@@ -13,7 +12,6 @@ public class BoardRequestDtoStepMain {
 
     private String title;
     private String subTitle;
-    private MultipartFile mainImageFile;
     private String content;
 
 
@@ -24,11 +22,9 @@ public class BoardRequestDtoStepMain {
     @Builder
     public BoardRequestDtoStepMain(@NotNull String title,
                                    @NotNull String subTitle,
-                                   @NotNull MultipartFile mainImageFile,
                                    @NotNull String content) {
         this.title = title;
         this.subTitle = subTitle;
-        this.mainImageFile = mainImageFile;
         this.content = content;
 
     }

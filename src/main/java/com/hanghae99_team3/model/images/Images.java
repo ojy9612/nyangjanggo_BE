@@ -6,9 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Entity
@@ -27,7 +27,7 @@ public class Images extends Timestamped {
     private Board board;
 
     @Builder
-    public Images(@NotNull String imageLink,@NotNull Board board) {
+    public Images(@NotNull String imageLink, @NotNull Board board) {
         this.imageLink = imageLink;
 //        board.addImages(this);
     }

@@ -2,7 +2,8 @@ package com.hanghae99_team3.model.good;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
+
+import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor

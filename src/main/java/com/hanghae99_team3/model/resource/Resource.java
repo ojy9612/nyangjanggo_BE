@@ -6,9 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Entity
@@ -33,7 +33,8 @@ public class Resource {
     private Board board;
 
     @Builder
-    public Resource(@NotNull ResourceRequestDto resourceRequestDto, Board board) {
+    public Resource(@NotNull ResourceRequestDto resourceRequestDto,
+                    @NotNull Board board) {
         this.resourceName = resourceRequestDto.getResourceName();
         this.num = resourceRequestDto.getAmount();
         this.category = resourceRequestDto.getCategory();
