@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class TokenDto {
-    private String accessToken = "test1234";
-    private String refreshToken = "test12345678";
+    private String accessToken;
+    private String refreshToken;
     private Long accessTokenExpireDate;
 }
