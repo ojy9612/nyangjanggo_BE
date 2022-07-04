@@ -29,7 +29,7 @@ public class TokenService {
         // AccessToken, RefreshToken 발급
         TokenDto tokenDto = jwtTokenProvider.createToken(principalDetails.getUsername(), principalDetails.getRole());
 
-        // RefreshToken DB에 존재하면
+        // RefreshToken이 DB에 존재하는지 확인
         Optional<RefreshToken> findRefreshToken = refreshTokenRepository.findByUserPk(principalDetails.getUsername());
         if (findRefreshToken.isPresent()) {
             return tokenDto.getAccessToken();

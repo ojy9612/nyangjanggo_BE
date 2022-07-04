@@ -45,11 +45,11 @@ public class UserController {
         userService.deleteUser(principalDetails);
     }
 
-    @RequestMapping("/auth")
-    public Authentication auth() {
-        return SecurityContextHolder.getContext()
-                .getAuthentication();
-    }
+//    @RequestMapping("/auth")
+//    public Authentication auth() {
+//        return SecurityContextHolder.getContext()
+//                .getAuthentication();
+//    }
 
 //    @PostMapping("/join")
 //    public Long join(@RequestBody SignupMemberDto signupMemberDto) {
