@@ -39,7 +39,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         String providerId = oAuth2UserInfo.getProviderId();
         String nickname = provider + "_" +providerId;  			// 사용자가 입력한 적은 없지만 만들어준다. Default username
-        String userImg = oAuth2UserInfo.getUserImg();
+        String userImg = oAuth2UserInfo.getUserImg() != null ? oAuth2UserInfo.getUserImg() : "";
         String uuid = UUID.randomUUID().toString().substring(0, 6);
         String password = passwordEncoder.encode("패스워드"+uuid);  // 사용자가 입력한 적은 없지만 만들어준다
 

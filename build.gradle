@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.7.1'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'org.asciidoctor.jvm.convert' version "3.3.2"
 }
 
 group = 'com'
@@ -12,6 +13,8 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    
+    asciidoctorExtensions
 }
 
 repositories {
@@ -41,8 +44,48 @@ dependencies {
     //login
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+    //Spring Rest Docs
+    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:2.0.6.RELEASE'
 }
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+test {
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    dependsOn test
+    configurations 'asciidoctorExtensions' // 이부분!
+    inputs.dir snippetsDir
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from ("${asciidoctor.outputDir}") {
+        into 'static/docs'
+    }
+}
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+
+    from file("build/docs/asciidoc/")
+    into file("src/main/resources/static/docs")
+}
+
+build {
+    dependsOn copyDocument
+}
+
+
+
+
 
 tasks.named('test') {
     useJUnitPlatform()
 }
+
