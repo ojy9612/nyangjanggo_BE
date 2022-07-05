@@ -101,6 +101,18 @@ public class User {
         this.providerId = providerId;
     }
 
+    @Builder(builderClassName = "TestRegister", builderMethodName = "testRegister")
+    public User(String nickname, String password, String email, String userImg, UserRole role, AuthProvider provider, String providerId, String userDescription) {
+        this.nickname = nickname;
+        this.password = password;
+        this.email = email;
+        this.userImg = userImg;
+        this.role = role;
+        this.authProvider = provider;
+        this.providerId = providerId;
+        this.userDescription = userDescription;
+    }
+
     public User update(UserReqDto userDto) {
         this.nickname = userDto.getNickname();
         this.userImg = userDto.getImgUrl();

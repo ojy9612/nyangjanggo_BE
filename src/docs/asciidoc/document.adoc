@@ -1,0 +1,37 @@
+= Spring REST Docs
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+[[resources-post]]
+== User Api
+
+[[user-get]]
+=== 회원정보 조회
+
+==== curl request
+
+include::{snippets}/get-user/curl-request.adoc[]
+
+==== HTTP request
+
+include::{snippets}/get-user/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/get-user/http-response.adoc[]
+
+
+[[user-put]]
+=== 회원정보 변경
+
+==== curl request
+
+include::{snippets}/put-user/curl-request.adoc[]
+
+==== HTTP request
+
+include::{snippets}/put-user/http-request.adoc[]
