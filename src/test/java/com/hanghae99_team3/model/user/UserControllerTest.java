@@ -1,6 +1,5 @@
 package com.hanghae99_team3.model.user;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanghae99_team3.model.user.domain.AuthProvider;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.domain.UserRole;
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -32,12 +30,17 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
+import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -46,7 +49,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 
-//@AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class) // JUnit5에서 필요
 @SpringBootTest
 class UserControllerTest {
@@ -64,8 +66,8 @@ class UserControllerTest {
                 .alwaysDo(document("{method-name}",
                         preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())))
                 .build();
-    }
 
+    }
 
 
     @MockBean
@@ -74,7 +76,7 @@ class UserControllerTest {
     private UserService userService;
     private final String accessToken = "JwtAccessToken";
     private Principal mockPrincipal;
-
+    private User testUser;
     private void mockUserSetup() {
         User testUser = User.testRegister()
                 .email("email@test.com")
@@ -87,6 +89,7 @@ class UserControllerTest {
                 .userDescription("description")
                 .build();
 
+        this.testUser = testUser;
         PrincipalDetails testUserDetails = new PrincipalDetails(testUser);
         this.mockPrincipal = new UsernamePasswordAuthenticationToken(testUserDetails, "", testUserDetails.getAuthorities());
     }
@@ -96,6 +99,7 @@ class UserControllerTest {
     void getUser() throws Exception {
         //given
         this.mockUserSetup();
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(testUser));
 
         //when
         ResultActions resultActions = this.mockMvc.perform(get("/api/user")
@@ -106,7 +110,13 @@ class UserControllerTest {
         resultActions.andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("get-user",
-                        requestHeaders(headerWithName("Access-Token").description("Jwt Access-Token"))
+                        requestHeaders(headerWithName("Access-Token").description("Jwt Access-Token")),
+                        responseFields(
+                                fieldWithPath("nickname").description("회원 닉네임"),
+                                fieldWithPath("userImg").description("회원 프로필 사진 링크"),
+                                fieldWithPath("userDescription").description("회원 소개글")
+                        )
+
                 ));
 
     }
