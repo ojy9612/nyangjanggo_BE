@@ -35,8 +35,6 @@ public class RecipeStepService {
                            MultipartFile multipartFile){
         List<RecipeStep> recipeStepList = recipeStepRepository.findAllByBoard(board);
 
-
-
         recipeStepList.forEach(recipeStep -> {
             Integer stepNum = recipeStep.getStepNum();
             if (stepNum.equals(recipeStepRequestDto.getStepNum())){

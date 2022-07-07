@@ -1,19 +1,25 @@
 package com.hanghae99_team3.model.user;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanghae99_team3.model.user.domain.AuthProvider;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.domain.UserRole;
 import com.hanghae99_team3.model.user.repository.UserRepository;
 import com.hanghae99_team3.security.MockSpringSecurityFilter;
+import com.hanghae99_team3.security.WebSecurityConfig;
+import com.hanghae99_team3.security.jwt.JwtAuthFilter;
+import com.hanghae99_team3.security.jwt.JwtTokenProvider;
 import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
@@ -21,6 +27,7 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
@@ -32,48 +39,54 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
+import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-
-//@AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class) // JUnit5에서 필요
-@SpringBootTest
+@MockBean(JpaMetamodelMappingContext.class)
+@WebMvcTest(UserController.class)
 class UserControllerTest {
 
     private MockMvc mockMvc;
-
-    // MockMvc, Spring Rest Docs Setup
-    @BeforeEach
-    public void setup(WebApplicationContext webApplicationContext,
-                      RestDocumentationContextProvider restDocumentation) {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .addFilters(new CharacterEncodingFilter("UTF-8", true))
-                .apply(documentationConfiguration(restDocumentation))
-                .apply(SecurityMockMvcConfigurers.springSecurity(new MockSpringSecurityFilter()))
-                .alwaysDo(document("{method-name}",
-                        preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())))
-                .build();
-    }
-
-
-
+    @Autowired
+    private WebApplicationContext context;
     @MockBean
     private UserRepository userRepository;
+    @MockBean
+    private JwtTokenProvider jwtTokenProvider;
     @MockBean
     private UserService userService;
     private final String accessToken = "JwtAccessToken";
     private Principal mockPrincipal;
+
+    // MockMvc, Spring Rest Docs Setup
+    @BeforeEach
+    public void setup(RestDocumentationContextProvider restDocumentation) {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
+                .addFilters(new CharacterEncodingFilter("UTF-8", true))
+                .apply(documentationConfiguration(restDocumentation))
+                .apply(SecurityMockMvcConfigurers.springSecurity(new MockSpringSecurityFilter()))
+//                .apply(SecurityMockMvcConfigurers.springSecurity(new JwtAuthFilter(jwtTokenProvider)))
+                .alwaysDo(document("{method-name}",
+                        preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())))
+                .build();
+
+    }
+
 
     private void mockUserSetup() {
         User testUser = User.testRegister()
@@ -96,6 +109,7 @@ class UserControllerTest {
     void getUser() throws Exception {
         //given
         this.mockUserSetup();
+//        when(userRepository.findByEmail(any())).thenReturn(Optional.of(testUser));
 
         //when
         ResultActions resultActions = this.mockMvc.perform(get("/api/user")
@@ -106,7 +120,13 @@ class UserControllerTest {
         resultActions.andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("get-user",
-                        requestHeaders(headerWithName("Access-Token").description("Jwt Access-Token"))
+                        requestHeaders(headerWithName("Access-Token").description("Jwt Access-Token")),
+                        responseFields(
+                                fieldWithPath("nickname").description("회원 닉네임"),
+                                fieldWithPath("userImg").description("회원 프로필 사진 링크"),
+                                fieldWithPath("userDescription").description("회원 소개글")
+                        )
+
                 ));
 
     }
@@ -124,12 +144,9 @@ class UserControllerTest {
 
         //when
         MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/user");
-        builder.with(new RequestPostProcessor() {
-            @Override
-            public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
-                request.setMethod("PUT");
-                return request;
-            }
+        builder.with(request -> {
+            request.setMethod("PUT");
+            return request;
         });
 
         ResultActions resultActions = this.mockMvc.perform(builder
