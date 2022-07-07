@@ -18,7 +18,7 @@ import java.util.List;
 
 @Getter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Board extends Timestamped {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

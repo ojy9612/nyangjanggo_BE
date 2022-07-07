@@ -69,7 +69,7 @@ public class BoardController {
         boardService.createBoardStepEnd(boardId, principalDetails);
 
     }
-
+//
     @PutMapping("/api/board/step/1")
     public Long updateBoardStepMain(@RequestPart Long boardId,
                                     @RequestPart BoardRequestDtoStepMain boardRequestDtoStepMain,
@@ -108,5 +108,6 @@ public class BoardController {
 
         boardService.deleteBoard(principalDetails, boardId);
     }
+
 
 }

@@ -1,10 +1,7 @@
 package com.hanghae99_team3.scheduler;
 
-import com.hanghae99_team3.model.board.Board;
 import com.hanghae99_team3.model.board.BoardRepository;
-import com.hanghae99_team3.model.images.Images;
 import com.hanghae99_team3.model.images.ImagesRepository;
-import com.hanghae99_team3.model.recipestep.RecipeStep;
 import com.hanghae99_team3.model.recipestep.RecipeStepRepository;
 import com.hanghae99_team3.model.s3.AwsS3Service;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Component
