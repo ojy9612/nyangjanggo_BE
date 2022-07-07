@@ -4,9 +4,11 @@ package com.hanghae99_team3.model.board.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class BoardRequestDtoStepMain {
 
