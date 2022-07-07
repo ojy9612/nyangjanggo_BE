@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public class BoardResponseDto {
 
     private Long boardId;
+    private String status;
     private String nickname;
     private String userImg;
     private String title;
@@ -30,6 +31,7 @@ public class BoardResponseDto {
 
     public BoardResponseDto(Board board) {
         this.boardId = board.getId();
+        this.status = board.getStatus();
         this.nickname = board.getUser().getNickname();
         this.userImg = board.getUser().getUserImg();
         this.title = board.getTitle();

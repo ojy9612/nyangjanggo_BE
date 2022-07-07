@@ -104,6 +104,8 @@ public class BoardService {
 
         recipeStepService.createRecipeStep(boardRequestDtoStepRecipe.getRecipeStepRequestDto(),multipartFile, board);
 
+        board.setStatus("step 3");
+
         return board.getId();
     }
 
@@ -118,7 +120,7 @@ public class BoardService {
 
 
     @Transactional
-    public Long updateBoardStepMain(BoardRequestDtoStepMain boardRequestDtoStepMain, MultipartFile multipartFile, PrincipalDetails principalDetails, Long boardId) {
+    public Long updateBoardStepMain(Long boardId,BoardRequestDtoStepMain boardRequestDtoStepMain, MultipartFile multipartFile, PrincipalDetails principalDetails) {
         User user = userService.findUserByAuthEmail(principalDetails);
         Board board = this.findBoardById(boardId);
         if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
