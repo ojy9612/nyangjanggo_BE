@@ -55,7 +55,7 @@ public class KakaoUserInfo implements OAuth2UserInfo{
 
     @Override
     public String getUserImg() {
-        return attributesProfile.get("thumbnail_image_url").toString();
+        return "";
     }
 
 
