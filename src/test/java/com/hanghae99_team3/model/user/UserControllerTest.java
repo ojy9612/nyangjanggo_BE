@@ -134,12 +134,9 @@ class UserControllerTest {
 
         //when
         MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/user");
-        builder.with(new RequestPostProcessor() {
-            @Override
-            public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
-                request.setMethod("PUT");
-                return request;
-            }
+        builder.with(request -> {
+            request.setMethod("PUT");
+            return request;
         });
 
         ResultActions resultActions = this.mockMvc.perform(builder
