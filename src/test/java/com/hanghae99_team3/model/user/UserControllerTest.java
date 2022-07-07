@@ -5,13 +5,21 @@ import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.domain.UserRole;
 import com.hanghae99_team3.model.user.repository.UserRepository;
 import com.hanghae99_team3.security.MockSpringSecurityFilter;
+import com.hanghae99_team3.security.WebSecurityConfig;
+import com.hanghae99_team3.security.jwt.JwtAuthFilter;
+import com.hanghae99_team3.security.jwt.JwtTokenProvider;
 import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
@@ -19,6 +27,7 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
@@ -47,22 +56,31 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-
 @ExtendWith(RestDocumentationExtension.class) // JUnit5에서 필요
-@SpringBootTest
+@MockBean(JpaMetamodelMappingContext.class)
+@WebMvcTest(UserController.class)
 class UserControllerTest {
 
     private MockMvc mockMvc;
+    @Autowired
+    private WebApplicationContext context;
+    @MockBean
+    private UserRepository userRepository;
+    @MockBean
+    private JwtTokenProvider jwtTokenProvider;
+    @MockBean
+    private UserService userService;
+    private final String accessToken = "JwtAccessToken";
+    private Principal mockPrincipal;
 
     // MockMvc, Spring Rest Docs Setup
     @BeforeEach
-    public void setup(WebApplicationContext webApplicationContext,
-                      RestDocumentationContextProvider restDocumentation) {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+    public void setup(RestDocumentationContextProvider restDocumentation) {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .addFilters(new CharacterEncodingFilter("UTF-8", true))
                 .apply(documentationConfiguration(restDocumentation))
                 .apply(SecurityMockMvcConfigurers.springSecurity(new MockSpringSecurityFilter()))
+//                .apply(SecurityMockMvcConfigurers.springSecurity(new JwtAuthFilter(jwtTokenProvider)))
                 .alwaysDo(document("{method-name}",
                         preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())))
                 .build();
@@ -70,13 +88,6 @@ class UserControllerTest {
     }
 
 
-    @MockBean
-    private UserRepository userRepository;
-    @MockBean
-    private UserService userService;
-    private final String accessToken = "JwtAccessToken";
-    private Principal mockPrincipal;
-    private User testUser;
     private void mockUserSetup() {
         User testUser = User.testRegister()
                 .email("email@test.com")
@@ -89,7 +100,6 @@ class UserControllerTest {
                 .userDescription("description")
                 .build();
 
-        this.testUser = testUser;
         PrincipalDetails testUserDetails = new PrincipalDetails(testUser);
         this.mockPrincipal = new UsernamePasswordAuthenticationToken(testUserDetails, "", testUserDetails.getAuthorities());
     }
@@ -99,7 +109,7 @@ class UserControllerTest {
     void getUser() throws Exception {
         //given
         this.mockUserSetup();
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(testUser));
+//        when(userRepository.findByEmail(any())).thenReturn(Optional.of(testUser));
 
         //when
         ResultActions resultActions = this.mockMvc.perform(get("/api/user")
