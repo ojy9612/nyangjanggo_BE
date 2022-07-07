@@ -6,7 +6,44 @@
 :toclevels: 4
 :sectlinks:
 
-[[resources-post]]
+
+
+== User Api
+
+[[user-get]]
+=== 회원정보 조회
+
+==== curl request
+
+include::{snippets}/get-user/curl-request.adoc[]
+
+==== HTTP request
+
+include::{snippets}/get-user/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/get-user/http-response.adoc[]
+
+==== response fields
+
+include::{snippets}/get-user/response-fields.adoc[]
+
+
+[[user-put]]
+=== 회원정보 변경
+
+==== curl request
+
+include::{snippets}/put-user/curl-request.adoc[]
+
+==== HTTP request
+
+include::{snippets}/put-user/http-request.adoc[]
+
+
+
+
 == Board Api
 
 [[board-post]]
@@ -19,12 +56,13 @@ include::{snippets}/get-getOneBoard/response-fields.adoc[]
 include::{snippets}/get-getOneBoard/response-body.adoc[]
 
 === Board 전체 불러오기
-==== curl request
-include::{snippets}/get-getAllBoards/curl-request.adoc[]
-==== response fields
-include::{snippets}/get-getAllBoards/response-fields.adoc[]
-==== response data
-include::{snippets}/get-getAllBoards/response-body.adoc[]
+개발중입니다.
+//==== curl request
+//include::{snippets}/get-getAllBoards/curl-request.adoc[]
+//==== response fields
+//include::{snippets}/get-getAllBoards/response-fields.adoc[]
+//==== response data
+//include::{snippets}/get-getAllBoards/response-body.adoc[]
 
 === Board 생성 0단계 - 작성중인 파일 있을 때
 ==== curl request
@@ -137,36 +175,3 @@ include::{snippets}/delete-deleteBoard/curl-request.adoc[]
 include::{snippets}/delete-deleteBoard/request-headers.adoc[]
 
 
-[[resources-post]]
-== User Api
-
-[[user-get]]
-=== 회원정보 조회
-
-==== curl request
-
-include::{snippets}/get-user/curl-request.adoc[]
-
-==== HTTP request
-
-include::{snippets}/get-user/http-request.adoc[]
-
-==== HTTP response
-
-include::{snippets}/get-user/http-response.adoc[]
-
-==== response fields
-
-include::{snippets}/get-user/response-fields.adoc[]
-
-
-[[user-put]]
-=== 회원정보 변경
-
-==== curl request
-
-include::{snippets}/put-user/curl-request.adoc[]
-
-==== HTTP request
-
-include::{snippets}/put-user/http-request.adoc[]

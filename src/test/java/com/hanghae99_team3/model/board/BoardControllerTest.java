@@ -10,19 +10,23 @@ import com.hanghae99_team3.model.recipestep.RecipeStepService;
 import com.hanghae99_team3.model.recipestep.dto.RecipeStepRequestDto;
 import com.hanghae99_team3.model.resource.ResourceService;
 import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;
+import com.hanghae99_team3.model.user.UserController;
 import com.hanghae99_team3.model.user.domain.AuthProvider;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.domain.UserRole;
 import com.hanghae99_team3.security.MockSpringSecurityFilter;
+import com.hanghae99_team3.security.jwt.JwtTokenProvider;
 import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
@@ -57,22 +61,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @ExtendWith(RestDocumentationExtension.class)
-@SpringBootTest
+@MockBean(JpaMetamodelMappingContext.class)
+@WebMvcTest(BoardController.class)
 @DisplayName("Board 컨트롤러 테스트")
 class BoardControllerTest {
 
     MockMvc mockMvc;
 
     @MockBean
+    JwtTokenProvider jwtTokenProvider;
+
+    @MockBean
     BoardService boardService;
 
-    @Autowired
+    @MockBean
     BoardRepository boardRepository;
 
-    @Autowired
+    @MockBean
     ResourceService resourceService;
 
-    @Autowired
+    @MockBean
     RecipeStepService recipeStepService;
 
     final String accessToken = "JwtAccessToken";
@@ -107,10 +115,9 @@ class BoardControllerTest {
 
         baseUserDetails = new PrincipalDetails(baseUser);
         mockPrincipal = new UsernamePasswordAuthenticationToken(baseUserDetails, "", baseUserDetails.getAuthorities());
-
     }
 
-    @Transactional
+
     @Test
     @DisplayName("Board 하나 불러오기")
     void getOneBoard() throws Exception {
@@ -198,7 +205,6 @@ class BoardControllerTest {
 //                .andDo(BoardDocumentation.getAllBoards());
 //    }
 
-    @Transactional
     @Test
     @DisplayName("Board 생성 0단계 - 작성중인 파일 있을 때")
     void createBoardStepStart() throws Exception {
@@ -238,7 +244,7 @@ class BoardControllerTest {
                 .andDo(BoardDocumentation.createBoardStepStart());
     }
 
-    @Transactional
+
     @Test
     @DisplayName("Board 생성 1단계 - 게시글 정보 등록")
     void createBoardStepMain() throws Exception {
@@ -301,7 +307,7 @@ class BoardControllerTest {
 
     }
 
-    @Transactional
+
     @Test
     @DisplayName("Board 생성 2단계 - 재료 등록")
     void createBoardStepResource() throws Exception {
@@ -341,7 +347,7 @@ class BoardControllerTest {
 
     }
 
-    @Transactional
+
     @Test
     @DisplayName("Board 생성 3단계 - 게시글 레시피 등록")
     void createBoardStepRecipe() throws Exception {
@@ -394,7 +400,7 @@ class BoardControllerTest {
 
     }
 
-    @Transactional
+
     @Test
     @DisplayName("Board 생성 4단계 - 게시글 등록")
     void createBoardStepEnd() throws Exception {
@@ -426,7 +432,7 @@ class BoardControllerTest {
 
     }
 
-    @Transactional
+
     @Test
     @DisplayName("Board 수정 1단계 - 게시글 정보 수정")
     void updateBoardStepMain() throws Exception {
@@ -491,7 +497,7 @@ class BoardControllerTest {
     }
 
 
-    @Transactional
+
     @Test
     @DisplayName("Board 수정 2단계 - 재료 수정")
     void updateBoardStepResource() throws Exception {
@@ -531,7 +537,7 @@ class BoardControllerTest {
 
     }
 
-    @Transactional
+
     @Test
     @DisplayName("Board 수정 3단계 - 게시글 레시피 수정")
     void updateBoardStepRecipe() throws Exception {
@@ -588,7 +594,7 @@ class BoardControllerTest {
 
     }
 
-    @Transactional
+
     @Test
     @DisplayName("Board 삭제 3단계 - 게시글 레시피 삭제")
     void deleteBoardStepRecipe() throws Exception {
@@ -634,7 +640,7 @@ class BoardControllerTest {
 
     }
 
-    @Transactional
+
     @Test
     @DisplayName("Board 삭제")
     void deleteBoard() throws Exception {
