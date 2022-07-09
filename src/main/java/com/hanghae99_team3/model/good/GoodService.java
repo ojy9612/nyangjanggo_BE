@@ -4,7 +4,7 @@ import com.hanghae99_team3.model.board.Board;
 import com.hanghae99_team3.model.board.BoardService;
 import com.hanghae99_team3.model.user.UserService;
 import com.hanghae99_team3.model.user.domain.User;
-import com.hanghae99_team3.security.oauth2.PrincipalDetails;
+import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
