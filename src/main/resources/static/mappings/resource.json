@@ -1,0 +1,17 @@
+{
+  "properties" : {
+    "id" : {
+      "type": "keyword"
+    },
+    "resourceName": {
+      "type": "text"
+    },
+    "num": {
+      "type": "text"
+    },
+    "category": {
+      "type": "text"
+    }
+  }
+
+}
