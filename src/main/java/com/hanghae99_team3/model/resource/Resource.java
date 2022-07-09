@@ -11,7 +11,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Getter
-@Setter
 @Entity
 @NoArgsConstructor
 public class Resource {

@@ -1,8 +1,10 @@
-package com.hanghae99_team3.security;
+package com.hanghae99_team3.login.config;
 
-import com.hanghae99_team3.security.jwt.JwtAuthFilter;
-import com.hanghae99_team3.security.jwt.JwtTokenProvider;
-import com.hanghae99_team3.security.oauth2.OAuth2SuccessHandler;
+import com.hanghae99_team3.login.exception.RestAuthenticationEntryPoint;
+import com.hanghae99_team3.login.handler.TokenAccessDeniedHandler;
+import com.hanghae99_team3.login.jwt.JwtAuthFilter;
+import com.hanghae99_team3.login.jwt.JwtTokenProvider;
+import com.hanghae99_team3.login.handler.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +31,7 @@ public class WebSecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
 //    private final PrincipalOauth2UserService oAuth2UserService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
-
+    private final TokenAccessDeniedHandler tokenAccessDeniedHandler;
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
@@ -67,14 +69,16 @@ public class WebSecurityConfig {
         http
                 .httpBasic().disable() // rest api 만을 고려하여 기본 설정은 해제하겠습니다.
                 .csrf().disable() // csrf 보안 토큰 disable처리.
-                .cors().configurationSource(corsConfigurationSource()).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 역시 사용하지 않습니다.
+                .cors().configurationSource(corsConfigurationSource())
                 .and()
-                .authorizeRequests() // 요청에 대한 사용권한 체크
-//                .and()
-//                .oauth2Login()
-//                    .successHandler(oAuth2SuccessHandler)
-//                    .userInfoEndpoint().userService(oAuth2UserService);
+                    .exceptionHandling()
+                    .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+                    .accessDeniedHandler(tokenAccessDeniedHandler)
+                .and()
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 역시 사용하지 않습니다.
+                .and()
+                    .authorizeRequests() // 요청에 대한 사용권한 체크
                     .antMatchers("/admin/**").hasRole("ADMIN")
                     .antMatchers("/user/**").hasAnyAuthority("USER_TOKEN")
                     .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능

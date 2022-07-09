@@ -1,6 +1,6 @@
-package com.hanghae99_team3.model.user.repository;
+package com.hanghae99_team3.login.jwt.repository;
 
-import com.hanghae99_team3.model.user.domain.RefreshToken;
+import com.hanghae99_team3.login.jwt.entity.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

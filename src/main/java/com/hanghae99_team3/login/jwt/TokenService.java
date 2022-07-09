@@ -1,11 +1,12 @@
-package com.hanghae99_team3.security.jwt;
+package com.hanghae99_team3.login.jwt;
 
 
-import com.hanghae99_team3.model.user.domain.RefreshToken;
-import com.hanghae99_team3.model.user.repository.RefreshTokenRepository;
+import com.hanghae99_team3.login.jwt.dto.TokenDto;
+import com.hanghae99_team3.login.jwt.dto.TokenRequestDto;
+import com.hanghae99_team3.login.jwt.entity.RefreshToken;
+import com.hanghae99_team3.login.jwt.repository.RefreshTokenRepository;
 import com.hanghae99_team3.model.user.repository.UserRepository;
-import com.hanghae99_team3.security.exception.RefreshTokenException;
-import com.hanghae99_team3.security.oauth2.PrincipalDetails;
+import com.hanghae99_team3.login.exception.RefreshTokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -47,20 +48,26 @@ public class TokenService {
     public String refresh(TokenRequestDto tokenRequestDto) {
 
         // accessToken이 만료인지 다시 확인해야함
+        boolean accessTokenValid = jwtTokenProvider.validateToken(tokenRequestDto.getAccessToken());
 
-        String accessToken = tokenRequestDto.getAccessToken();
-        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        RefreshToken refreshToken = refreshTokenRepository.findByUserPk(principalDetails.getUsername()).orElseThrow(
-                () -> new RefreshTokenException("RefreshToken을 찾을 수 없습니다.")
-        );
+        if (!accessTokenValid) {
+            String accessToken = tokenRequestDto.getAccessToken();
+            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+            RefreshToken refreshToken = refreshTokenRepository.findByUserPk(principalDetails.getUsername()).orElseThrow(
+                    () -> new RefreshTokenException("RefreshToken을 찾을 수 없습니다.")
+            );
 
-        // refreshToken의 유효기간이 끝난 경우
-        if (!jwtTokenProvider.validateToken(refreshToken.getToken())) {
-            refreshTokenRepository.deleteByUserPk(principalDetails.getUsername());
-            throw new RefreshTokenException();
+            // refreshToken의 유효기간이 끝난 경우
+            if (!jwtTokenProvider.validateToken(refreshToken.getToken())) {
+                refreshTokenRepository.deleteByUserPk(principalDetails.getUsername());
+                throw new RefreshTokenException();
+            }
+
+            return jwtTokenProvider.createAccessTokenOnly(principalDetails.getUsername(), principalDetails.getRole());
         }
-
-        return jwtTokenProvider.createAccessTokenOnly(principalDetails.getUsername(), principalDetails.getRole());
+        else {
+            return tokenRequestDto.getAccessToken();
+        }
     }
 }

@@ -2,7 +2,7 @@ package com.hanghae99_team3.model.user;
 
 import com.hanghae99_team3.model.user.domain.UserRole;
 import com.hanghae99_team3.model.user.dto.*;
-import com.hanghae99_team3.security.oauth2.PrincipalDetails;
+import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

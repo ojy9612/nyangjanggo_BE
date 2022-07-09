@@ -1,4 +1,4 @@
-package com.hanghae99_team3.security.jwt;
+package com.hanghae99_team3.login.jwt.dto;
 
 import lombok.*;
 

@@ -1,8 +1,9 @@
-package com.hanghae99_team3.security.oauth2;
+package com.hanghae99_team3.login.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hanghae99_team3.security.jwt.JwtTokenProvider;
-import com.hanghae99_team3.security.jwt.TokenService;
+import com.hanghae99_team3.login.jwt.JwtTokenProvider;
+import com.hanghae99_team3.login.jwt.PrincipalDetails;
+import com.hanghae99_team3.login.jwt.TokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -36,12 +37,13 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         log.info("{}", accessToken);
 //        TokenDto testToken = new TokenDto();
 //        writeTokenResponse(response, token);
+
         getRedirectStrategy().sendRedirect(request, response, makeRedirectUrl(accessToken));
     }
 
 
-
     private String makeRedirectUrl(String accessToken) {
+
         return UriComponentsBuilder.fromUriString("http://localhost:3000/oauth2/redirect/")
                 .queryParam("token", accessToken)
                 .build().toUriString();

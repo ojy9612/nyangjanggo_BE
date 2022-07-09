@@ -2,7 +2,7 @@ package com.hanghae99_team3.model.board;
 
 
 import com.hanghae99_team3.model.board.dto.*;
-import com.hanghae99_team3.security.oauth2.PrincipalDetails;
+import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -83,7 +83,7 @@ public class BoardController {
         boardService.createBoardStepEnd(boardId, principalDetails);
 
     }
-//
+
     @PutMapping("/api/board/step/1")
     public Map<String, Long> updateBoardStepMain(@RequestPart Long boardId,
                                                  @RequestPart BoardRequestDtoStepMain boardRequestDtoStepMain,
@@ -135,6 +135,5 @@ public class BoardController {
 
         boardService.deleteBoard(principalDetails, boardId);
     }
-
 
 }

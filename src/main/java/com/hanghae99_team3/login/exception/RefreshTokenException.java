@@ -1,4 +1,4 @@
-package com.hanghae99_team3.security.exception;
+package com.hanghae99_team3.login.exception;
 
 public class RefreshTokenException extends RuntimeException {
     public RefreshTokenException() {
