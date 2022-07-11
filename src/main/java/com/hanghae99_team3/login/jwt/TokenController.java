@@ -1,5 +1,6 @@
-package com.hanghae99_team3.security.jwt;
+package com.hanghae99_team3.login.jwt;
 
+import com.hanghae99_team3.login.jwt.dto.TokenRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,7 +1,8 @@
-package com.hanghae99_team3.security.jwt;
+package com.hanghae99_team3.login.jwt;
 
+import com.hanghae99_team3.login.jwt.dto.TokenDto;
 import com.hanghae99_team3.model.user.domain.UserRole;
-import com.hanghae99_team3.security.exception.TokenValidFailedException;
+import com.hanghae99_team3.login.exception.TokenValidFailedException;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -90,6 +91,15 @@ public class JwtTokenProvider {
         UserDetails userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
+
+    // JWT 토큰에서 UserPk 추출
+    public String getUserPkFromToken(String token) {
+
+        Authentication authentication = getAuthentication(token);
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        return principalDetails.getUsername();
+    }
+
 
     // jwt 토큰 복호화
     public Claims parseClaims(String token) {

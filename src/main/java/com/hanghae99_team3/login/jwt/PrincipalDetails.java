@@ -1,5 +1,6 @@
-package com.hanghae99_team3.security.oauth2;
+package com.hanghae99_team3.login.jwt;
 
+import com.hanghae99_team3.login.oauth2.userinfo.OAuth2UserInfo;
 import com.hanghae99_team3.model.user.domain.AuthProvider;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.domain.UserRole;
