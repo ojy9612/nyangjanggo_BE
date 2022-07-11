@@ -18,7 +18,7 @@ public class RefreshToken extends Timestamped {
     private Long id;
 
     @Column(nullable = false)
-    private String userPk;
+    private Long userId;
 
     @Column(nullable = false)
     private String token;
@@ -29,8 +29,8 @@ public class RefreshToken extends Timestamped {
     }
 
     @Builder
-    public RefreshToken(String userPk, String token) {
-        this.userPk = userPk;
+    public RefreshToken(Long userId, String token) {
+        this.userId = userId;
         this.token = token;
     }
 }
