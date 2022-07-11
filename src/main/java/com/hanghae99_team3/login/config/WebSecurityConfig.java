@@ -70,25 +70,30 @@ public class WebSecurityConfig {
                 .httpBasic().disable() // rest api 만을 고려하여 기본 설정은 해제하겠습니다.
                 .csrf().disable() // csrf 보안 토큰 disable처리.
                 .cors().configurationSource(corsConfigurationSource())
+
+                .and()
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 역시 사용하지 않습니다.
+
                 .and()
                     .exceptionHandling()
                     .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                     .accessDeniedHandler(tokenAccessDeniedHandler)
-                .and()
-                    .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 역시 사용하지 않습니다.
+
                 .and()
                     .authorizeRequests() // 요청에 대한 사용권한 체크
                     .antMatchers("/admin/**").hasRole("ADMIN")
                     .antMatchers("/user/**").hasAnyAuthority("USER_TOKEN")
                     .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
+
                 .and()
                     .oauth2Login()
-                    .successHandler(oAuth2SuccessHandler);
+                    .successHandler(oAuth2SuccessHandler)
 //                    .userInfoEndpoint().userService(oAuth2UserService);
-        http
-                .addFilterBefore(new JwtAuthFilter(jwtTokenProvider),
-                        UsernamePasswordAuthenticationFilter.class);
+
+                .and()
+                    .addFilterBefore(new JwtAuthFilter(jwtTokenProvider),
+                            UsernamePasswordAuthenticationFilter.class);
         // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
         return http.build();
     }

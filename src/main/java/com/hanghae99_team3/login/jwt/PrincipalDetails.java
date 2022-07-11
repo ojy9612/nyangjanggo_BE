@@ -24,7 +24,9 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     private final String email;
     private final UserRole role;
     private final AuthProvider authProvider;
+    private final Long userId;
     private OAuth2UserInfo oAuth2UserInfo;
+    private boolean isNew;
 
 
     //UserDetails: Form 로그인
@@ -35,20 +37,29 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         this.email = user.getEmail();
         this.role = user.getRole();
         this.authProvider = user.getAuthProvider();
+        this.userId = user.getId();
     }
 
     //OAuth2User : OAuth2 로그인
-    public PrincipalDetails(User user, OAuth2UserInfo oAuth2UserInfo) {
+    public PrincipalDetails(User user, OAuth2UserInfo oAuth2UserInfo, boolean isNew) {
         this.nickname = user.getNickname();
         this.userImg = user.getUserImg();
         this.userDescription = user.getUserDescription();
         this.email = user.getEmail();
         this.role = user.getRole();
         this.authProvider = user.getAuthProvider();
-
+        this.userId = user.getId();
         this.oAuth2UserInfo = oAuth2UserInfo;
+        this.isNew = isNew;
     }
 
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
 
     public String getNickname() {
         return nickname;

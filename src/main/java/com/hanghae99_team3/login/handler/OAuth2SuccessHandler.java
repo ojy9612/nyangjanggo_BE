@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanghae99_team3.login.jwt.JwtTokenProvider;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.login.jwt.TokenService;
+import com.hanghae99_team3.login.jwt.dto.TokenDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -29,23 +30,38 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             throws IOException{
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
+        boolean isNew = principalDetails.isNew();
 
-        // 최초 로그인이라면 회원가입 처리를 한다.
-        String accessToken = tokenService.login(principalDetails);
+        // Token 발행
+        TokenDto tokenDto = tokenService.login(principalDetails);
+
+
 
 //        TokenDto token = jwtTokenProvider.createToken(principalDetails.getUsername(), UserRole.USER);
-        log.info("{}", accessToken);
+        log.info("{}", tokenDto.toString());
 //        TokenDto testToken = new TokenDto();
 //        writeTokenResponse(response, token);
 
-        getRedirectStrategy().sendRedirect(request, response, makeRedirectUrl(accessToken));
+        response.setContentType("text/html;charset=UTF-8");
+        response.addHeader("Access-Token",tokenDto.getAccessToken());
+        response.addHeader("Refresh-Token", tokenDto.getRefreshToken());
+        if (isNew) {
+            response.addHeader("isNew", "Y");
+        } else {
+            response.addHeader("isNew", "N");
+        }
+
+
+        getRedirectStrategy().sendRedirect(request, response, makeRedirectUrl());
     }
 
 
-    private String makeRedirectUrl(String accessToken) {
+
+    private String makeRedirectUrl() {
 
         return UriComponentsBuilder.fromUriString("http://localhost:3000/oauth2/redirect/")
-                .queryParam("token", accessToken)
+
+//                .queryParam("token", accessToken)
                 .build().toUriString();
     }
 //    private void writeTokenResponse(HttpServletResponse response, String token)

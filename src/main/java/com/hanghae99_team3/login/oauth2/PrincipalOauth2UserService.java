@@ -52,6 +52,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         Optional<User> user = userRepository.findByEmail(email);
 
+
         //DB에 없는 사용자라면 회원처리
         if (user.isEmpty()) {
             User newUser = User.oauth2Register()
@@ -59,9 +60,10 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .provider(AuthProvider.valueOf(provider)).providerId(providerId)
                     .build();
             userRepository.save(newUser);
-            return new PrincipalDetails(newUser, oAuth2UserInfo);
+
+            return new PrincipalDetails(newUser, oAuth2UserInfo, true); //
         }
 
-        return new PrincipalDetails(user.get(), oAuth2UserInfo);
+        return new PrincipalDetails(user.get(), oAuth2UserInfo, false); //
     }
 }
