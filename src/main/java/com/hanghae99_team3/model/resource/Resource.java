@@ -1,20 +1,21 @@
 package com.hanghae99_team3.model.resource;
 
+import com.hanghae99_team3.model.Timestamped;
 import com.hanghae99_team3.model.board.Board;
 import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Getter
-@Setter
 @Entity
 @NoArgsConstructor
-public class Resource {
+public class Resource extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +41,12 @@ public class Resource {
         this.num = resourceRequestDto.getAmount();
         this.category = resourceRequestDto.getCategory();
         board.addResource(this);
+    }
+
+    public Resource(@NotNull ResourceRequestDto resourceRequestDto) {
+        this.resourceName = resourceRequestDto.getResourceName();
+        this.num = resourceRequestDto.getAmount();
+        this.category = resourceRequestDto.getCategory();
     }
 
 }
