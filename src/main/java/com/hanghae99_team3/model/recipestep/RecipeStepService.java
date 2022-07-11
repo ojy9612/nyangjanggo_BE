@@ -38,9 +38,14 @@ public class RecipeStepService {
         recipeStepList.forEach(recipeStep -> {
             Integer stepNum = recipeStep.getStepNum();
             if (stepNum.equals(recipeStepRequestDto.getStepNum())){
-                awsS3Service.deleteFile(recipeStep.getImageLink());
 
-                recipeStep.updateRecipeStep(recipeStepRequestDto, awsS3Service.uploadFile(multipartFile));
+                if(multipartFile.getContentType() == null){
+                    recipeStep.updateRecipeStep(recipeStepRequestDto, recipeStep.getImageLink());
+                }else{
+                    awsS3Service.deleteFile(recipeStep.getImageLink());
+                    recipeStep.updateRecipeStep(recipeStepRequestDto, awsS3Service.uploadFile(multipartFile));
+                }
+
             }
 
         });
