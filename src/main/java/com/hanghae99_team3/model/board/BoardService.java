@@ -125,9 +125,14 @@ public class BoardService {
         Board board = this.findBoardById(boardId);
         if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
 
-        awsS3Service.deleteFile(board.getMainImage());
+        if (multipartFile.getContentType() == null){
+            board.updateStepMain(boardRequestDtoStepMain,board.getMainImage());
+            return board.getId();
+        }
 
+        awsS3Service.deleteFile(board.getMainImage());
         board.updateStepMain(boardRequestDtoStepMain,awsS3Service.uploadFile(multipartFile));
+
         return board.getId();
     }
 
