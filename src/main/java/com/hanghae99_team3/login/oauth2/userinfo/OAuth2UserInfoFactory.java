@@ -1,4 +1,4 @@
-package com.hanghae99_team3.security.oauth2;
+package com.hanghae99_team3.login.oauth2.userinfo;
 
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;

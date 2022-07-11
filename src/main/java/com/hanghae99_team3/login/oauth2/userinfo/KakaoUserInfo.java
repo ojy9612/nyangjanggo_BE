@@ -1,4 +1,4 @@
-package com.hanghae99_team3.security.oauth2;
+package com.hanghae99_team3.login.oauth2.userinfo;
 
 import java.util.Map;
 

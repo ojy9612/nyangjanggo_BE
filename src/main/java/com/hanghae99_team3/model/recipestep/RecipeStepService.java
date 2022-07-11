@@ -39,6 +39,7 @@ public class RecipeStepService {
             Integer stepNum = recipeStep.getStepNum();
             if (stepNum.equals(recipeStepRequestDto.getStepNum())){
                 awsS3Service.deleteFile(recipeStep.getImageLink());
+
                 recipeStep.updateRecipeStep(recipeStepRequestDto, awsS3Service.uploadFile(multipartFile));
             }
 

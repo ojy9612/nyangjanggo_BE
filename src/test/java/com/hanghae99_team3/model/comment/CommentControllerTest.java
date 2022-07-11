@@ -1,11 +1,7 @@
 package com.hanghae99_team3.model.comment;
 
-import com.hanghae99_team3.model.board.Board;
-import com.hanghae99_team3.model.board.BoardController;
 import com.hanghae99_team3.model.board.BoardRepository;
-import com.hanghae99_team3.model.images.Images;
 import com.hanghae99_team3.model.images.ImagesRepository;
-import com.hanghae99_team3.model.recipestep.RecipeStep;
 import com.hanghae99_team3.model.recipestep.RecipeStepRepository;
 import com.hanghae99_team3.model.s3.AwsS3Service;
 import com.hanghae99_team3.model.user.domain.AuthProvider;
@@ -13,16 +9,14 @@ import com.hanghae99_team3.model.user.domain.UserRole;
 import com.hanghae99_team3.model.user.repository.UserRepository;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.security.MockSpringSecurityFilter;
-import com.hanghae99_team3.security.jwt.JwtTokenProvider;
-import com.hanghae99_team3.security.oauth2.PrincipalDetails;
+import com.hanghae99_team3.login.jwt.JwtTokenProvider;
+import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.restdocs.RestDocumentationContextProvider;
@@ -34,11 +28,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import javax.transaction.Transactional;
-
 import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;

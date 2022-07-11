@@ -1,8 +1,7 @@
-package com.hanghae99_team3.security.jwt;
+package com.hanghae99_team3.login.jwt;
 
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.repository.UserRepository;
-import com.hanghae99_team3.security.oauth2.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

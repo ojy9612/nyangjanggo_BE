@@ -1,4 +1,4 @@
-package com.hanghae99_team3.model.user.domain;
+package com.hanghae99_team3.login.jwt.entity;
 
 import com.hanghae99_team3.model.Timestamped;
 import lombok.Builder;
