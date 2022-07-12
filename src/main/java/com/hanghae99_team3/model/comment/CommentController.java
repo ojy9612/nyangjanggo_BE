@@ -27,24 +27,22 @@ CommentController {
 
 
     @PostMapping("/api/board/{boardId}/comment")
-    public CommentResponseDto createComment(@AuthenticationPrincipal PrincipalDetails principalDetails,
+    public void createComment(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                             @RequestPart CommentRequestDto commentRequestDto,
                                             @PathVariable Long boardId){
 
-        return new CommentResponseDto(
-                commentService.createComment(principalDetails,commentRequestDto,boardId)
-        );
+        commentService.createComment(principalDetails,commentRequestDto,boardId);
     }
 
     @PutMapping("/api/board/{boardId}/comment/{commentId}")
-    public CommentResponseDto updateComment(@AuthenticationPrincipal PrincipalDetails principalDetails,
+    public void updateComment(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                             @RequestPart CommentRequestDto commentRequestDto,
                                             @PathVariable Long boardId,
                                             @PathVariable Long commentId){
 
-        return new CommentResponseDto(
-                commentService.updateComment(principalDetails,commentRequestDto,boardId,commentId)
-        );
+
+        commentService.updateComment(principalDetails,commentRequestDto,boardId,commentId);
+
     }
 
     @DeleteMapping("/api/board/{boardId}/comment/{commentId}")
