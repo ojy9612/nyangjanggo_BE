@@ -7,10 +7,10 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 import java.util.List;
 
 
-public interface ResourceSearchRepository extends ElasticsearchRepository<ResourceDocument,Long> {
-
-    List<ResourceDocument> findByResourceName(String resourceName, Pageable pageable);
-
-    List<ResourceDocument> findByCategory(String category, Pageable pageable);
-
-}
+//public interface ResourceSearchRepository extends ElasticsearchRepository<ResourceDocument,Long> {
+//
+//    List<ResourceDocument> findByResourceName(String resourceName, Pageable pageable);
+//
+//    List<ResourceDocument> findByCategory(String category, Pageable pageable);
+//
+//}

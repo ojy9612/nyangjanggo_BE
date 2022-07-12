@@ -33,8 +33,8 @@ public class Comment extends Timestamped {
     private User user;
 
     @Builder
-    public Comment(@NotNull String content, @NotNull Board board, @NotNull User user) {
-        this.content = content;
+    public Comment(@NotNull CommentRequestDto commentRequestDto, @NotNull Board board, @NotNull User user) {
+        this.content = commentRequestDto.getContent();
         board.addComment(this);
         user.addComment(this);
     }
