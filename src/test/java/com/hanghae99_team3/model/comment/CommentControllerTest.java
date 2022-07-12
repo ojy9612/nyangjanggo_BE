@@ -1,70 +1,68 @@
 package com.hanghae99_team3.model.comment;
 
-import com.hanghae99_team3.model.board.BoardRepository;
-import com.hanghae99_team3.model.images.ImagesRepository;
-import com.hanghae99_team3.model.recipestep.RecipeStepRepository;
-import com.hanghae99_team3.model.s3.AwsS3Service;
-import com.hanghae99_team3.model.user.domain.AuthProvider;
-import com.hanghae99_team3.model.user.domain.UserRole;
-import com.hanghae99_team3.model.user.repository.UserRepository;
-import com.hanghae99_team3.model.user.domain.User;
-import com.hanghae99_team3.security.MockSpringSecurityFilter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hanghae99_team3.docs.CommentDocumentation;
 import com.hanghae99_team3.login.jwt.JwtTokenProvider;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
+import com.hanghae99_team3.model.board.Board;
+import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepMain;
+import com.hanghae99_team3.model.comment.dto.CommentRequestDto;
+import com.hanghae99_team3.model.user.domain.AuthProvider;
+import com.hanghae99_team3.model.user.domain.User;
+import com.hanghae99_team3.model.user.domain.UserRole;
+import com.hanghae99_team3.model.user.repository.UserRepository;
+import com.hanghae99_team3.security.MockSpringSecurityFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(RestDocumentationExtension.class)
 @MockBean(JpaMetamodelMappingContext.class)
 @WebMvcTest(CommentController.class)
+@DisplayName("Comment 컨트롤러 테스트")
 class CommentControllerTest {
 
     MockMvc mockMvc;
-
-    @MockBean
-    AwsS3Service awsS3Service;
-
-    @MockBean
-    JwtTokenProvider jwtTokenProvider;
-
-    @MockBean
-    UserRepository userRepository;
-
-    @MockBean
-    CommentService commentService;
-
-    @MockBean
-    BoardRepository boardRepository;
-
-    @MockBean
-    ImagesRepository imagesRepository;
-    RecipeStepRepository recipeStepRepository;
-
+    @MockBean JwtTokenProvider jwtTokenProvider;
+    @MockBean UserRepository userRepository;
+    @MockBean CommentService commentService;
+    @MockBean CommentRepository commentRepository;
+    final String accessToken = "JwtAccessToken";
     User baseUser;
-
     Principal mockPrincipal;
     PrincipalDetails baseUserDetails;
+    Board baseBoard;
+    ObjectMapper objectMapper = new ObjectMapper();
+
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext,
                RestDocumentationContextProvider restDocumentation) {
@@ -90,78 +88,152 @@ class CommentControllerTest {
 
         baseUserDetails = new PrincipalDetails(baseUser);
         mockPrincipal = new UsernamePasswordAuthenticationToken(baseUserDetails, "", baseUserDetails.getAuthorities());
+
+        BoardRequestDtoStepMain boardRequestDtoStepMain = BoardRequestDtoStepMain.builder()
+                .title("제목")
+                .subTitle("부제목")
+                .content("내용")
+                .build();
+
+        baseBoard = Board.builder()
+                .boardRequestDtoStepMain(boardRequestDtoStepMain)
+                .status("complete")
+                .user(baseUser)
+                .build();
     }
 
+    @Test
+    @DisplayName("댓글 등록")
+    void createComment() throws Exception {
+        //given
+        CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+                .content("댓글 내용")
+                .build();
 
-    @Nested
-    @DisplayName("댓글 기능 Test")
-    class CommentTest {
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+                "commentRequestDto",
+                "commentRequestDto",
+                "application/json",
+                objectMapper.writeValueAsString(commentRequestDto).getBytes(StandardCharsets.UTF_8)
+        );
 
-//        @BeforeEach
-//        void setUp(){
-//            //given
-//            baseUser = User.userDetailRegister()
-//                    .email("email@test.com")
-//                    .password("password!")
-//                    .username("nickname")
-//                    .role(UserRole.USER)
-//                    .build();
-//
-//            basePrincipalDetails = new PrincipalDetails(baseUser);
-//
-//            List<MultipartFile> baseMultipaerFileList = new ArrayList<>();
-//
-//
-//            BoardRequestDto boardRequestDto = BoardRequestDto.builder()
-//                    .title("제목")
-//                    .subTitle("부제목")
-//                    .content("내용")
-//                    .resourceInfos()
-//                    .imgFile()
-//                    .build();
-//
-//            baseBoard = Board.builder()
-//                    .boardRequestDto(boardRequestDto)
-//                    .user(baseUser)
-//                    .build();
-//
-//            //when
-//            userRepository.save(baseUser);
-//            boardRepository.save(baseBoard);
-//        }
+        Comment comment = Comment.builder()
+                .board(baseBoard)
+                .user(baseUser)
+                .commentRequestDto(commentRequestDto)
+                .build();
 
-        @Nested
-        @DisplayName("성공 테스트")
-        class SuccessTest {
+        //when
+        when(commentService.updateComment(
+                any(PrincipalDetails.class),
+                any(CommentRequestDto.class),
+                anyLong(),
+                anyLong()
+        )).thenReturn(
+            comment
+        );
 
-            @Test
-            @DisplayName("댓글 생성")
-            void CreateComment(){
-//                List<String> allObject = awsS3Service.getAllObject().get(0);
-//
-//                allObject.forEach(imageLink -> {
-//                    Optional<Images> optionalImages1 = imagesRepository.findByImageLink(imageLink);
-//                    Optional<Board> optionalImages2 = boardRepository.findByMainImage(imageLink);
-//                    Optional<RecipeStep> optionalImages3 = recipeStepRepository.findByImageLink(imageLink);
-//
-//                    if (optionalImages1.isEmpty() && optionalImages2.isEmpty() && optionalImages3.isEmpty()){
-//                        awsS3Service.deleteFile(imageLink);
-//                    }
-//                });
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(
+                "/api/board/{boardId}/comment",1L);
 
+        //then
+        mockMvc.perform(builder
+                        .file(mockMultipartFile)
+                        .header("Access-Token", accessToken)
+                        .principal(mockPrincipal)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(CommentDocumentation.createComment(commentRequestDto));
 
+    }
 
-                //given
-//                Comment comment = Comment.builder()
-//                        .board()
-//                        .build()
-                //when
+    @Test
+    @DisplayName("댓글 수정")
+    void updateComment() throws Exception {
+        //given
+        CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+                .content("댓글 내용")
+                .build();
 
-                //then
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+                "commentRequestDto",
+                "commentRequestDto",
+                "application/json",
+                objectMapper.writeValueAsString(commentRequestDto).getBytes(StandardCharsets.UTF_8)
+        );
 
-            }
+        Comment comment = Comment.builder()
+                .board(baseBoard)
+                .user(baseUser)
+                .commentRequestDto(commentRequestDto)
+                .build();
 
-        }
+        //when
+        when(commentService.updateComment(
+                any(PrincipalDetails.class),
+                any(CommentRequestDto.class),
+                anyLong(),
+                anyLong()
+        )).thenReturn(
+            comment
+        );
+
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(
+                "/api/board/{boardId}/comment/{commentId}",1L,1L);
+        builder.with(request -> {
+            request.setMethod("PUT");
+            return request;
+        });
+
+        //then
+        mockMvc.perform(builder
+                        .file(mockMultipartFile)
+                        .header("Access-Token", accessToken)
+                        .principal(mockPrincipal)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(CommentDocumentation.updateComment(commentRequestDto));
+
+    }
+
+    @Test
+    @DisplayName("댓글 삭제")
+    void removeComment() throws Exception {
+        //given
+        CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+                .content("댓글 내용")
+                .build();
+
+        Comment comment = Comment.builder()
+                .board(baseBoard)
+                .user(baseUser)
+                .commentRequestDto(commentRequestDto)
+                .build();
+
+        //when
+        doNothing().when(commentService);
+
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(
+                "/api/board/{boardId}/comment/{commentId}",1L,1L);
+        builder.with(request -> {
+            request.setMethod("DELETE");
+            return request;
+        });
+
+        //then
+        mockMvc.perform(builder
+                        .header("Access-Token", accessToken)
+                        .principal(mockPrincipal)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(CommentDocumentation.removeComment());
+
     }
 
 }

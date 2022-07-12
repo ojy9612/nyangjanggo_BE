@@ -11,6 +11,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-
     Page<Comment> findAllByBoard(Board board, Pageable pageable);
 }

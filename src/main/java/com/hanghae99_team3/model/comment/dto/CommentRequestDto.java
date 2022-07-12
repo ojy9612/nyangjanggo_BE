@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @Getter
-@Setter
 public class CommentRequestDto {
 
     private String content;
