@@ -144,6 +144,7 @@ public class BoardController {
         testmap.put("contentType",multipartFile.getContentType());
         testmap.put("OriginalFilename",multipartFile.getOriginalFilename());
         testmap.put("Name",multipartFile.getName());
+        testmap.put("비교!", (multipartFile.getContentType() == null ? "null이 맞네요" : "null이 아니네요 ㅠ") );
 
         return testmap;
     }
