@@ -4,16 +4,13 @@
       "type": "long"
     },
     "resourceName": {
-      "type": "text",
-      "analyzer": "korean"
+      "type": "text"
     },
     "amount": {
-      "type": "text",
-      "analyzer": "korean"
+      "type": "text"
     },
     "category": {
-      "type": "text",
-      "analyzer": "korean"
+      "type": "text"
     },
     "board": {
       "properties": {
