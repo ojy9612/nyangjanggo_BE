@@ -2,7 +2,7 @@ package com.hanghae99_team3.login.jwt;
 
 import com.hanghae99_team3.login.jwt.dto.TokenDto;
 import com.hanghae99_team3.model.user.domain.UserRole;
-import com.hanghae99_team3.login.exception.TokenValidFailedException;
+import com.hanghae99_team3.exception.newException.TokenValidFailedException;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
