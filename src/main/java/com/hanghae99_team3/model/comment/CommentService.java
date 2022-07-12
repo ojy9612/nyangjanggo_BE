@@ -60,7 +60,6 @@ public class CommentService {
 
         comment.updateContent(commentRequestDto);
 
-
     }
 
     public void removeComment(PrincipalDetails principalDetails, Long boardId, Long commentId) {

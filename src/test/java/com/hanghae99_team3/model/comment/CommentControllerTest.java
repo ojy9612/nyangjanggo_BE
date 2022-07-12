@@ -117,21 +117,8 @@ class CommentControllerTest {
                 objectMapper.writeValueAsString(commentRequestDto).getBytes(StandardCharsets.UTF_8)
         );
 
-        Comment comment = Comment.builder()
-                .board(baseBoard)
-                .user(baseUser)
-                .commentRequestDto(commentRequestDto)
-                .build();
-
         //when
-        when(commentService.updateComment(
-                any(PrincipalDetails.class),
-                any(CommentRequestDto.class),
-                anyLong(),
-                anyLong()
-        )).thenReturn(
-            comment
-        );
+        doNothing().when(commentService);
 
         MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(
                 "/api/board/{boardId}/comment",1L);
@@ -164,21 +151,8 @@ class CommentControllerTest {
                 objectMapper.writeValueAsString(commentRequestDto).getBytes(StandardCharsets.UTF_8)
         );
 
-        Comment comment = Comment.builder()
-                .board(baseBoard)
-                .user(baseUser)
-                .commentRequestDto(commentRequestDto)
-                .build();
-
         //when
-        when(commentService.updateComment(
-                any(PrincipalDetails.class),
-                any(CommentRequestDto.class),
-                anyLong(),
-                anyLong()
-        )).thenReturn(
-            comment
-        );
+        doNothing().when(commentService);
 
         MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(
                 "/api/board/{boardId}/comment/{commentId}",1L,1L);
@@ -204,16 +178,6 @@ class CommentControllerTest {
     @DisplayName("댓글 삭제")
     void removeComment() throws Exception {
         //given
-        CommentRequestDto commentRequestDto = CommentRequestDto.builder()
-                .content("댓글 내용")
-                .build();
-
-        Comment comment = Comment.builder()
-                .board(baseBoard)
-                .user(baseUser)
-                .commentRequestDto(commentRequestDto)
-                .build();
-
         //when
         doNothing().when(commentService);
 
