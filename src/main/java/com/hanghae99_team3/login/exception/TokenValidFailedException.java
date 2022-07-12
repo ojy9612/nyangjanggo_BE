@@ -1,4 +1,4 @@
-package com.hanghae99_team3.exception.newException;
+package com.hanghae99_team3.login.exception;
 
 public class TokenValidFailedException extends RuntimeException {
     public TokenValidFailedException() {

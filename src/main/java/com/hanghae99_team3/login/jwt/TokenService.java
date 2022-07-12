@@ -7,7 +7,7 @@ import com.hanghae99_team3.login.jwt.entity.RefreshToken;
 import com.hanghae99_team3.login.jwt.repository.RefreshTokenRepository;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.repository.UserRepository;
-import com.hanghae99_team3.exception.newException.RefreshTokenException;
+import com.hanghae99_team3.login.exception.RefreshTokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

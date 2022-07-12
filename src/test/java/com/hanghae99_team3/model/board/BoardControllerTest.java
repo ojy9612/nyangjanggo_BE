@@ -61,27 +61,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class BoardControllerTest {
 
     MockMvc mockMvc;
-
-    @MockBean
-    JwtTokenProvider jwtTokenProvider;
-
-    @MockBean
-    BoardService boardService;
-
-    @MockBean
-    BoardRepository boardRepository;
-
-    @MockBean
-    ResourceService resourceService;
-
-    @MockBean
-    RecipeStepService recipeStepService;
-
+    @MockBean JwtTokenProvider jwtTokenProvider;
+    @MockBean BoardService boardService;
+    @MockBean BoardRepository boardRepository;
+    @MockBean ResourceService resourceService;
+    @MockBean RecipeStepService recipeStepService;
     final String accessToken = "JwtAccessToken";
     User baseUser;
     Principal mockPrincipal;
     PrincipalDetails baseUserDetails;
-
     ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
@@ -94,7 +82,6 @@ class BoardControllerTest {
                 .alwaysDo(document("{method-name}",
                         preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())))
                 .build();
-
 
         baseUser = User.testRegister()
                 .email("email@test.com")
@@ -151,9 +138,7 @@ class BoardControllerTest {
                 "<<image data>>".getBytes(StandardCharsets.UTF_8)
         );
 
-
         resourceService.createResource(resourceRequestDtoList,board);
-
         recipeStepService.createRecipeStep(recipeStepRequestDto,image,board);
 
         //when
@@ -287,7 +272,6 @@ class BoardControllerTest {
 
         MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/board/step/1");
 
-
         //then
         mockMvc.perform(builder
                         .file(image)
@@ -347,7 +331,7 @@ class BoardControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(BoardDocumentation.createBoardStepResource(boardRequestDtoStepResource.getResourceRequestDtoList()));
+                .andDo(BoardDocumentation.createBoardStepResource(boardRequestDtoStepResource));
 
     }
 
@@ -550,7 +534,7 @@ class BoardControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(BoardDocumentation.updateBoardStepResource(boardRequestDtoStepResource.getResourceRequestDtoList()));
+                .andDo(BoardDocumentation.updateBoardStepResource(boardRequestDtoStepResource));
 
     }
 
@@ -675,7 +659,5 @@ class BoardControllerTest {
                 .andDo(BoardDocumentation.deleteBoard());
 
     }
-
-
 
 }
