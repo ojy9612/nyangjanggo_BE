@@ -42,7 +42,7 @@ public class CommentService {
         Board board = boardService.findBoardById(boardId);
 
         Comment comment = Comment.builder()
-                .content(commentRequestDto.getContent())
+                .commentRequestDto(commentRequestDto)
                 .board(board)
                 .user(user)
                 .build();
