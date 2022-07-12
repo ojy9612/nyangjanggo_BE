@@ -12,13 +12,13 @@ import javax.validation.constraints.NotNull;
 public class ResourceResponseDto {
 
     private String resourceName;
-    private String num;
+    private String amount;
     private String category;
 
     @Builder
     public ResourceResponseDto(@NotNull Resource resource) {
         this.resourceName = resource.getResourceName();
-        this.num = resource.getNum();
+        this.amount = resource.getAmount();
         this.category = resource.getCategory();
     }
 

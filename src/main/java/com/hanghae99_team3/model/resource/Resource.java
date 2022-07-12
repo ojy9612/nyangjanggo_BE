@@ -24,7 +24,7 @@ public class Resource extends Timestamped {
     private String resourceName;
 
     @Column
-    private String num;
+    private String amount;
 
     @Column
     private String category;
@@ -37,14 +37,14 @@ public class Resource extends Timestamped {
     public Resource(@NotNull ResourceRequestDto resourceRequestDto,
                     @NotNull Board board) {
         this.resourceName = resourceRequestDto.getResourceName();
-        this.num = resourceRequestDto.getAmount();
+        this.amount = resourceRequestDto.getAmount();
         this.category = resourceRequestDto.getCategory();
         board.addResource(this);
     }
 
     public Resource(@NotNull ResourceRequestDto resourceRequestDto) {
         this.resourceName = resourceRequestDto.getResourceName();
-        this.num = resourceRequestDto.getAmount();
+        this.amount = resourceRequestDto.getAmount();
         this.category = resourceRequestDto.getCategory();
     }
 
