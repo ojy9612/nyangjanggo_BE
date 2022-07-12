@@ -1,4 +1,4 @@
-package com.hanghae99_team3.model.resource;
+package com.hanghae99_team3.model.resource.domain;
 
 import com.hanghae99_team3.model.Timestamped;
 import com.hanghae99_team3.model.board.Board;

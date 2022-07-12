@@ -36,7 +36,7 @@ public class BoardDocumentation {
             fieldWithPath("goodCount").type(JsonFieldType.NUMBER).description("좋아요 수"),
             fieldWithPath("resourceResponseDtoList").type(JsonFieldType.ARRAY).description("재료 리스트").optional(),
             fieldWithPath("resourceResponseDtoList[].resourceName").type(JsonFieldType.STRING).description("재료 이름").optional(),
-            fieldWithPath("resourceResponseDtoList[].num").type(JsonFieldType.STRING).description("재료 수량").optional(),
+            fieldWithPath("resourceResponseDtoList[].amount").type(JsonFieldType.STRING).description("재료 수량").optional(),
             fieldWithPath("resourceResponseDtoList[].category").type(JsonFieldType.STRING).description("재료 카테고리").optional(),
             fieldWithPath("createdAt").type(JsonFieldType.STRING).description("게시글 생성 날짜").optional(),
             fieldWithPath("modifiedAt").type(JsonFieldType.STRING).description("게시글 수정 날짜").optional()
@@ -53,7 +53,7 @@ public class BoardDocumentation {
             fieldWithPath("mainImg").type(JsonFieldType.STRING).description("게시글 대표 이미지").optional(),
             fieldWithPath("resourceResponseDtoList").type(JsonFieldType.ARRAY).description("재료 리스트").optional(),
             fieldWithPath("resourceResponseDtoList[].resourceName").type(JsonFieldType.STRING).description("재료 이름").optional(),
-            fieldWithPath("resourceResponseDtoList[].num").type(JsonFieldType.STRING).description("재료 수량").optional(),
+            fieldWithPath("resourceResponseDtoList[].amount").type(JsonFieldType.STRING).description("재료 수량").optional(),
             fieldWithPath("resourceResponseDtoList[].category").type(JsonFieldType.STRING).description("재료 카테고리").optional(),
             fieldWithPath("recipeStepResponseDtoList").type(JsonFieldType.ARRAY).description("재료 리스트").optional(),
             fieldWithPath("recipeStepResponseDtoList[].stepNum").type(JsonFieldType.NUMBER).description("레시피 Step").optional(),
@@ -126,9 +126,9 @@ public class BoardDocumentation {
                 requestHeaders(
                         headerWithName("Access-Token").description("Jwt Access-Token")
                 ),
-                requestFields(
-                        fieldWithPath("boardId").description("게시글 아이디"),
-                        subsectionWithPath("resourceRequestDtoList").type(JsonFieldType.ARRAY).description(objectMapper.writeValueAsString(resourceRequestDtoList))
+                requestParts(
+                        partWithName("boardId").description("게시글 아이디"),
+                        partWithName("resourceRequestDtoList").description(objectMapper.writeValueAsString(resourceRequestDtoList))
                 ),
                 responseFields(
                         fieldWithPath("boardId").type(JsonFieldType.NUMBER).description("게시글 ID")
@@ -188,9 +188,9 @@ public class BoardDocumentation {
                 requestHeaders(
                         headerWithName("Access-Token").description("Jwt Access-Token")
                 ),
-                requestFields(
-                        fieldWithPath("boardId").description("게시글 아이디"),
-                        subsectionWithPath("resourceRequestDtoList").type(JsonFieldType.ARRAY).description(objectMapper.writeValueAsString(resourceRequestDtoList))
+                requestParts(
+                        partWithName("boardId").description("게시글 아이디"),
+                        partWithName("resourceRequestDtoList").description(objectMapper.writeValueAsString(resourceRequestDtoList))
                 ),
                 responseFields(
                         fieldWithPath("boardId").type(JsonFieldType.NUMBER).description("게시글 ID")
