@@ -52,7 +52,7 @@ public class BoardController {
     }
 
     @PostMapping(value = "/api/board/step/2")
-    public Map<String, Long> createBoardStepResource(@RequestBody BoardRequestDtoStepResource boardRequestDtoStepResource,
+    public Map<String, Long> createBoardStepResource(@RequestPart BoardRequestDtoStepResource boardRequestDtoStepResource,
                                                      @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         Map<String, Long> result = new HashMap<>();
@@ -99,7 +99,7 @@ public class BoardController {
     }
 
     @PutMapping("/api/board/step/2")
-    public Map<String, Long> updateBoardStepResource(@RequestBody BoardRequestDtoStepResource boardRequestDtoStepResource,
+    public Map<String, Long> updateBoardStepResource(@RequestPart BoardRequestDtoStepResource boardRequestDtoStepResource,
                                                      @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         Map<String, Long> result = new HashMap<>();
@@ -134,19 +134,6 @@ public class BoardController {
                             @PathVariable Long boardId) {
 
         boardService.deleteBoard(principalDetails, boardId);
-    }
-
-    @PostMapping("/test")
-    public Map<String, String> test(@RequestPart MultipartFile multipartFile){
-
-        Map<String, String> testmap = new HashMap<>();
-
-        testmap.put("contentType",multipartFile.getContentType());
-        testmap.put("OriginalFilename",multipartFile.getOriginalFilename());
-        testmap.put("Name",multipartFile.getName());
-        testmap.put("비교!", (multipartFile.getContentType() == null ? "null이 맞네요" : "null이 아니네요 ㅠ") );
-
-        return testmap;
     }
 
 }
