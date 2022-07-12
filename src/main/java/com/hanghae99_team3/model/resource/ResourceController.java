@@ -19,13 +19,13 @@ public class ResourceController {
     private final ResourceRepository resourceRepository;
     private final ResourceSearchService resourceSearchService;
 
-    @PostMapping("/resource")
-    public void aa(@RequestBody ResourceRequestDto resourceRequestDto){
-
-        Resource resource = new Resource(resourceRequestDto);
-        resourceRepository.save(resource);
-    }
-
+//    @PostMapping("/resource")
+//    public void aa(@RequestBody ResourceRequestDto resourceRequestDto){
+//
+//        Resource resource = new Resource(resourceRequestDto);
+//        resourceRepository.save(resource);
+//    }
+//
 //    @GetMapping("/resources/resourceName")
 //    public List<ResourceResponseDto> searchByNickname(@RequestParam String resourceName, Pageable pageable){
 //

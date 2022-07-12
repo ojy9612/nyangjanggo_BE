@@ -141,8 +141,7 @@ public class BoardService {
         Board board = this.findBoardById(boardRequestDtoStepResource.getBoardId());
         if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
 
-        resourceService.removeAllResource(board);
-        resourceService.createResource(boardRequestDtoStepResource.getResourceRequestDtoList(),board);
+        resourceService.updateResource(boardRequestDtoStepResource.getResourceRequestDtoList(),board);
 
         return board.getId();
     }
