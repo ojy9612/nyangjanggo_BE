@@ -322,6 +322,13 @@ class BoardControllerTest {
                 .resourceRequestDtoList(resourceRequestDtoList)
                 .build();
 
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+                "boardRequestDtoStepResource",
+                "boardRequestDtoStepResource",
+                "application/json",
+                objectMapper.writeValueAsString(boardRequestDtoStepResource).getBytes(StandardCharsets.UTF_8)
+        );
+
         //when
         when(boardService.createBoardStepResource(
                 any(BoardRequestDtoStepResource.class),
@@ -329,12 +336,14 @@ class BoardControllerTest {
         ))
                 .thenReturn(1L);
 
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/board/step/2");
+
         //then
-        mockMvc.perform(post("/api/board/step/2")
+        mockMvc.perform(builder
+                        .file(mockMultipartFile)
                         .header("Access-Token", accessToken)
                         .principal(mockPrincipal)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(boardRequestDtoStepResource))
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -512,6 +521,13 @@ class BoardControllerTest {
                 .resourceRequestDtoList(resourceRequestDtoList)
                 .build();
 
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+                "boardRequestDtoStepResource",
+                "boardRequestDtoStepResource",
+                "application/json",
+                objectMapper.writeValueAsString(boardRequestDtoStepResource).getBytes(StandardCharsets.UTF_8)
+        );
+
         //when
         when(boardService.updateBoardStepResource(
                 any(BoardRequestDtoStepResource.class),
@@ -519,12 +535,18 @@ class BoardControllerTest {
         ))
                 .thenReturn(1L);
 
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/board/step/2");
+        builder.with(request -> {
+            request.setMethod("PUT");
+            return request;
+        });
+
         //then
-        mockMvc.perform(put("/api/board/step/2")
+        mockMvc.perform(builder
+                        .file(mockMultipartFile)
                         .header("Access-Token", accessToken)
                         .principal(mockPrincipal)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(boardRequestDtoStepResource))
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
