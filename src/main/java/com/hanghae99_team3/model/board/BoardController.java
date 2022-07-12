@@ -136,4 +136,16 @@ public class BoardController {
         boardService.deleteBoard(principalDetails, boardId);
     }
 
+    @PostMapping("/test")
+    public Map<String, String> test(@RequestPart MultipartFile multipartFile){
+
+        Map<String, String> testmap = new HashMap<>();
+
+        testmap.put("contentType",multipartFile.getContentType());
+        testmap.put("OriginalFilename",multipartFile.getOriginalFilename());
+        testmap.put("Name",multipartFile.getName());
+
+        return testmap;
+    }
+
 }
