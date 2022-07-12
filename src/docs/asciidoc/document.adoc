@@ -175,3 +175,27 @@ include::{snippets}/delete-deleteBoard/curl-request.adoc[]
 include::{snippets}/delete-deleteBoard/request-headers.adoc[]
 
 
+== Comment Api
+
+[[comment-post]]
+=== 댓글 등록
+==== curl request
+include::{snippets}/post-createComment/curl-request.adoc[]
+==== request header
+include::{snippets}/post-createComment/request-headers.adoc[]
+==== request body
+include::{snippets}/post-createComment/request-parts.adoc[]
+
+=== 댓글 수정
+==== curl request
+include::{snippets}/put-updateComment/curl-request.adoc[]
+==== request header
+include::{snippets}/put-updateComment/request-headers.adoc[]
+==== request body
+include::{snippets}/put-updateComment/request-parts.adoc[]
+
+=== 댓글 삭제
+==== curl request
+include::{snippets}/delete-removeComment/curl-request.adoc[]
+==== request header
+include::{snippets}/delete-removeComment/request-headers.adoc[]
