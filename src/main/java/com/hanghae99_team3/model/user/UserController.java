@@ -1,5 +1,6 @@
 package com.hanghae99_team3.model.user;
 
+import com.hanghae99_team3.model.fridge.dto.FridgeRequestDto;
 import com.hanghae99_team3.model.user.domain.UserRole;
 import com.hanghae99_team3.model.user.dto.*;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -21,7 +24,7 @@ public class UserController {
     }
 
 
-    @GetMapping("api/user")
+    @GetMapping("/api/user")
     public UserResDto getUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         return new UserResDto(
                 principalDetails.getNickname(),
@@ -30,15 +33,28 @@ public class UserController {
         );
     }
 
-    @PutMapping("api/user")
+    @PutMapping("/api/user")
     public void updateUser(@ModelAttribute UserReqDto userDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        userService.update(userDto, principalDetails);
+        userService.updateUser(userDto, principalDetails);
     }
 
-    @DeleteMapping("api/user")
+    @DeleteMapping("/api/user")
     public void deleteUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         userService.deleteUser(principalDetails);
     }
+
+    @PostMapping("/api/user/fridge")
+    public void createFridge(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                             @RequestPart List<FridgeRequestDto> fridgeRequestDtoList){
+        userService.createFridge(principalDetails,fridgeRequestDtoList);
+    }
+
+    @PutMapping("/api/user/fridge")
+    public void updateFridge(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                             @RequestPart List<FridgeRequestDto> fridgeRequestDtoList){
+        userService.updateFridge(principalDetails,fridgeRequestDtoList);
+    }
+
 
 //    @RequestMapping("/auth")
 //    public Authentication auth() {
