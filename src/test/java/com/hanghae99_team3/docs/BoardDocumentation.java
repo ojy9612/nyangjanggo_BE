@@ -126,10 +126,10 @@ public class BoardDocumentation {
                 requestHeaders(
                         headerWithName("Access-Token").description("Jwt Access-Token")
                 ),
-                requestParts(
-                        partWithName("boardId").description("게시글 아이디"),
-                        partWithName("resourceRequestDtoList").description(objectMapper.writeValueAsString(resourceRequestDtoList))
-                ),
+//                requestParts(
+//                        partWithName("boardId").description("게시글 아이디"),
+//                        partWithName("resourceRequestDtoList").description(objectMapper.writeValueAsString(resourceRequestDtoList))
+//                ),
                 responseFields(
                         fieldWithPath("boardId").type(JsonFieldType.NUMBER).description("게시글 ID")
                 )
@@ -188,10 +188,10 @@ public class BoardDocumentation {
                 requestHeaders(
                         headerWithName("Access-Token").description("Jwt Access-Token")
                 ),
-                requestParts(
-                        partWithName("boardId").description("게시글 아이디"),
-                        partWithName("resourceRequestDtoList").description(objectMapper.writeValueAsString(resourceRequestDtoList))
-                ),
+//                requestParts(
+//                        partWithName("boardId").description("게시글 아이디"),
+//                        partWithName("resourceRequestDtoList").description(objectMapper.writeValueAsString(resourceRequestDtoList))
+//                ),
                 responseFields(
                         fieldWithPath("boardId").type(JsonFieldType.NUMBER).description("게시글 ID")
                 )
