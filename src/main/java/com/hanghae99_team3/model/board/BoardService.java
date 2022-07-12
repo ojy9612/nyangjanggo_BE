@@ -7,7 +7,7 @@ import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepRecipe;
 import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepResource;
 import com.hanghae99_team3.model.board.dto.BoardResponseDto;
 import com.hanghae99_team3.model.recipestep.RecipeStepService;
-import com.hanghae99_team3.model.resource.ResourceService;
+import com.hanghae99_team3.model.resource.service.ResourceService;
 import com.hanghae99_team3.model.s3.AwsS3Service;
 import com.hanghae99_team3.model.user.UserService;
 import com.hanghae99_team3.model.user.domain.User;
@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.hanghae99_team3.exception.ErrorMessage.BOARD_NOT_FOUND;
@@ -125,14 +126,13 @@ public class BoardService {
         Board board = this.findBoardById(boardId);
         if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
 
-        if (multipartFile.getContentType() == null){
-            board.updateStepMain(boardRequestDtoStepMain,board.getMainImage());
+        if (Objects.equals(multipartFile.getOriginalFilename(), "")){
+            awsS3Service.deleteFile(board.getMainImage());
+            board.updateStepMain(boardRequestDtoStepMain,awsS3Service.uploadFile(multipartFile));
             return board.getId();
         }
 
-        awsS3Service.deleteFile(board.getMainImage());
-        board.updateStepMain(boardRequestDtoStepMain,awsS3Service.uploadFile(multipartFile));
-
+        board.updateStepMain(boardRequestDtoStepMain,board.getMainImage());
         return board.getId();
     }
 
@@ -141,8 +141,7 @@ public class BoardService {
         Board board = this.findBoardById(boardRequestDtoStepResource.getBoardId());
         if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
 
-        resourceService.removeAllResource(board);
-        resourceService.createResource(boardRequestDtoStepResource.getResourceRequestDtoList(),board);
+        resourceService.updateResource(boardRequestDtoStepResource.getResourceRequestDtoList(),board);
 
         return board.getId();
     }

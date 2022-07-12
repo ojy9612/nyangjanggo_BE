@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -39,11 +40,11 @@ public class RecipeStepService {
             Integer stepNum = recipeStep.getStepNum();
             if (stepNum.equals(recipeStepRequestDto.getStepNum())){
 
-                if(multipartFile.getContentType() == null){
-                    recipeStep.updateRecipeStep(recipeStepRequestDto, recipeStep.getImageLink());
-                }else{
+                if(Objects.equals(multipartFile.getOriginalFilename(), "")){
                     awsS3Service.deleteFile(recipeStep.getImageLink());
                     recipeStep.updateRecipeStep(recipeStepRequestDto, awsS3Service.uploadFile(multipartFile));
+                }else{
+                    recipeStep.updateRecipeStep(recipeStepRequestDto, recipeStep.getImageLink());
                 }
 
             }

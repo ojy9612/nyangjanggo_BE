@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 public class RecipeStepResponseDto {
 
     private Integer stepNum;
-    private String content;
+    private String stepContent;
     private String imageLink;
 
     @Builder
     public RecipeStepResponseDto(RecipeStep recipeStep) {
         this.stepNum = recipeStep.getStepNum();
-        this.content = recipeStep.getContent();
+        this.stepContent = recipeStep.getContent();
         this.imageLink = recipeStep.getImageLink();
     }
 

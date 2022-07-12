@@ -32,10 +32,11 @@ public class TokenService {
         TokenDto tokenDto = jwtTokenProvider.createToken(principalDetails.getUsername(), principalDetails.getRole());
 
         // RefreshToken이 DB에 존재하는지 확인
-//        Optional<RefreshToken> findRefreshToken = refreshTokenRepository.findByUserId(principalDetails.getUserId());
-//        if (findRefreshToken.isPresent()) {
-//            throw new RefreshTokenException("refreshToken 존재");
-//        }
+
+        Optional<RefreshToken> findRefreshToken = refreshTokenRepository.findByUserId(principalDetails.getUserId());
+        if (findRefreshToken.isPresent()) {
+            throw new RefreshTokenException("refreshToken 존재");
+        }
 
         // RefreshToken DB에 저장
         RefreshToken refreshToken = RefreshToken.builder()

@@ -6,7 +6,7 @@ import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepMain;
 import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.good.Good;
 import com.hanghae99_team3.model.recipestep.RecipeStep;
-import com.hanghae99_team3.model.resource.Resource;
+import com.hanghae99_team3.model.resource.domain.Resource;
 import com.hanghae99_team3.model.user.domain.User;
 import lombok.*;
 
