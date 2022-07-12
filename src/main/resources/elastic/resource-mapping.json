@@ -1,0 +1,26 @@
+{
+  "properties": {
+    "id": {
+      "type": "long"
+    },
+    "resourceName": {
+      "type": "text",
+      "analyzer": "korean"
+    },
+    "amount": {
+      "type": "text",
+      "analyzer": "korean"
+    },
+    "category": {
+      "type": "text",
+      "analyzer": "korean"
+    },
+    "board": {
+      "properties": {
+        "id": {
+          "type": "long"
+        }
+      }
+    }
+  }
+}
