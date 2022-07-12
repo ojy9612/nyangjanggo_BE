@@ -7,7 +7,7 @@ import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepRecipe;
 import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepResource;
 import com.hanghae99_team3.model.recipestep.RecipeStepService;
 import com.hanghae99_team3.model.recipestep.dto.RecipeStepRequestDto;
-import com.hanghae99_team3.model.resource.ResourceService;
+import com.hanghae99_team3.model.resource.service.ResourceService;
 import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;
 import com.hanghae99_team3.model.user.domain.AuthProvider;
 import com.hanghae99_team3.model.user.domain.User;
@@ -150,6 +150,7 @@ class BoardControllerTest {
                 null,
                 "<<image data>>".getBytes(StandardCharsets.UTF_8)
         );
+
 
         resourceService.createResource(resourceRequestDtoList,board);
 
