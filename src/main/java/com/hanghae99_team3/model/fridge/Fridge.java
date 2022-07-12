@@ -2,6 +2,7 @@ package com.hanghae99_team3.model.fridge;
 
 
 import com.hanghae99_team3.model.Timestamped;
+import com.hanghae99_team3.model.fridge.dto.FridgeRequestDto;
 import com.hanghae99_team3.model.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +25,7 @@ public class Fridge extends Timestamped {
     private String resourceName;
 
     @Column
-    private String num;
+    private String amount;
 
     @Column
     private String category;
@@ -37,15 +38,12 @@ public class Fridge extends Timestamped {
     private User user;
 
     @Builder
-    public Fridge(@NotNull String resourceName,
-                  @NotNull String num,
-                  @NotNull String category,
-                  @NotNull String endTime,
+    public Fridge(@NotNull FridgeRequestDto fridgeRequestDto,
                   @NotNull User user) {
-        this.resourceName = resourceName;
-        this.num = num;
-        this.category = category;
-        this.endTime = endTime;
+        this.resourceName = fridgeRequestDto.getResourceName();
+        this.amount = fridgeRequestDto.getAmount();
+        this.category = fridgeRequestDto.getCategory();
+        this.endTime = fridgeRequestDto.getEndTime();
         user.addFridge(this);
     }
 
