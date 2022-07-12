@@ -28,7 +28,7 @@ CommentController {
 
     @PostMapping("/api/board/{boardId}/comment")
     public CommentResponseDto createComment(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                            @RequestBody CommentRequestDto commentRequestDto,
+                                            @RequestPart CommentRequestDto commentRequestDto,
                                             @PathVariable Long boardId){
 
         return new CommentResponseDto(
@@ -38,7 +38,7 @@ CommentController {
 
     @PutMapping("/api/board/{boardId}/comment/{commentId}")
     public CommentResponseDto updateComment(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                            @RequestBody CommentRequestDto commentRequestDto,
+                                            @RequestPart CommentRequestDto commentRequestDto,
                                             @PathVariable Long boardId,
                                             @PathVariable Long commentId){
 

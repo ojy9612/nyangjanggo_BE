@@ -29,6 +29,11 @@ public class ResourceService {
         });
     }
 
+    public void updateResource(List<ResourceRequestDto> resourceRequestDtoList, Board board){
+        this.removeAllResource(board);
+        this.createResource(resourceRequestDtoList,board);
+    }
+
     public void removeAllResource(Board board) {
         resourceRepository.deleteAll(resourceRepository.findAllByBoard(board));
     }

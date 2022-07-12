@@ -16,8 +16,8 @@ import static org.springframework.data.elasticsearch.annotations.DateFormat.epoc
 @Getter
 @Document(indexName = "resource")
 @NoArgsConstructor
-@Mapping(mappingPath = "elastic/member-mapping.json")
-@Setting(settingPath = "elastic/member-setting.json")
+//@Mapping(mappingPath = "elastic/resource-mapping.json")
+//@Setting(settingPath = "elastic/resource-setting.json")
 public class ResourceDocument {
 
     @Id

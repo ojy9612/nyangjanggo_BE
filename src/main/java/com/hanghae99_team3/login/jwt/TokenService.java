@@ -10,7 +10,6 @@ import com.hanghae99_team3.model.user.repository.UserRepository;
 import com.hanghae99_team3.login.exception.RefreshTokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

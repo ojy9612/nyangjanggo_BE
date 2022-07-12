@@ -16,9 +16,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ResourceController {
 
-//    private final ResourceRepository resourceRepository;
-//    private final ResourceSearchService resourceSearchService;
-//
+    private final ResourceRepository resourceRepository;
+    private final ResourceSearchService resourceSearchService;
+
 //    @PostMapping("/resource")
 //    public void aa(@RequestBody ResourceRequestDto resourceRequestDto){
 //

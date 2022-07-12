@@ -136,17 +136,18 @@ public class BoardService {
         return board.getId();
     }
 
+    @Transactional
     public Long updateBoardStepResource(BoardRequestDtoStepResource boardRequestDtoStepResource, PrincipalDetails principalDetails) {
         User user = userService.findUserByAuthEmail(principalDetails);
         Board board = this.findBoardById(boardRequestDtoStepResource.getBoardId());
         if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
 
-        resourceService.removeAllResource(board);
-        resourceService.createResource(boardRequestDtoStepResource.getResourceRequestDtoList(),board);
+        resourceService.updateResource(boardRequestDtoStepResource.getResourceRequestDtoList(),board);
 
         return board.getId();
     }
 
+    @Transactional
     public Long updateBoardStepRecipe(BoardRequestDtoStepRecipe boardRequestDtoStepRecipe, MultipartFile multipartFile, PrincipalDetails principalDetails) {
         User user = userService.findUserByAuthEmail(principalDetails);
         Board board = this.findBoardById(boardRequestDtoStepRecipe.getBoardId());
@@ -165,7 +166,6 @@ public class BoardService {
         recipeStepService.removeAndResortRecipeStep(board,stepNum);
     }
 
-    @Transactional
     public void deleteBoard(PrincipalDetails principalDetails, Long boardId) {
         User user = userService.findUserByAuthEmail(principalDetails);
         Board board = this.findBoardById(boardId);
