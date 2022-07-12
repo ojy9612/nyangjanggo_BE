@@ -1,6 +1,7 @@
 package com.hanghae99_team3.model.resource.dto;
 
-import com.hanghae99_team3.model.resource.Resource;
+import com.hanghae99_team3.model.resource.domain.Resource;
+import com.hanghae99_team3.model.resource.domain.ResourceDocument;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,11 +16,17 @@ public class ResourceResponseDto {
     private String amount;
     private String category;
 
-    @Builder
+    @Builder(builderMethodName = "Resource")
     public ResourceResponseDto(@NotNull Resource resource) {
         this.resourceName = resource.getResourceName();
         this.amount = resource.getAmount();
         this.category = resource.getCategory();
+    }
+    @Builder(builderMethodName = "ResourceDocument")
+    public ResourceResponseDto(@NotNull ResourceDocument resourceDocument) {
+        this.resourceName = resourceDocument.getResourceName();
+        this.amount = resourceDocument.getAmount();
+        this.category = resourceDocument.getCategory();
     }
 
 }
