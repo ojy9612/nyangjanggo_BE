@@ -35,12 +35,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // Token 발행
         TokenDto tokenDto = tokenService.login(principalDetails);
 
-
-
-//        TokenDto token = jwtTokenProvider.createToken(principalDetails.getUsername(), UserRole.USER);
         log.info("{}", tokenDto.toString());
-//        TokenDto testToken = new TokenDto();
-//        writeTokenResponse(response, token);
 
         response.setContentType("text/html;charset=UTF-8");
         response.addHeader("Access-Token",tokenDto.getAccessToken());

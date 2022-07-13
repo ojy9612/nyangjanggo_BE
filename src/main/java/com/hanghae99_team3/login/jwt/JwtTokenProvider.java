@@ -2,7 +2,7 @@ package com.hanghae99_team3.login.jwt;
 
 import com.hanghae99_team3.login.jwt.dto.TokenDto;
 import com.hanghae99_team3.model.user.domain.UserRole;
-import com.hanghae99_team3.exception.newException.TokenValidFailedException;
+import com.hanghae99_team3.login.exception.TokenValidFailedException;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,9 +27,11 @@ public class JwtTokenProvider {
 
 
 
-    // 토큰 유효시간 30분
-    private final Long accessTokenValidTime = 14 * 24 * 60 * 60 * 1000L;  // 14일  //2 hours
+    // 토큰 유효시간
+    private final Long accessTokenValidTime = 14 * 24 * 60 * 60 * 1000L; // 14days
+//    private final Long accessTokenValidTime = 10 * 1000L; 10초
     private final Long refreshTokenValidTime = 14 * 24 * 60 * 60 * 1000L; // 14days
+//    private final Long refreshTokenValidTime = 60 * 1000L; 60초
     private final UserDetailsService userDetailsService;
 
     // 객체 초기화, secretKey를 Base64로 인코딩한다.

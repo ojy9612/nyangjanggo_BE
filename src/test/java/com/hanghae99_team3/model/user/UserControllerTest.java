@@ -1,12 +1,12 @@
 package com.hanghae99_team3.model.user;
 
+import com.hanghae99_team3.login.jwt.JwtTokenProvider;
+import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.user.domain.AuthProvider;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.domain.UserRole;
 import com.hanghae99_team3.model.user.repository.UserRepository;
 import com.hanghae99_team3.security.MockSpringSecurityFilter;
-import com.hanghae99_team3.login.jwt.JwtTokenProvider;
-import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
