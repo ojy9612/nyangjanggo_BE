@@ -17,21 +17,26 @@ import java.util.List;
 public class ResourceController {
 
     private final ResourceRepository resourceRepository;
-    private final ResourceSearchService resourceSearchService;
+//    private final ResourceSearchService resourceSearchService;
 
-//    @PostMapping("/resource")
-//    public void aa(@RequestBody ResourceRequestDto resourceRequestDto){
+    @PostMapping("/resource")
+    public void aa(@RequestBody ResourceRequestDto resourceRequestDto){
+
+        Resource resource = new Resource(resourceRequestDto);
+        resourceRepository.save(resource);
+    }
+
+//    @GetMapping("/resources/resourcename")
+//    public List<ResourceResponseDto> searchByNickname(@RequestParam String resourcename, Pageable pageable){
 //
-//        Resource resource = new Resource(resourceRequestDto);
-//        resourceRepository.save(resource);
+//        return resourceSearchService.getByResourceName(resourcename,pageable);
 //    }
 //
-//    @GetMapping("/resources/resourceName")
-//    public List<ResourceResponseDto> searchByNickname(@RequestParam String resourceName, Pageable pageable){
+//    @GetMapping("/resources/category")
+//    public List<ResourceResponseDto> searchByNickname(@RequestParam String category){
 //
-//        return resourceSearchService.getByResourceName(resourceName,pageable);
+//        return resourceSearchService.getByCategory(category);
 //    }
-//
 //
 //    @GetMapping("/resources")
 //    public List<ResourceResponseDto> searchByName(SearchCondition searchCondition, Pageable pageable){
