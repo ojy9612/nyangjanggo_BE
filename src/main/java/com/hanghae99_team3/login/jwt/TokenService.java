@@ -55,7 +55,6 @@ public class TokenService {
         // accessToken 에서 User 불러오기
         String accessToken = tokenRequestDto.getAccessToken();
         String userPk = jwtTokenProvider.getUserPkFromToken(accessToken);
-
         User user = userRepository.findByEmail(userPk).orElseThrow(
                 () -> new UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다."));
 

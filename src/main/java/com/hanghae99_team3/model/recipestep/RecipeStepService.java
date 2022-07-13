@@ -5,6 +5,7 @@ import com.hanghae99_team3.model.recipestep.dto.RecipeStepRequestDto;
 import com.hanghae99_team3.model.s3.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -41,10 +42,10 @@ public class RecipeStepService {
             if (stepNum.equals(recipeStepRequestDto.getStepNum())){
 
                 if(Objects.equals(multipartFile.getOriginalFilename(), "")){
+                    recipeStep.updateRecipeStep(recipeStepRequestDto, recipeStep.getImageLink());
+                }else{
                     awsS3Service.deleteFile(recipeStep.getImageLink());
                     recipeStep.updateRecipeStep(recipeStepRequestDto, awsS3Service.uploadFile(multipartFile));
-                }else{
-                    recipeStep.updateRecipeStep(recipeStepRequestDto, recipeStep.getImageLink());
                 }
 
             }

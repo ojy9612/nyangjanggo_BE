@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepMain;
 import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepRecipe;
+import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepResource;
 import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -120,16 +121,15 @@ public class BoardDocumentation {
         );
     }
 
-    public static ResultHandler createBoardStepResource(List<ResourceRequestDto> resourceRequestDtoList) throws JsonProcessingException {
+    public static ResultHandler createBoardStepResource(BoardRequestDtoStepResource boardRequestDtoStepResource) throws JsonProcessingException {
 
         return document("post-createBoardStepResource",
                 requestHeaders(
                         headerWithName("Access-Token").description("Jwt Access-Token")
                 ),
-//                requestParts(
-//                        partWithName("boardId").description("게시글 아이디"),
-//                        partWithName("resourceRequestDtoList").description(objectMapper.writeValueAsString(resourceRequestDtoList))
-//                ),
+                requestParts(
+                        partWithName("boardRequestDtoStepResource").description(objectMapper.writeValueAsString(boardRequestDtoStepResource))
+                ),
                 responseFields(
                         fieldWithPath("boardId").type(JsonFieldType.NUMBER).description("게시글 ID")
                 )
@@ -182,16 +182,15 @@ public class BoardDocumentation {
     }
 
 
-    public static ResultHandler updateBoardStepResource(List<ResourceRequestDto> resourceRequestDtoList) throws JsonProcessingException {
+    public static ResultHandler updateBoardStepResource(BoardRequestDtoStepResource boardRequestDtoStepResource) throws JsonProcessingException {
 
         return document("put-updateBoardStepResource",
                 requestHeaders(
                         headerWithName("Access-Token").description("Jwt Access-Token")
                 ),
-//                requestParts(
-//                        partWithName("boardId").description("게시글 아이디"),
-//                        partWithName("resourceRequestDtoList").description(objectMapper.writeValueAsString(resourceRequestDtoList))
-//                ),
+                requestParts(
+                        partWithName("boardRequestDtoStepResource").description(objectMapper.writeValueAsString(boardRequestDtoStepResource))
+                ),
                 responseFields(
                         fieldWithPath("boardId").type(JsonFieldType.NUMBER).description("게시글 ID")
                 )
