@@ -40,7 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(RestDocumentationExtension.class) // JUnit5에서 필요
 @MockBean(JpaMetamodelMappingContext.class)
-@WebMvcTest(UserController.class)
+@WebMvcTest(GoodController.class)
 @DisplayName("Good 컨트롤러 테스트")
 class GoodControllerTest {
     MockMvc mockMvc;
@@ -114,35 +114,12 @@ class GoodControllerTest {
                 .principal(mockPrincipal));
         //then
 
-        resultActions.andExpect(status().isOk())
-                .andDo(print())
+        resultActions.andDo(print())
+                .andExpect(status().isOk())
                 .andDo(document("get-good",
                         requestHeaders(
                                 headerWithName("Access-Token").description("Jwt Access-Token"))));
     }
 }
 
-
-//    @Test
-//    @DisplayName("좋아요 취소")
-//    void RemoveGood()  throws Exception {
-//        //given
-//
-//
-//
-//
-//        //when
-//        doNothing().when(goodService);
-//        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/board/{boardId}/good", 1L)
-//                .header("Access-Token", accessToken)
-//                .principal(mockPrincipal));
-//        //then
-//
-//        resultActions.andExpect(status().isOk())
-//                .andDo(print())
-//                .andDo(document("get-good",
-//                        requestHeaders(
-//                                headerWithName("Access-Token").description("Jwt Access-Token"))));
-//    }
-//    }
 
