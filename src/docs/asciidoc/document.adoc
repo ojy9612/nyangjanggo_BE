@@ -29,6 +29,9 @@ include::{snippets}/put-user/curl-request.adoc[]
 ==== HTTP request
 include::{snippets}/put-user/http-request.adoc[]
 
+==== HTTP response
+include::{snippets}/put-user/http-response.adoc[]
+
 === 냉장고 등록
 ==== curl request
 include::{snippets}/post-createFridge/curl-request.adoc[]
@@ -205,3 +208,17 @@ include::{snippets}/put-updateComment/request-parts.adoc[]
 include::{snippets}/delete-removeComment/curl-request.adoc[]
 ==== request header
 include::{snippets}/delete-removeComment/request-headers.adoc[]
+
+
+== Good Api
+
+[[good-get]]
+=== 좋아요 요청
+==== curl request
+include::{snippets}/get-good/curl-request.adoc[]
+==== http request
+include::{snippets}/get-good/http-request.adoc[]
+==== request header
+include::{snippets}/get-good/request-headers.adoc[]
+==== http response
+include::{snippets}/get-good/http-response.adoc[]
