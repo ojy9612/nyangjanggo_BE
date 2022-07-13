@@ -1,6 +1,6 @@
 package com.hanghae99_team3.login.config;
 
-import com.hanghae99_team3.login.exception.RestAuthenticationEntryPoint;
+import com.hanghae99_team3.login.exception.CustomAuthenticationEntryPoint;
 import com.hanghae99_team3.login.handler.TokenAccessDeniedHandler;
 import com.hanghae99_team3.login.jwt.JwtAuthFilter;
 import com.hanghae99_team3.login.jwt.JwtTokenProvider;
@@ -77,9 +77,10 @@ public class WebSecurityConfig {
 
                 .and()
                     .exceptionHandling()
-                    .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                     .accessDeniedHandler(tokenAccessDeniedHandler)
 
+                // preAuth 로 refactor 할 것
                 .and()
                     .authorizeRequests() // 요청에 대한 사용권한 체크
                     .antMatchers("/admin/**").hasRole("ADMIN")

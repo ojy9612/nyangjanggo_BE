@@ -1,13 +1,13 @@
 package com.hanghae99_team3.login.jwt;
 
 
+import com.hanghae99_team3.login.exception.RefreshTokenException;
 import com.hanghae99_team3.login.jwt.dto.TokenDto;
 import com.hanghae99_team3.login.jwt.dto.TokenRequestDto;
 import com.hanghae99_team3.login.jwt.entity.RefreshToken;
 import com.hanghae99_team3.login.jwt.repository.RefreshTokenRepository;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.repository.UserRepository;
-import com.hanghae99_team3.login.exception.RefreshTokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,23 +30,24 @@ public class TokenService {
         // AccessToken, RefreshToken 발급
         TokenDto tokenDto = jwtTokenProvider.createToken(principalDetails.getUsername(), principalDetails.getRole());
 
-        // RefreshToken이 DB에 존재하는지 확인
 
+        // RefreshToken이 DB에 존재하는지 확인
         Optional<RefreshToken> findRefreshToken = refreshTokenRepository.findByUserId(principalDetails.getUserId());
         if (findRefreshToken.isPresent()) {
-            throw new RefreshTokenException("refreshToken 존재");
+            // 존재하면 새로운 Token으로 Update
+            findRefreshToken.get().updateToken(tokenDto.getRefreshToken());
+        } else {
+            // New RefreshToken DB에 저장
+            RefreshToken refreshToken = RefreshToken.builder()
+                    .userId(principalDetails.getUserId())
+                    .token(tokenDto.getRefreshToken())
+                    .build();
+            refreshTokenRepository.save(refreshToken);
         }
-
-        // RefreshToken DB에 저장
-        RefreshToken refreshToken = RefreshToken.builder()
-                .userId(principalDetails.getUserId())
-                .token(tokenDto.getRefreshToken())
-                .build();
-        refreshTokenRepository.save(refreshToken);
-
 
         return tokenDto;
     }
+
 
     @Transactional
     public String refresh(TokenRequestDto tokenRequestDto) {
@@ -57,11 +58,10 @@ public class TokenService {
         User user = userRepository.findByEmail(userPk).orElseThrow(
                 () -> new UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다."));
 
-        // refreshToken 이 expired 라면
-        if (!jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
-            refreshTokenRepository.deleteByUserId(user.getId());
-            throw new RefreshTokenException();
-        }
+        // refreshToken valid 검증
+        jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken());
+
+//
         // DB에 저장된 refreshToken과 일치하는지 검증
         RefreshToken refreshToken = refreshTokenRepository.findByUserId(user.getId()).orElseThrow(
                 () -> new RefreshTokenException("RefreshToken을 찾을 수 없습니다.")
@@ -73,7 +73,6 @@ public class TokenService {
         // AccessToken, RefreshToken을 모두 재발급?
 
         return jwtTokenProvider.createAccessTokenOnly(user.getEmail(), user.getRole());
-
 
     }
 }
