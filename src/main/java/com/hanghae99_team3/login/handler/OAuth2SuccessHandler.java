@@ -47,16 +47,19 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         }
 
 
-        getRedirectStrategy().sendRedirect(request, response, makeRedirectUrl());
+        getRedirectStrategy().sendRedirect(request, response, makeRedirectUrl(tokenDto, isNew));
     }
 
 
 
-    private String makeRedirectUrl() {
+    private String makeRedirectUrl(TokenDto tokenDto, Boolean isNew) {
 
         return UriComponentsBuilder.fromUriString("http://localhost:3000/oauth2/redirect/")
 
-//                .queryParam("token", accessToken)
+                .queryParam("Access-Token", tokenDto.getAccessToken())
+                .queryParam("Refresh-Token", tokenDto.getRefreshToken())
+
+                .queryParam("isNew", isNew.toString())
                 .build().toUriString();
     }
 //    private void writeTokenResponse(HttpServletResponse response, String token)
