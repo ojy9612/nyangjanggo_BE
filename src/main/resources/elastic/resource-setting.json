@@ -2,7 +2,7 @@
   "analysis": {
     "analyzer": {
       "korean": {
-        "type": "nori"
+        "type": "nori_tokenizer"
       }
     }
   }

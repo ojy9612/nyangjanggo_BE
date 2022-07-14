@@ -7,6 +7,7 @@ import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;
 import com.hanghae99_team3.model.resource.dto.ResourceResponseDto;
 import com.hanghae99_team3.model.resource.dto.SearchCondition;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ import java.util.List;
 public class ResourceController {
 
     private final ResourceRepository resourceRepository;
-//    private final ResourceSearchService resourceSearchService;
+    private final ResourceSearchService resourceSearchService;
 
     @PostMapping("/resource")
     public void aa(@RequestBody ResourceRequestDto resourceRequestDto){
@@ -26,22 +27,22 @@ public class ResourceController {
         resourceRepository.save(resource);
     }
 
-//    @GetMapping("/resources/resourcename")
-//    public List<ResourceResponseDto> searchByNickname(@RequestParam String resourcename, Pageable pageable){
-//
-//        return resourceSearchService.getByResourceName(resourcename,pageable);
-//    }
-//
-//    @GetMapping("/resources/category")
-//    public List<ResourceResponseDto> searchByNickname(@RequestParam String category){
-//
-//        return resourceSearchService.getByCategory(category);
-//    }
-//
-//    @GetMapping("/resources")
-//    public List<ResourceResponseDto> searchByName(SearchCondition searchCondition, Pageable pageable){
-//
-//        return resourceSearchService.searchByCondition(searchCondition,pageable);
-//    }
+    @GetMapping("/resources/resourcename")
+    public List<ResourceResponseDto> searchByResourceName(@RequestParam String resourcename, Pageable pageable){
+
+        return resourceSearchService.getByResourceName(resourcename,pageable);
+    }
+
+    @GetMapping("/resources/category")
+    public Page<ResourceResponseDto> searchByCategory(@RequestParam String category, Pageable pageable){
+
+        return resourceSearchService.getByCategory(category,pageable);
+    }
+
+    @GetMapping("/resources")
+    public List<ResourceResponseDto> searchByCondition(SearchCondition searchCondition, Pageable pageable){
+
+        return resourceSearchService.searchByCondition(searchCondition,pageable);
+    }
 
 }

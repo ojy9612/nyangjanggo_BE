@@ -39,8 +39,8 @@ public class ResourceSearchQueryRepository {
         if (searchCondition.getId() != null)
             query.addCriteria(Criteria.where("id").is(searchCondition.getId()));
 
-        if(StringUtils.hasText(searchCondition.getResourceName()))
-            query.addCriteria(Criteria.where("resourceName").is(searchCondition.getResourceName()));
+        if(StringUtils.hasText(searchCondition.getResourcename()))
+            query.addCriteria(Criteria.where("resourcename").is(searchCondition.getResourcename()));
 
         if(StringUtils.hasText(searchCondition.getAmount()))
             query.addCriteria(Criteria.where("amount").is(searchCondition.getAmount()));
@@ -49,10 +49,7 @@ public class ResourceSearchQueryRepository {
             query.addCriteria(Criteria.where("category").is(searchCondition.getCategory()));
 
         if(searchCondition.getBoardId() != null)
-            query.addCriteria(Criteria.where("zone.id").is(searchCondition.getBoardId()));
-
-        if(searchCondition.getStatus() != null)
-            query.addCriteria(Criteria.where("status").is(searchCondition.getStatus()));
+            query.addCriteria(Criteria.where("boardId").is(searchCondition.getBoardId()));
 
         return query;
     }
