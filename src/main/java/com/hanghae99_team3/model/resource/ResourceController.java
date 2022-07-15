@@ -1,5 +1,6 @@
 package com.hanghae99_team3.model.resource;
 
+import com.hanghae99_team3.model.resource.dto.ResourceDocumentResponseDto;
 import com.hanghae99_team3.model.resource.repository.ResourceRepository;
 import com.hanghae99_team3.model.resource.service.ResourceSearchService;
 import com.hanghae99_team3.model.resource.domain.Resource;
@@ -27,20 +28,14 @@ public class ResourceController {
         resourceRepository.save(resource);
     }
 
-    @GetMapping("/resources/resourcename")
-    public List<ResourceResponseDto> searchByResourceName(@RequestParam String resourcename, Pageable pageable){
-
-        return resourceSearchService.getByResourceName(resourcename,pageable);
-    }
-
     @GetMapping("/resources/category")
-    public Page<ResourceResponseDto> searchByCategory(@RequestParam String category, Pageable pageable){
+    public Page<ResourceDocumentResponseDto> searchByCategory(@RequestParam String category, Pageable pageable){
 
         return resourceSearchService.getByCategory(category,pageable);
     }
 
     @GetMapping("/resources")
-    public List<ResourceResponseDto> searchByCondition(SearchCondition searchCondition, Pageable pageable){
+    public List<ResourceDocumentResponseDto> searchByCondition(SearchCondition searchCondition, Pageable pageable){
 
         return resourceSearchService.searchByCondition(searchCondition,pageable);
     }

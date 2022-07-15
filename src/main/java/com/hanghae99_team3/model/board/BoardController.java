@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,9 +28,15 @@ public class BoardController {
 
     @GetMapping("/api/boards")
     public Page<BoardResponseDto> getAllBoards(@PageableDefault(size = 3) Pageable pageable) {
-        return boardService.getAllBoards(pageable);
+        return boardService.getAllBoards(pageable).map(BoardResponseDto::new);
     }
 
+    @GetMapping("/api/boards/resource")
+    public Page<BoardResponseDto> getByResource(@RequestParam String searchWord,
+                                                Pageable pageable
+                                                ){
+        return boardService.getByResource(searchWord,pageable).map(BoardResponseDto::new);
+    }
 
     @GetMapping(value = "/api/board/step/0")
     public BoardDetailResponseDto createBoardStepStart(@AuthenticationPrincipal PrincipalDetails principalDetails) {

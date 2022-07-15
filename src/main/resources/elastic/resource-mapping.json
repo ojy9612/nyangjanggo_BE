@@ -5,6 +5,10 @@
         "amount": {
           "type": "text",
           "fields": {
+            "nori": {
+              "type": "text",
+              "analyzer": "nori_analyzer"
+            },
             "keyword": {
               "type": "keyword",
               "ignore_above": 256
@@ -17,6 +21,10 @@
         "category": {
           "type": "text",
           "fields": {
+            "nori": {
+              "type": "text",
+              "analyzer": "nori_analyzer"
+            },
             "keyword": {
               "type": "keyword",
               "ignore_above": 256
@@ -35,6 +43,10 @@
         "resourcename": {
           "type": "text",
           "fields": {
+            "nori": {
+              "type": "text",
+              "analyzer": "nori_analyzer"
+            },
             "keyword": {
               "type": "keyword",
               "ignore_above": 256
