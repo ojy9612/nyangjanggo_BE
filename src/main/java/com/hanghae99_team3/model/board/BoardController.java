@@ -1,8 +1,13 @@
 package com.hanghae99_team3.model.board;
 
 
-import com.hanghae99_team3.model.board.dto.*;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepRecipe;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepResource;
+import com.hanghae99_team3.model.board.dto.response.BoardDetailResponseDto;
+import com.hanghae99_team3.model.board.dto.response.BoardResponseDto;
+import com.hanghae99_team3.model.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController

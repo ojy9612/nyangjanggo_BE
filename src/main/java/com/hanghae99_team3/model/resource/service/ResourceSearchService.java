@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,12 @@ public class ResourceSearchService {
 
     public List<ResourceDocumentResponseDto> searchByCondition(SearchCondition searchCondition, Pageable pageable) {
         return resourceSearchQueryRepository.findByCondition(searchCondition, pageable)
+                .stream()
+                .map(ResourceDocumentResponseDto::new)
+                .collect(Collectors.toList());
+    }
+    public List<ResourceDocumentResponseDto> searchByString(List<String> stringMap) {
+        return resourceSearchQueryRepository.findByString(stringMap)
                 .stream()
                 .map(ResourceDocumentResponseDto::new)
                 .collect(Collectors.toList());

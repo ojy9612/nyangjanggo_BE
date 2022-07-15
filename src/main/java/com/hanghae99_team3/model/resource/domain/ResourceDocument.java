@@ -16,7 +16,7 @@ public class ResourceDocument {
 
     @Id
     private Long id;
-    
+
     private String resourcename;
 
     private String amount;

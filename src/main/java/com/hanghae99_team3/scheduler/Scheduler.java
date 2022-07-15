@@ -1,6 +1,6 @@
 package com.hanghae99_team3.scheduler;
 
-import com.hanghae99_team3.model.board.BoardRepository;
+import com.hanghae99_team3.model.board.repository.BoardRepository;
 import com.hanghae99_team3.model.images.ImagesRepository;
 import com.hanghae99_team3.model.recipestep.RecipeStepRepository;
 import com.hanghae99_team3.model.s3.AwsS3Service;

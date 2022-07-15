@@ -1,11 +1,12 @@
-package com.hanghae99_team3.model.board;
+package com.hanghae99_team3.model.board.service;
 
 
 import com.hanghae99_team3.exception.newException.IdDuplicateException;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepMain;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepRecipe;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepResource;
-import com.hanghae99_team3.model.board.dto.BoardResponseDto;
+import com.hanghae99_team3.model.board.domain.Board;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepRecipe;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepResource;
+import com.hanghae99_team3.model.board.repository.BoardRepository;
 import com.hanghae99_team3.model.recipestep.RecipeStepService;
 import com.hanghae99_team3.model.resource.service.ResourceSearchService;
 import com.hanghae99_team3.model.resource.service.ResourceService;

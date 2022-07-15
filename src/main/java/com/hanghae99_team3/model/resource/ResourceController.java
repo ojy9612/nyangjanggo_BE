@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,9 +36,9 @@ public class ResourceController {
     }
 
     @GetMapping("/resources")
-    public List<ResourceDocumentResponseDto> searchByCondition(SearchCondition searchCondition, Pageable pageable){
+    public List<ResourceDocumentResponseDto> searchByString(@RequestParam List<String> stringMap){
 
-        return resourceSearchService.searchByCondition(searchCondition,pageable);
+        return resourceSearchService.searchByString(stringMap);
     }
 
 }
