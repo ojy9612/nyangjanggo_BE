@@ -49,7 +49,7 @@ public class ResourceSearchQueryRepository {
             query.addCriteria(Criteria.where("category").is(searchCondition.getCategory()));
 
         if(searchCondition.getBoardId() != null)
-            query.addCriteria(Criteria.where("boardId").is(searchCondition.getBoardId()));
+            query.addCriteria(Criteria.where("board_id").is(searchCondition.getBoardId()));
 
         return query;
     }

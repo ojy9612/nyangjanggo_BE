@@ -1,6 +1,5 @@
 package com.hanghae99_team3.model.resource.domain;
 
-import com.hanghae99_team3.model.board.Board;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.elasticsearch.annotations.*;
@@ -16,28 +15,27 @@ import java.time.LocalDateTime;
 public class ResourceDocument {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     private String resourcename;
 
     private String amount;
 
     private String category;
 
-    private Board board;
+    private Long board_id;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime createdat;
 
-    private LocalDateTime modifiedAt;
+    private LocalDateTime modifiedat;
 
     public ResourceDocument(Resource resource){
         this.id = resource.getId();
         this.resourcename = resource.getResourceName();
         this.amount = resource.getAmount();
         this.category = resource.getCategory();
-        this.board = resource.getBoard();
-        this.createdAt = resource.getCreatedAt();
-        this.modifiedAt = resource.getModifiedAt();
+        this.board_id = resource.getBoard().getId();
+        this.createdat = resource.getCreatedAt();
+        this.modifiedat = resource.getModifiedAt();
     }
 }

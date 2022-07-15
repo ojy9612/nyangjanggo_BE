@@ -10,16 +10,19 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
-public class ResourceResponseDto {
+public class ResourceDocumentResponseDto {
 
     private String resourcename;
     private String amount;
     private String category;
+    private Long boardId;
 
     @Builder
-    public ResourceResponseDto(@NotNull Resource resource) {
-        this.resourcename = resource.getResourceName();
-        this.amount = resource.getAmount();
-        this.category = resource.getCategory();
+    public ResourceDocumentResponseDto(@NotNull ResourceDocument resourceDocument) {
+        this.resourcename = resourceDocument.getResourcename();
+        this.amount = resourceDocument.getAmount();
+        this.category = resourceDocument.getCategory();
+        this.boardId = resourceDocument.getBoard_id();
     }
+
 }
