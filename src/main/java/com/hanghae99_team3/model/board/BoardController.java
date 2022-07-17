@@ -7,40 +7,48 @@ import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepRecipe;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepResource;
 import com.hanghae99_team3.model.board.dto.response.BoardDetailResponseDto;
 import com.hanghae99_team3.model.board.dto.response.BoardResponseDto;
+import com.hanghae99_team3.model.board.service.BoardDocumentService;
 import com.hanghae99_team3.model.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 public class BoardController {
 
     private final BoardService boardService;
+    private final BoardDocumentService boardDocumentService;
 
     @GetMapping("/api/board/{boardId}")
     public BoardDetailResponseDto getOneBoard(@PathVariable Long boardId) {
         return new BoardDetailResponseDto(boardService.getOneBoard(boardId));
     }
 
+//    @GetMapping("/api/boards")
+//    public Page<BoardResponseDto> getAllBoards(@PageableDefault(size = 3) Pageable pageable) {
+//        return boardService.getAllBoards(pageable).map(BoardResponseDto::new);
+//    }
+
     @GetMapping("/api/boards")
-    public Page<BoardResponseDto> getAllBoards(@PageableDefault(size = 3) Pageable pageable) {
-        return boardService.getAllBoards(pageable).map(BoardResponseDto::new);
+    public List<BoardResponseDto> getAllBoardDocument(Pageable pageable){
+        return boardDocumentService.getAllBoardDocument(pageable).stream()
+                .map(BoardResponseDto::new).collect(Collectors.toList());
     }
 
-    @GetMapping("/api/boards/resource")
-    public Page<BoardResponseDto> getByResource(@RequestParam String searchWord,
-                                                Pageable pageable
-                                                ){
-        return boardService.getByResource(searchWord,pageable).map(BoardResponseDto::new);
-    }
+//    @GetMapping("/api/boards/resource")
+//    public Page<BoardResponseDto> getByResource(@RequestParam String searchWord,
+//                                                Pageable pageable
+//                                                ){
+//        return boardService.getByResource(searchWord,pageable).map(BoardResponseDto::new);
+//    }
 
     @GetMapping(value = "/api/board/step/0")
     public BoardDetailResponseDto createBoardStepStart(@AuthenticationPrincipal PrincipalDetails principalDetails) {

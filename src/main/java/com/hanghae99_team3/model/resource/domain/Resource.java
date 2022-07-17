@@ -36,14 +36,14 @@ public class Resource extends Timestamped {
     @Builder
     public Resource(@NotNull ResourceRequestDto resourceRequestDto,
                     @NotNull Board board) {
-        this.resourceName = resourceRequestDto.getResourcename();
+        this.resourceName = resourceRequestDto.getResourceName();
         this.amount = resourceRequestDto.getAmount();
         this.category = resourceRequestDto.getCategory();
         board.addResource(this);
     }
 
     public Resource(@NotNull ResourceRequestDto resourceRequestDto) {
-        this.resourceName = resourceRequestDto.getResourcename();
+        this.resourceName = resourceRequestDto.getResourceName();
         this.amount = resourceRequestDto.getAmount();
         this.category = resourceRequestDto.getCategory();
     }

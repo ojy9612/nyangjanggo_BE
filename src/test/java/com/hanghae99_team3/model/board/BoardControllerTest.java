@@ -270,7 +270,7 @@ class BoardControllerTest {
         List<ResourceRequestDto> resourceRequestDtoList = new ArrayList<>();
         for (int i = 0; i < 2; i++){
             resourceRequestDtoList.add(ResourceRequestDto.builder()
-                    .resourcename("재료"+i)
+                    .resourceName("재료"+i)
                     .amount("수량"+i)
                     .category("카테고리"+i)
                     .build()
@@ -469,7 +469,7 @@ class BoardControllerTest {
         List<ResourceRequestDto> resourceRequestDtoList = new ArrayList<>();
         for (int i = 0; i < 2; i++){
             resourceRequestDtoList.add(ResourceRequestDto.builder()
-                    .resourcename("재료"+i)
+                    .resourceName("재료"+i)
                     .amount("수량"+i)
                     .category("카테고리"+i)
                     .build()

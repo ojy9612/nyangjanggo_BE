@@ -15,7 +15,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 public class ElasticSearchConfig extends AbstractElasticsearchConfiguration {
 
     private final String username = "elastic";
-    private final String password = "changeme";
+    private final String password = "HangHaeNyang";
 
     @Override
     public RestHighLevelClient elasticsearchClient() {
