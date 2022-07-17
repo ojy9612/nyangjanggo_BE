@@ -1,7 +1,9 @@
 REPOSITORY=/home/ubuntu/hanghae99_team3
+# shellcheck disable=SC2164
 cd $REPOSITORY
 
 APP_NAME=hanghae99_team3 #1
+# shellcheck disable=SC2010
 JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep 'SNAPSHOT.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
@@ -16,5 +18,7 @@ else
   sleep 5
 fi
 
+# shellcheck disable=SC2164
+cd $REPOSITORY
 echo "> $JAR_PATH 배포" #3
 nohup java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &

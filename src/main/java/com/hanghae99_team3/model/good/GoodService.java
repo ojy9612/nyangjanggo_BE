@@ -1,7 +1,7 @@
 package com.hanghae99_team3.model.good;
 
-import com.hanghae99_team3.model.board.Board;
-import com.hanghae99_team3.model.board.BoardService;
+import com.hanghae99_team3.model.board.domain.Board;
+import com.hanghae99_team3.model.board.service.BoardService;
 import com.hanghae99_team3.model.user.UserService;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;

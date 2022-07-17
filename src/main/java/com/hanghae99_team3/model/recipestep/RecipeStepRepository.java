@@ -1,6 +1,6 @@
 package com.hanghae99_team3.model.recipestep;
 
-import com.hanghae99_team3.model.board.Board;
+import com.hanghae99_team3.model.board.domain.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

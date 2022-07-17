@@ -1,8 +1,8 @@
 package com.hanghae99_team3.model.comment;
 
 import com.hanghae99_team3.exception.newException.IdDuplicateException;
-import com.hanghae99_team3.model.board.Board;
-import com.hanghae99_team3.model.board.BoardService;
+import com.hanghae99_team3.model.board.domain.Board;
+import com.hanghae99_team3.model.board.service.BoardService;
 import com.hanghae99_team3.model.comment.dto.CommentRequestDto;
 import com.hanghae99_team3.model.comment.dto.CommentResponseDto;
 import com.hanghae99_team3.model.user.UserService;

@@ -1,7 +1,7 @@
 package com.hanghae99_team3.model.comment;
 
 import com.hanghae99_team3.model.Timestamped;
-import com.hanghae99_team3.model.board.Board;
+import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.comment.dto.CommentRequestDto;
 import com.hanghae99_team3.model.user.domain.User;
 import lombok.Builder;

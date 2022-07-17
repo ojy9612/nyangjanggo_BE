@@ -1,13 +1,13 @@
-package com.hanghae99_team3.model.board;
+package com.hanghae99_team3.model.board.service;
 
 
 import com.hanghae99_team3.exception.newException.IdDuplicateException;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepMain;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepRecipe;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepResource;
-import com.hanghae99_team3.model.board.dto.BoardResponseDto;
+import com.hanghae99_team3.model.board.domain.Board;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepRecipe;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepResource;
+import com.hanghae99_team3.model.board.repository.BoardRepository;
 import com.hanghae99_team3.model.recipestep.RecipeStepService;
-import com.hanghae99_team3.model.resource.service.ResourceSearchService;
 import com.hanghae99_team3.model.resource.service.ResourceService;
 import com.hanghae99_team3.model.s3.AwsS3Service;
 import com.hanghae99_team3.model.user.UserService;
@@ -32,10 +32,10 @@ import static com.hanghae99_team3.exception.ErrorMessage.ID_DUPLICATE;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final BoardDocumentService boardDocumentService;
     private final UserService userService;
     private final AwsS3Service awsS3Service;
     private final ResourceService resourceService;
-    private final ResourceSearchService resourceSearchService;
     private final RecipeStepService recipeStepService;
 
 
@@ -54,13 +54,6 @@ public class BoardService {
         return boardRepository.findAll(pageable);
     }
 
-
-    public Page<Board> getByResource(String searchWord,Pageable pageable) {
-
-        Set<Long> boardIdSet = resourceSearchService.getByResourceName(searchWord);
-
-        return boardRepository.findAllByIdIn(boardIdSet,pageable);
-    }
 
     public Optional<Board> createBoardStepStart(PrincipalDetails principalDetails) {
         User user = userService.findUserByAuthEmail(principalDetails);
@@ -117,6 +110,8 @@ public class BoardService {
         if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
 
         board.setStatus("complete");
+
+        boardDocumentService.createBoard(board);
     }
 
 

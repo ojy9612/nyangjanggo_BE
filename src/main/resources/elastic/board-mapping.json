@@ -1,57 +1,74 @@
 {
-  "resource": {
-    "mappings": {
+  "properties": {
+    "_class": {
+      "type": "keyword",
+      "index": false,
+      "doc_values": false
+    },
+    "content": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 256
+        }
+      }
+    },
+    "id": {
+      "type": "long"
+    },
+    "resourceDocumentList": {
       "properties": {
         "amount": {
           "type": "text",
           "fields": {
-            "nori": {
-              "type": "text",
-              "analyzer": "nori_analyzer"
-            },
             "keyword": {
               "type": "keyword",
               "ignore_above": 256
             }
           }
         },
-        "board_id": {
+        "boardId": {
           "type": "long"
         },
         "category": {
           "type": "text",
           "fields": {
-            "nori": {
-              "type": "text",
-              "analyzer": "nori_analyzer"
-            },
             "keyword": {
               "type": "keyword",
               "ignore_above": 256
             }
           }
-        },
-        "createdAt": {
-          "type": "date"
         },
         "id": {
           "type": "long"
         },
-        "modifiedAt": {
-          "type": "date"
-        },
         "resourceName": {
           "type": "text",
           "fields": {
-            "nori": {
-              "type": "text",
-              "analyzer": "nori_analyzer"
-            },
             "keyword": {
               "type": "keyword",
               "ignore_above": 256
             }
           }
+        }
+      }
+    },
+    "status": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 256
+        }
+      }
+    },
+    "title": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 256
         }
       }
     }
