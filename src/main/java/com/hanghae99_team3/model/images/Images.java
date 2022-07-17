@@ -1,7 +1,7 @@
 package com.hanghae99_team3.model.images;
 
 import com.hanghae99_team3.model.Timestamped;
-import com.hanghae99_team3.model.board.Board;
+import com.hanghae99_team3.model.board.domain.Board;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

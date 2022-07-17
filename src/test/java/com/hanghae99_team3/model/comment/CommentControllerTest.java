@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanghae99_team3.docs.CommentDocumentation;
 import com.hanghae99_team3.login.jwt.JwtTokenProvider;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
-import com.hanghae99_team3.model.board.Board;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepMain;
+import com.hanghae99_team3.model.board.domain.Board;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
 import com.hanghae99_team3.model.comment.dto.CommentRequestDto;
 import com.hanghae99_team3.model.user.domain.AuthProvider;
 import com.hanghae99_team3.model.user.domain.User;
@@ -35,10 +35,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -192,7 +189,6 @@ class CommentControllerTest {
         mockMvc.perform(builder
                         .header("Access-Token", accessToken)
                         .principal(mockPrincipal)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

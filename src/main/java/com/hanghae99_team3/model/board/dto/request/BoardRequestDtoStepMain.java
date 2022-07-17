@@ -1,4 +1,4 @@
-package com.hanghae99_team3.model.board.dto;
+package com.hanghae99_team3.model.board.dto.request;
 
 
 import lombok.Builder;

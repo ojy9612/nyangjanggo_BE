@@ -10,13 +10,13 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class ResourceRequestDto {
 
-    private String resourceName;
+    private String resourcename;
     private String amount;
     private String category;
 
     @Builder
-    public ResourceRequestDto(@NotNull String resourceName,@NotNull String amount,@NotNull String category) {
-        this.resourceName = resourceName;
+    public ResourceRequestDto(@NotNull String resourcename, @NotNull String amount, @NotNull String category) {
+        this.resourcename = resourcename;
         this.amount = amount;
         this.category = category;
     }

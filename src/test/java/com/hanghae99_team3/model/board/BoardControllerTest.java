@@ -2,12 +2,13 @@ package com.hanghae99_team3.model.board;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanghae99_team3.docs.BoardDocumentation;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepMain;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepRecipe;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepResource;
-import com.hanghae99_team3.model.recipestep.RecipeStepService;
+import com.hanghae99_team3.model.board.domain.Board;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepRecipe;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepResource;
+import com.hanghae99_team3.model.board.repository.BoardRepository;
+import com.hanghae99_team3.model.board.service.BoardService;
 import com.hanghae99_team3.model.recipestep.dto.RecipeStepRequestDto;
-import com.hanghae99_team3.model.resource.service.ResourceService;
 import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;
 import com.hanghae99_team3.model.user.domain.AuthProvider;
 import com.hanghae99_team3.model.user.domain.User;
@@ -62,8 +63,10 @@ class BoardControllerTest {
 
     MockMvc mockMvc;
     @MockBean JwtTokenProvider jwtTokenProvider;
-    @MockBean BoardService boardService;
-    @MockBean BoardRepository boardRepository;
+    @MockBean
+    BoardService boardService;
+    @MockBean
+    BoardRepository boardRepository;
     final String accessToken = "JwtAccessToken";
     User baseUser;
     Principal mockPrincipal;
@@ -267,7 +270,7 @@ class BoardControllerTest {
         List<ResourceRequestDto> resourceRequestDtoList = new ArrayList<>();
         for (int i = 0; i < 2; i++){
             resourceRequestDtoList.add(ResourceRequestDto.builder()
-                    .resourceName("재료"+i)
+                    .resourcename("재료"+i)
                     .amount("수량"+i)
                     .category("카테고리"+i)
                     .build()
@@ -466,7 +469,7 @@ class BoardControllerTest {
         List<ResourceRequestDto> resourceRequestDtoList = new ArrayList<>();
         for (int i = 0; i < 2; i++){
             resourceRequestDtoList.add(ResourceRequestDto.builder()
-                    .resourceName("재료"+i)
+                    .resourcename("재료"+i)
                     .amount("수량"+i)
                     .category("카테고리"+i)
                     .build()

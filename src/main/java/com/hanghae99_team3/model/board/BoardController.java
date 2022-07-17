@@ -1,8 +1,13 @@
 package com.hanghae99_team3.model.board;
 
 
-import com.hanghae99_team3.model.board.dto.*;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepRecipe;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepResource;
+import com.hanghae99_team3.model.board.dto.response.BoardDetailResponseDto;
+import com.hanghae99_team3.model.board.dto.response.BoardResponseDto;
+import com.hanghae99_team3.model.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,9 +32,15 @@ public class BoardController {
 
     @GetMapping("/api/boards")
     public Page<BoardResponseDto> getAllBoards(@PageableDefault(size = 3) Pageable pageable) {
-        return boardService.getAllBoards(pageable);
+        return boardService.getAllBoards(pageable).map(BoardResponseDto::new);
     }
 
+    @GetMapping("/api/boards/resource")
+    public Page<BoardResponseDto> getByResource(@RequestParam String searchWord,
+                                                Pageable pageable
+                                                ){
+        return boardService.getByResource(searchWord,pageable).map(BoardResponseDto::new);
+    }
 
     @GetMapping(value = "/api/board/step/0")
     public BoardDetailResponseDto createBoardStepStart(@AuthenticationPrincipal PrincipalDetails principalDetails) {

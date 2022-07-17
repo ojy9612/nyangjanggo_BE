@@ -1,6 +1,6 @@
 package com.hanghae99_team3.model.resource.repository;
 
-import com.hanghae99_team3.model.board.Board;
+import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.resource.domain.Resource;
 import org.springframework.data.jpa.repository.JpaRepository;
 

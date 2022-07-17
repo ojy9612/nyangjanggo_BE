@@ -1,6 +1,6 @@
 package com.hanghae99_team3.model.resource.service;
 
-import com.hanghae99_team3.model.board.Board;
+import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.resource.repository.ResourceRepository;
 import com.hanghae99_team3.model.resource.domain.Resource;
 import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;

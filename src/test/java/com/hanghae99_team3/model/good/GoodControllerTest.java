@@ -2,7 +2,7 @@ package com.hanghae99_team3.model.good;
 
 import com.hanghae99_team3.login.jwt.JwtTokenProvider;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
-import com.hanghae99_team3.model.board.BoardRepository;
+import com.hanghae99_team3.model.board.repository.BoardRepository;
 import com.hanghae99_team3.model.user.UserController;
 import com.hanghae99_team3.model.user.UserService;
 import com.hanghae99_team3.model.user.domain.AuthProvider;
