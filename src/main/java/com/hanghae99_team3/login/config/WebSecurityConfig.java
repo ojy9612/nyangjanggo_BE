@@ -87,16 +87,14 @@ public class WebSecurityConfig {
                     .authorizeRequests() // 요청에 대한 사용권한 체크
                     .antMatchers("/api/boards/**").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/board/**").permitAll()
+                    .antMatchers("/refresh/**").permitAll()
                     .anyRequest().hasAnyRole("USER", "ADMIN")
 
-//                    .anyRequest().authenticated()
-
-//                    .antMatchers("/admin/**").hasRole("ADMIN")
 
                 .and()
                     .oauth2Login()
                     .successHandler(oAuth2SuccessHandler)
-//                    .userInfoEndpoint().userService(oAuth2UserService);
+
 
                 .and()
                     .addFilterBefore(new JwtAuthFilter(jwtTokenProvider),
