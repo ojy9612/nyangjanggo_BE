@@ -1,6 +1,7 @@
 package com.hanghae99_team3.model.user;
 
 
+import com.hanghae99_team3.model.fridge.Fridge;
 import com.hanghae99_team3.model.fridge.FridgeService;
 import com.hanghae99_team3.model.fridge.dto.FridgeRequestDto;
 import com.hanghae99_team3.model.s3.AwsS3Service;
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Transactional
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -31,8 +31,9 @@ public class UserService {
                 () -> new IllegalArgumentException("유저 정보가 없습니다."));
     }
 
+    @Transactional
     public void updateUser(UserReqDto userReqDto, PrincipalDetails principalDetails) {
-        User user = findUserByAuthEmail(principalDetails);
+        User user = this.findUserByAuthEmail(principalDetails);
         //기존 이미지 삭제
         awsS3Service.deleteFile(user.getUserImg());
         //s3에 이미지 저장
@@ -43,25 +44,34 @@ public class UserService {
         user.update(userReqDto);
     }
 
+    @Transactional
     public void deleteUser(PrincipalDetails principalDetails) {
-        User user = findUserByAuthEmail(principalDetails);
+        User user = this.findUserByAuthEmail(principalDetails);
         //기존 이미지 삭제
         awsS3Service.deleteFile(user.getUserImg());
         userRepository.deleteById(user.getId());
     }
 
+    @Transactional(readOnly = true)
+    public List<Fridge> getFridge(PrincipalDetails principalDetails) {
+        User user = this.findUserByAuthEmail(principalDetails);
+
+        return fridgeService.getFridge(user);
+    }
+
+    @Transactional
     public void createFridge(PrincipalDetails principalDetails, List<FridgeRequestDto> fridgeRequestDtoList) {
-        User user = findUserByAuthEmail(principalDetails);
+        User user = this.findUserByAuthEmail(principalDetails);
 
         fridgeService.createFridge(fridgeRequestDtoList,user);
     }
 
+    @Transactional
     public void updateFridge(PrincipalDetails principalDetails, List<FridgeRequestDto> fridgeRequestDtoList) {
-        User user = findUserByAuthEmail(principalDetails);
+        User user = this.findUserByAuthEmail(principalDetails);
 
         fridgeService.updateFridge(fridgeRequestDtoList,user);
     }
-
 
 
 

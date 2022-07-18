@@ -1,8 +1,10 @@
 package com.hanghae99_team3.model.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hanghae99_team3.model.fridge.Fridge;
 import com.hanghae99_team3.model.fridge.FridgeService;
 import com.hanghae99_team3.model.fridge.dto.FridgeRequestDto;
+import com.hanghae99_team3.model.fridge.dto.FridgeResponseDto;
 import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;
 import com.hanghae99_team3.model.user.domain.AuthProvider;
 import com.hanghae99_team3.model.user.domain.User;
@@ -23,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.web.servlet.MockMvc;
@@ -37,6 +40,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -68,6 +72,7 @@ class UserControllerTest {
     @MockBean private UserService userService;
     @MockBean private FridgeService fridgeService;
     private final String accessToken = "JwtAccessToken";
+    private User testUser;
     private Principal mockPrincipal;
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -83,11 +88,7 @@ class UserControllerTest {
                         preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())))
                 .build();
 
-    }
-
-
-    private void mockUserSetup() {
-        User testUser = User.testRegister()
+        testUser = User.testRegister()
                 .email("email@test.com")
                 .password("password")
                 .userImg("userImgLink")
@@ -99,14 +100,13 @@ class UserControllerTest {
                 .build();
 
         PrincipalDetails testUserDetails = new PrincipalDetails(testUser);
-        this.mockPrincipal = new UsernamePasswordAuthenticationToken(testUserDetails, "", testUserDetails.getAuthorities());
+        mockPrincipal = new UsernamePasswordAuthenticationToken(testUserDetails, "", testUserDetails.getAuthorities());
     }
 
     @Test
     @DisplayName("회원정보 조회")
     void getUser() throws Exception {
         //given
-        this.mockUserSetup();
 //        when(userRepository.findByEmail(any())).thenReturn(Optional.of(testUser));
 
         //when
@@ -133,7 +133,6 @@ class UserControllerTest {
     @DisplayName("회원정보 수정")
     void updateUser() throws Exception {
         //given
-        this.mockUserSetup();
         MockMultipartFile image = new MockMultipartFile(
                 "userImg",
                 "userImg.png",
@@ -177,8 +176,6 @@ class UserControllerTest {
     @DisplayName("회원 탈퇴")
     void deleteUser() throws Exception {
         //given
-        this.mockUserSetup();
-
         //when
         ResultActions resultActions = this.mockMvc.perform(delete("/api/user")
                 .header("Access-Token", accessToken)
@@ -193,11 +190,62 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("냉장고 조회")
+    void getFridge() throws Exception {
+        //given
+        List<FridgeRequestDto> fridgeRequestDtoList = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            fridgeRequestDtoList.add(FridgeRequestDto.builder()
+                    .resourceName("재료" + i)
+                    .amount("수량" + i)
+                    .category("카테고리" + i)
+                    .endTime("유통기한" + i)
+                    .build()
+            );
+        }
+
+        List<Fridge> fridgeList = fridgeRequestDtoList.stream().map(fridgeRequestDto -> Fridge.builder()
+                .fridgeRequestDto(fridgeRequestDto)
+                .user(testUser)
+                .build()
+        ).collect(Collectors.toList());
+
+        //when
+        when(userService.getFridge(
+                any(PrincipalDetails.class))
+        )
+                .thenReturn(fridgeList);
+
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(
+                "/api/user/fridge");
+        builder.with(request -> {
+            request.setMethod("GET");
+            return request;
+        });
+
+        ResultActions resultActions = this.mockMvc.perform(builder
+                .header("Access-Token", accessToken)
+                .principal(mockPrincipal));
+
+        //then
+        resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("get-getFridge",
+                        requestHeaders(headerWithName("Access-Token").description("Jwt Access-Token")),
+                        responseFields(
+                                fieldWithPath("[].resourceName").type(JsonFieldType.STRING).description("재료 이름"),
+                                fieldWithPath("[].amount").type(JsonFieldType.STRING).description("재료 수량"),
+                                fieldWithPath("[].category").type(JsonFieldType.STRING).description("재료 카테고리"),
+                                fieldWithPath("[].endTime").type(JsonFieldType.STRING).description("재료 유효기간")
+                                )
+                ));
+    }
+
+
+    @Test
     @DisplayName("냉장고 등록")
     void createFridge() throws Exception {
         //given
-        this.mockUserSetup();
-
         List<FridgeRequestDto> fridgeRequestDtoList = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
             fridgeRequestDtoList.add(FridgeRequestDto.builder()
@@ -244,8 +292,6 @@ class UserControllerTest {
     @DisplayName("냉장고 수정")
     void updateFridge() throws Exception {
         //given
-        this.mockUserSetup();
-
         List<FridgeRequestDto> fridgeRequestDtoList = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
             fridgeRequestDtoList.add(FridgeRequestDto.builder()

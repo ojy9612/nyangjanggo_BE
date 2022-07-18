@@ -32,6 +32,16 @@ include::{snippets}/put-user/http-request.adoc[]
 ==== HTTP response
 include::{snippets}/put-user/http-response.adoc[]
 
+=== 냉장고 조회
+==== curl request
+include::{snippets}/get-getFridge/curl-request.adoc[]
+==== request header
+include::{snippets}/get-getFridge/request-headers.adoc[]
+==== response fields
+include::{snippets}/get-getFridge/response-fields.adoc[]
+==== response data
+include::{snippets}/get-getFridge/response-body.adoc[]
+
 === 냉장고 등록
 ==== curl request
 include::{snippets}/post-createFridge/curl-request.adoc[]
