@@ -2,14 +2,12 @@ package com.hanghae99_team3.docs;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepMain;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepRecipe;
-import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepRecipe;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepResource;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultHandler;
-
-import java.util.List;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -36,7 +34,7 @@ public class BoardDocumentation {
             fieldWithPath("goodCount").type(JsonFieldType.NUMBER).description("좋아요 수"),
             fieldWithPath("resourceResponseDtoList").type(JsonFieldType.ARRAY).description("재료 리스트").optional(),
             fieldWithPath("resourceResponseDtoList[].resourceName").type(JsonFieldType.STRING).description("재료 이름").optional(),
-            fieldWithPath("resourceResponseDtoList[].num").type(JsonFieldType.STRING).description("재료 수량").optional(),
+            fieldWithPath("resourceResponseDtoList[].amount").type(JsonFieldType.STRING).description("재료 수량").optional(),
             fieldWithPath("resourceResponseDtoList[].category").type(JsonFieldType.STRING).description("재료 카테고리").optional(),
             fieldWithPath("createdAt").type(JsonFieldType.STRING).description("게시글 생성 날짜").optional(),
             fieldWithPath("modifiedAt").type(JsonFieldType.STRING).description("게시글 수정 날짜").optional()
@@ -53,7 +51,7 @@ public class BoardDocumentation {
             fieldWithPath("mainImg").type(JsonFieldType.STRING).description("게시글 대표 이미지").optional(),
             fieldWithPath("resourceResponseDtoList").type(JsonFieldType.ARRAY).description("재료 리스트").optional(),
             fieldWithPath("resourceResponseDtoList[].resourceName").type(JsonFieldType.STRING).description("재료 이름").optional(),
-            fieldWithPath("resourceResponseDtoList[].num").type(JsonFieldType.STRING).description("재료 수량").optional(),
+            fieldWithPath("resourceResponseDtoList[].amount").type(JsonFieldType.STRING).description("재료 수량").optional(),
             fieldWithPath("resourceResponseDtoList[].category").type(JsonFieldType.STRING).description("재료 카테고리").optional(),
             fieldWithPath("recipeStepResponseDtoList").type(JsonFieldType.ARRAY).description("재료 리스트").optional(),
             fieldWithPath("recipeStepResponseDtoList[].stepNum").type(JsonFieldType.NUMBER).description("레시피 Step").optional(),
@@ -120,15 +118,14 @@ public class BoardDocumentation {
         );
     }
 
-    public static ResultHandler createBoardStepResource(List<ResourceRequestDto> resourceRequestDtoList) throws JsonProcessingException {
+    public static ResultHandler createBoardStepResource(BoardRequestDtoStepResource boardRequestDtoStepResource) throws JsonProcessingException {
 
         return document("post-createBoardStepResource",
                 requestHeaders(
                         headerWithName("Access-Token").description("Jwt Access-Token")
                 ),
-                requestFields(
-                        fieldWithPath("boardId").description("게시글 아이디"),
-                        subsectionWithPath("resourceRequestDtoList").type(JsonFieldType.ARRAY).description(objectMapper.writeValueAsString(resourceRequestDtoList))
+                requestParts(
+                        partWithName("boardRequestDtoStepResource").description(objectMapper.writeValueAsString(boardRequestDtoStepResource))
                 ),
                 responseFields(
                         fieldWithPath("boardId").type(JsonFieldType.NUMBER).description("게시글 ID")
@@ -182,15 +179,14 @@ public class BoardDocumentation {
     }
 
 
-    public static ResultHandler updateBoardStepResource(List<ResourceRequestDto> resourceRequestDtoList) throws JsonProcessingException {
+    public static ResultHandler updateBoardStepResource(BoardRequestDtoStepResource boardRequestDtoStepResource) throws JsonProcessingException {
 
         return document("put-updateBoardStepResource",
                 requestHeaders(
                         headerWithName("Access-Token").description("Jwt Access-Token")
                 ),
-                requestFields(
-                        fieldWithPath("boardId").description("게시글 아이디"),
-                        subsectionWithPath("resourceRequestDtoList").type(JsonFieldType.ARRAY).description(objectMapper.writeValueAsString(resourceRequestDtoList))
+                requestParts(
+                        partWithName("boardRequestDtoStepResource").description(objectMapper.writeValueAsString(boardRequestDtoStepResource))
                 ),
                 responseFields(
                         fieldWithPath("boardId").type(JsonFieldType.NUMBER).description("게시글 ID")

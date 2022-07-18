@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -57,11 +58,11 @@ public class AwsS3Service {
     public String uploadFile(MultipartFile multipartFile) {
         // forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
 
-        if(multipartFile.getContentType() != null){
+        if(Objects.equals(multipartFile.getOriginalFilename(), "")){
+            return "";
+        } else {
             String fileName = putFile(multipartFile);
             return OBJECTLINK + amazonS3.getObject(bucket,fileName).getKey();
-        } else {
-            return "";
         }
 
     }

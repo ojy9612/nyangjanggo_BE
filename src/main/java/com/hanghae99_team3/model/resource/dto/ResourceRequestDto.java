@@ -15,7 +15,7 @@ public class ResourceRequestDto {
     private String category;
 
     @Builder
-    public ResourceRequestDto(@NotNull String resourceName,@NotNull String amount,@NotNull String category) {
+    public ResourceRequestDto(@NotNull String resourceName, @NotNull String amount, @NotNull String category) {
         this.resourceName = resourceName;
         this.amount = amount;
         this.category = category;

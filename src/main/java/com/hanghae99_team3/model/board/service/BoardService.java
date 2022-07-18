@@ -1,13 +1,14 @@
-package com.hanghae99_team3.model.board;
+package com.hanghae99_team3.model.board.service;
 
 
 import com.hanghae99_team3.exception.newException.IdDuplicateException;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepMain;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepRecipe;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepResource;
-import com.hanghae99_team3.model.board.dto.BoardResponseDto;
+import com.hanghae99_team3.model.board.domain.Board;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepRecipe;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepResource;
+import com.hanghae99_team3.model.board.repository.BoardRepository;
 import com.hanghae99_team3.model.recipestep.RecipeStepService;
-import com.hanghae99_team3.model.resource.ResourceService;
+import com.hanghae99_team3.model.resource.service.ResourceService;
 import com.hanghae99_team3.model.s3.AwsS3Service;
 import com.hanghae99_team3.model.user.UserService;
 import com.hanghae99_team3.model.user.domain.User;
@@ -20,8 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.hanghae99_team3.exception.ErrorMessage.BOARD_NOT_FOUND;
 import static com.hanghae99_team3.exception.ErrorMessage.ID_DUPLICATE;
@@ -32,6 +32,7 @@ import static com.hanghae99_team3.exception.ErrorMessage.ID_DUPLICATE;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final BoardDocumentService boardDocumentService;
     private final UserService userService;
     private final AwsS3Service awsS3Service;
     private final ResourceService resourceService;
@@ -48,16 +49,9 @@ public class BoardService {
         return this.findBoardById(boardId);
     }
 
-    public Page<BoardResponseDto> getAllBoards(Pageable pageable) {
+    public Page<Board> getAllBoards(Pageable pageable) {
 
-
-        Page<Board> all = boardRepository.findAll(pageable);
-        List<Board> content1 = all.getContent();
-        Page<BoardResponseDto> map1 = boardRepository.findAll(pageable)
-                .map(BoardResponseDto::new);
-        List<BoardResponseDto> content = map1.getContent();
-
-        return map1;
+        return boardRepository.findAll(pageable);
     }
 
 
@@ -116,6 +110,8 @@ public class BoardService {
         if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
 
         board.setStatus("complete");
+
+        boardDocumentService.createBoard(board);
     }
 
 
@@ -125,28 +121,28 @@ public class BoardService {
         Board board = this.findBoardById(boardId);
         if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
 
-        if (multipartFile.getContentType() == null){
-            board.updateStepMain(boardRequestDtoStepMain,board.getMainImage());
+        if (Objects.equals(multipartFile.getOriginalFilename(), "")){
+            awsS3Service.deleteFile(board.getMainImage());
+            board.updateStepMain(boardRequestDtoStepMain,awsS3Service.uploadFile(multipartFile));
             return board.getId();
         }
 
-        awsS3Service.deleteFile(board.getMainImage());
-        board.updateStepMain(boardRequestDtoStepMain,awsS3Service.uploadFile(multipartFile));
-
+        board.updateStepMain(boardRequestDtoStepMain,board.getMainImage());
         return board.getId();
     }
 
+    @Transactional
     public Long updateBoardStepResource(BoardRequestDtoStepResource boardRequestDtoStepResource, PrincipalDetails principalDetails) {
         User user = userService.findUserByAuthEmail(principalDetails);
         Board board = this.findBoardById(boardRequestDtoStepResource.getBoardId());
         if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
 
-        resourceService.removeAllResource(board);
-        resourceService.createResource(boardRequestDtoStepResource.getResourceRequestDtoList(),board);
+        resourceService.updateResource(boardRequestDtoStepResource.getResourceRequestDtoList(),board);
 
         return board.getId();
     }
 
+    @Transactional
     public Long updateBoardStepRecipe(BoardRequestDtoStepRecipe boardRequestDtoStepRecipe, MultipartFile multipartFile, PrincipalDetails principalDetails) {
         User user = userService.findUserByAuthEmail(principalDetails);
         Board board = this.findBoardById(boardRequestDtoStepRecipe.getBoardId());
@@ -165,7 +161,6 @@ public class BoardService {
         recipeStepService.removeAndResortRecipeStep(board,stepNum);
     }
 
-    @Transactional
     public void deleteBoard(PrincipalDetails principalDetails, Long boardId) {
         User user = userService.findUserByAuthEmail(principalDetails);
         Board board = this.findBoardById(boardId);

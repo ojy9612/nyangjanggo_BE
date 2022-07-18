@@ -2,19 +2,21 @@ package com.hanghae99_team3.model.board;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanghae99_team3.docs.BoardDocumentation;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepMain;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepRecipe;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepResource;
-import com.hanghae99_team3.model.recipestep.RecipeStepService;
+import com.hanghae99_team3.login.jwt.JwtTokenProvider;
+import com.hanghae99_team3.login.jwt.PrincipalDetails;
+import com.hanghae99_team3.model.board.domain.Board;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepRecipe;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepResource;
+import com.hanghae99_team3.model.board.repository.BoardRepository;
+import com.hanghae99_team3.model.board.service.BoardDocumentService;
+import com.hanghae99_team3.model.board.service.BoardService;
 import com.hanghae99_team3.model.recipestep.dto.RecipeStepRequestDto;
-import com.hanghae99_team3.model.resource.ResourceService;
 import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;
 import com.hanghae99_team3.model.user.domain.AuthProvider;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.domain.UserRole;
 import com.hanghae99_team3.security.MockSpringSecurityFilter;
-import com.hanghae99_team3.login.jwt.JwtTokenProvider;
-import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,14 +44,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -61,27 +63,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class BoardControllerTest {
 
     MockMvc mockMvc;
-
-    @MockBean
-    JwtTokenProvider jwtTokenProvider;
-
+    @MockBean JwtTokenProvider jwtTokenProvider;
     @MockBean
     BoardService boardService;
-
+    @MockBean
+    BoardDocumentService boardDocumentService;
     @MockBean
     BoardRepository boardRepository;
-
-    @MockBean
-    ResourceService resourceService;
-
-    @MockBean
-    RecipeStepService recipeStepService;
-
     final String accessToken = "JwtAccessToken";
     User baseUser;
     Principal mockPrincipal;
     PrincipalDetails baseUserDetails;
-
     ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
@@ -94,7 +86,6 @@ class BoardControllerTest {
                 .alwaysDo(document("{method-name}",
                         preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())))
                 .build();
-
 
         baseUser = User.testRegister()
                 .email("email@test.com")
@@ -128,32 +119,6 @@ class BoardControllerTest {
                 .status("step 1")
                 .user(baseUser)
                 .build();
-
-        List<ResourceRequestDto> resourceRequestDtoList = new ArrayList<>();
-        for (int i = 0; i < 2; i++){
-            resourceRequestDtoList.add(ResourceRequestDto.builder()
-                    .resourceName("재료"+i)
-                    .amount("수량"+i)
-                    .category("카테고리"+i)
-                    .build()
-            );
-        }
-
-        RecipeStepRequestDto recipeStepRequestDto = RecipeStepRequestDto.builder()
-                .stepContent("Step 내용")
-                .stepNum(1)
-                .build();
-
-        MockMultipartFile image = new MockMultipartFile(
-                "multipartFile",
-                "",
-                null,
-                "<<image data>>".getBytes(StandardCharsets.UTF_8)
-        );
-
-        resourceService.createResource(resourceRequestDtoList,board);
-
-        recipeStepService.createRecipeStep(recipeStepRequestDto,image,board);
 
         //when
         when(boardService.getOneBoard(
@@ -286,7 +251,6 @@ class BoardControllerTest {
 
         MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/board/step/1");
 
-
         //then
         mockMvc.perform(builder
                         .file(image)
@@ -321,6 +285,13 @@ class BoardControllerTest {
                 .resourceRequestDtoList(resourceRequestDtoList)
                 .build();
 
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+                "boardRequestDtoStepResource",
+                "boardRequestDtoStepResource",
+                "application/json",
+                objectMapper.writeValueAsString(boardRequestDtoStepResource).getBytes(StandardCharsets.UTF_8)
+        );
+
         //when
         when(boardService.createBoardStepResource(
                 any(BoardRequestDtoStepResource.class),
@@ -328,16 +299,18 @@ class BoardControllerTest {
         ))
                 .thenReturn(1L);
 
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/board/step/2");
+
         //then
-        mockMvc.perform(post("/api/board/step/2")
+        mockMvc.perform(builder
+                        .file(mockMultipartFile)
                         .header("Access-Token", accessToken)
                         .principal(mockPrincipal)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(boardRequestDtoStepResource))
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(BoardDocumentation.createBoardStepResource(boardRequestDtoStepResource.getResourceRequestDtoList()));
+                .andDo(BoardDocumentation.createBoardStepResource(boardRequestDtoStepResource));
 
     }
 
@@ -511,6 +484,13 @@ class BoardControllerTest {
                 .resourceRequestDtoList(resourceRequestDtoList)
                 .build();
 
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+                "boardRequestDtoStepResource",
+                "boardRequestDtoStepResource",
+                "application/json",
+                objectMapper.writeValueAsString(boardRequestDtoStepResource).getBytes(StandardCharsets.UTF_8)
+        );
+
         //when
         when(boardService.updateBoardStepResource(
                 any(BoardRequestDtoStepResource.class),
@@ -518,16 +498,22 @@ class BoardControllerTest {
         ))
                 .thenReturn(1L);
 
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/board/step/2");
+        builder.with(request -> {
+            request.setMethod("PUT");
+            return request;
+        });
+
         //then
-        mockMvc.perform(put("/api/board/step/2")
+        mockMvc.perform(builder
+                        .file(mockMultipartFile)
                         .header("Access-Token", accessToken)
                         .principal(mockPrincipal)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(boardRequestDtoStepResource))
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(BoardDocumentation.updateBoardStepResource(boardRequestDtoStepResource.getResourceRequestDtoList()));
+                .andDo(BoardDocumentation.updateBoardStepResource(boardRequestDtoStepResource));
 
     }
 
@@ -652,7 +638,5 @@ class BoardControllerTest {
                 .andDo(BoardDocumentation.deleteBoard());
 
     }
-
-
 
 }

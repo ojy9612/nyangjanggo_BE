@@ -1,6 +1,7 @@
 package com.hanghae99_team3.model.resource.dto;
 
-import com.hanghae99_team3.model.resource.Resource;
+import com.hanghae99_team3.model.resource.domain.Resource;
+import com.hanghae99_team3.model.resource.domain.ResourceDocument;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,15 +12,14 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class ResourceResponseDto {
 
-    private String resourceName;
-    private String num;
+    private String resourcename;
+    private String amount;
     private String category;
 
     @Builder
     public ResourceResponseDto(@NotNull Resource resource) {
-        this.resourceName = resource.getResourceName();
-        this.num = resource.getNum();
+        this.resourcename = resource.getResourceName();
+        this.amount = resource.getAmount();
         this.category = resource.getCategory();
     }
-
 }

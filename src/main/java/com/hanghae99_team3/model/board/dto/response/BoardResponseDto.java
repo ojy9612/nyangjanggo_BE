@@ -1,10 +1,7 @@
-package com.hanghae99_team3.model.board.dto;
+package com.hanghae99_team3.model.board.dto.response;
 
 
-import com.hanghae99_team3.model.board.Board;
-import com.hanghae99_team3.model.comment.dto.CommentResponseDto;
-import com.hanghae99_team3.model.good.GoodResponseDto;
-import com.hanghae99_team3.model.recipestep.dto.RecipeStepResponseDto;
+import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.resource.dto.ResourceResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-public class BoardDetailResponseDto {
+public class BoardResponseDto {
 
     private Long boardId;
     private String status;
@@ -25,15 +22,14 @@ public class BoardDetailResponseDto {
     private String subTitle;
     private String content;
     private String mainImg;
+    private int commentCount;
+    private int goodCount;
     private List<ResourceResponseDto> resourceResponseDtoList;
-    private List<RecipeStepResponseDto> recipeStepResponseDtoList;
-    private List<CommentResponseDto> commentList;
-    private List<GoodResponseDto> goodList;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
 
-    public BoardDetailResponseDto(Board board) {
+    public BoardResponseDto(Board board) {
         this.boardId = board.getId();
         this.status = board.getStatus();
         this.nickname = board.getUser().getNickname();
@@ -42,10 +38,9 @@ public class BoardDetailResponseDto {
         this.subTitle = board.getSubTitle();
         this.content = board.getContent();
         this.mainImg = board.getMainImage();
+        this.commentCount = board.getCommentList().size();
+        this.goodCount = board.getGoodList().size();
         this.resourceResponseDtoList = board.getResourceList().stream().map(ResourceResponseDto::new).collect(Collectors.toList());
-        this.recipeStepResponseDtoList = board.getRecipeStepList().stream().map(RecipeStepResponseDto::new).collect(Collectors.toList());
-        this.commentList = board.getCommentList().stream().map(CommentResponseDto::new).collect(Collectors.toList());
-        this.goodList = board.getGoodList().stream().map(GoodResponseDto::new).collect(Collectors.toList());
         this.createdAt = board.getCreatedAt();
         this.modifiedAt = board.getModifiedAt();
     }

@@ -1,0 +1,59 @@
+{
+  "resource": {
+    "mappings": {
+      "properties": {
+        "amount": {
+          "type": "text",
+          "fields": {
+            "nori": {
+              "type": "text",
+              "analyzer": "nori_analyzer"
+            },
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "board_id": {
+          "type": "long"
+        },
+        "category": {
+          "type": "text",
+          "fields": {
+            "nori": {
+              "type": "text",
+              "analyzer": "nori_analyzer"
+            },
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "createdAt": {
+          "type": "date"
+        },
+        "id": {
+          "type": "long"
+        },
+        "modifiedAt": {
+          "type": "date"
+        },
+        "resourceName": {
+          "type": "text",
+          "fields": {
+            "nori": {
+              "type": "text",
+              "analyzer": "nori_analyzer"
+            },
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        }
+      }
+    }
+  }
+}

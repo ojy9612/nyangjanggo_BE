@@ -1,12 +1,12 @@
-package com.hanghae99_team3.model.board;
+package com.hanghae99_team3.model.board.domain;
 
 
 import com.hanghae99_team3.model.Timestamped;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepMain;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
 import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.good.Good;
 import com.hanghae99_team3.model.recipestep.RecipeStep;
-import com.hanghae99_team3.model.resource.Resource;
+import com.hanghae99_team3.model.resource.domain.Resource;
 import com.hanghae99_team3.model.user.domain.User;
 import lombok.*;
 

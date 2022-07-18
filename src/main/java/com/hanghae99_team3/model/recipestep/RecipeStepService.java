@@ -1,6 +1,6 @@
 package com.hanghae99_team3.model.recipestep;
 
-import com.hanghae99_team3.model.board.Board;
+import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.recipestep.dto.RecipeStepRequestDto;
 import com.hanghae99_team3.model.s3.AwsS3Service;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -39,7 +40,7 @@ public class RecipeStepService {
             Integer stepNum = recipeStep.getStepNum();
             if (stepNum.equals(recipeStepRequestDto.getStepNum())){
 
-                if(multipartFile.getContentType() == null){
+                if(Objects.equals(multipartFile.getOriginalFilename(), "")){
                     recipeStep.updateRecipeStep(recipeStepRequestDto, recipeStep.getImageLink());
                 }else{
                     awsS3Service.deleteFile(recipeStep.getImageLink());

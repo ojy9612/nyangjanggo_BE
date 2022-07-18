@@ -1,6 +1,8 @@
 package com.hanghae99_team3.model.user;
 
 
+import com.hanghae99_team3.model.fridge.FridgeService;
+import com.hanghae99_team3.model.fridge.dto.FridgeRequestDto;
 import com.hanghae99_team3.model.s3.AwsS3Service;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.dto.UserReqDto;
@@ -21,6 +23,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final AwsS3Service awsS3Service;
+    private final FridgeService fridgeService;
 //    private final PasswordEncoder passwordEncoder;
 
     public User findUserByAuthEmail(PrincipalDetails principalDetails) {
@@ -28,7 +31,7 @@ public class UserService {
                 () -> new IllegalArgumentException("유저 정보가 없습니다."));
     }
 
-    public void update(UserReqDto userReqDto, PrincipalDetails principalDetails) {
+    public void updateUser(UserReqDto userReqDto, PrincipalDetails principalDetails) {
         User user = findUserByAuthEmail(principalDetails);
         //기존 이미지 삭제
         awsS3Service.deleteFile(user.getUserImg());
@@ -46,6 +49,21 @@ public class UserService {
         awsS3Service.deleteFile(user.getUserImg());
         userRepository.deleteById(user.getId());
     }
+
+    public void createFridge(PrincipalDetails principalDetails, List<FridgeRequestDto> fridgeRequestDtoList) {
+        User user = findUserByAuthEmail(principalDetails);
+
+        fridgeService.createFridge(fridgeRequestDtoList,user);
+    }
+
+    public void updateFridge(PrincipalDetails principalDetails, List<FridgeRequestDto> fridgeRequestDtoList) {
+        User user = findUserByAuthEmail(principalDetails);
+
+        fridgeService.updateFridge(fridgeRequestDtoList,user);
+    }
+
+
+
 
 //    public Long join(SignupMemberDto memberDto) {
 //        String username = memberDto.getUsername();

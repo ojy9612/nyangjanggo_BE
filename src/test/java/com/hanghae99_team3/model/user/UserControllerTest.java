@@ -1,5 +1,9 @@
 package com.hanghae99_team3.model.user;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hanghae99_team3.model.fridge.FridgeService;
+import com.hanghae99_team3.model.fridge.dto.FridgeRequestDto;
+import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;
 import com.hanghae99_team3.model.user.domain.AuthProvider;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.domain.UserRole;
@@ -31,8 +35,13 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -41,6 +50,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -52,16 +62,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerTest {
 
     private MockMvc mockMvc;
-    @Autowired
-    private WebApplicationContext context;
-    @MockBean
-    private UserRepository userRepository;
-    @MockBean
-    private JwtTokenProvider jwtTokenProvider;
-    @MockBean
-    private UserService userService;
+    @Autowired private WebApplicationContext context;
+    @MockBean private UserRepository userRepository;
+    @MockBean private JwtTokenProvider jwtTokenProvider;
+    @MockBean private UserService userService;
+    @MockBean private FridgeService fridgeService;
     private final String accessToken = "JwtAccessToken";
     private Principal mockPrincipal;
+    ObjectMapper objectMapper = new ObjectMapper();
 
     // MockMvc, Spring Rest Docs Setup
     @BeforeEach
@@ -184,5 +192,100 @@ class UserControllerTest {
                 ));
     }
 
+    @Test
+    @DisplayName("냉장고 등록")
+    void createFridge() throws Exception {
+        //given
+        this.mockUserSetup();
+
+        List<FridgeRequestDto> fridgeRequestDtoList = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            fridgeRequestDtoList.add(FridgeRequestDto.builder()
+                    .resourceName("재료" + i)
+                    .amount("수량" + i)
+                    .category("카테고리" + i)
+                    .endTime("유통기한" + i)
+                    .build()
+            );
+        }
+
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+                "fridgeRequestDtoList",
+                "fridgeRequestDtoList",
+                "application/json",
+                objectMapper.writeValueAsString(fridgeRequestDtoList).getBytes(StandardCharsets.UTF_8)
+        );
+
+        //when
+        doNothing().when(userService);
+
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(
+                "/api/user/fridge");
+        builder.with(request -> {
+            request.setMethod("POST");
+            return request;
+        });
+
+        ResultActions resultActions = this.mockMvc.perform(builder
+                .file(mockMultipartFile)
+                .header("Access-Token", accessToken)
+                .principal(mockPrincipal));
+
+        //then
+        resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("post-createFridge",
+                        requestHeaders(headerWithName("Access-Token").description("Jwt Access-Token")),
+                        requestParts(partWithName("fridgeRequestDtoList").description(objectMapper.writeValueAsString(fridgeRequestDtoList)))
+                ));
+    }
+
+    @Test
+    @DisplayName("냉장고 수정")
+    void updateFridge() throws Exception {
+        //given
+        this.mockUserSetup();
+
+        List<FridgeRequestDto> fridgeRequestDtoList = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            fridgeRequestDtoList.add(FridgeRequestDto.builder()
+                    .resourceName("재료" + i)
+                    .amount("수량" + i)
+                    .category("카테고리" + i)
+                    .endTime("유통기한" + i)
+                    .build()
+            );
+        }
+
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+                "fridgeRequestDtoList",
+                "fridgeRequestDtoList",
+                "application/json",
+                objectMapper.writeValueAsString(fridgeRequestDtoList).getBytes(StandardCharsets.UTF_8)
+        );
+
+        //when
+        doNothing().when(userService);
+
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(
+                "/api/user/fridge");
+        builder.with(request -> {
+            request.setMethod("PUT");
+            return request;
+        });
+
+        ResultActions resultActions = this.mockMvc.perform(builder
+                .file(mockMultipartFile)
+                .header("Access-Token", accessToken)
+                .principal(mockPrincipal));
+
+        //then
+        resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("put-updateFridge",
+                        requestHeaders(headerWithName("Access-Token").description("Jwt Access-Token")),
+                        requestParts(partWithName("fridgeRequestDtoList").description(objectMapper.writeValueAsString(fridgeRequestDtoList)))
+                ));
+    }
 
 }
