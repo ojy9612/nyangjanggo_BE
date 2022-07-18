@@ -1,5 +1,6 @@
 package com.hanghae99_team3.login.cookie;
 
+import org.springframework.http.ResponseCookie;
 import org.springframework.util.SerializationUtils;
 
 import javax.servlet.http.Cookie;
@@ -24,12 +25,22 @@ public class CookieUtil {
     }
 
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(maxAge);
+        ResponseCookie cookie = ResponseCookie.from(name, value)
+                .path("/")
+                .httpOnly(true)
+                .maxAge(maxAge)
+                .secure(true)
+                .sameSite("None")
+                .build();
 
-        response.addCookie(cookie);
+        response.addHeader("Set-Cookie", cookie.toString());
+
+//        Cookie cookie = new Cookie(name, value);
+//        cookie.setPath("/");
+//        cookie.setHttpOnly(true);
+//        cookie.setMaxAge(maxAge);
+//        cookie.setSecure(true);
+//        response.addCookie(cookie);
     }
 
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
