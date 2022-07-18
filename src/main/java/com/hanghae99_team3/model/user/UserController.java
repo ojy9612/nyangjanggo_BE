@@ -1,11 +1,12 @@
 package com.hanghae99_team3.model.user;
 
+import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.fridge.dto.FridgeRequestDto;
 import com.hanghae99_team3.model.user.domain.UserRole;
-import com.hanghae99_team3.model.user.dto.*;
-import com.hanghae99_team3.login.jwt.PrincipalDetails;
+import com.hanghae99_team3.model.user.dto.UserInfoDto;
+import com.hanghae99_team3.model.user.dto.UserReqDto;
+import com.hanghae99_team3.model.user.dto.UserResDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,26 +81,5 @@ public class UserController {
         return new UserInfoDto(username, roles);
     }
 
-//    @PostMapping("/member/memberInfo1")
-//    public UserInfoDto getUserInfo1(@AuthenticationPrincipal UserDetails userDetails) {
-//        System.out.println("userDetails = " + userDetails);
-//        String username = userDetails.getUsername();
-//        UserRole roles = UserRole.USER;
-//        return new UserInfoDto(username, roles);
-//    }
-
-    @GetMapping("/loginInfo")
-    @ResponseBody
-    public String loginInfo(Authentication authentication){
-        String result = "";
-
-        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-        if(principal.getAuthProvider() == null) {
-            result = result + "Form 로그인 : " + principal;
-        }else{
-            result = result + "OAuth2 로그인 : " + principal;
-        }
-        return result;
-    }
 
 }
