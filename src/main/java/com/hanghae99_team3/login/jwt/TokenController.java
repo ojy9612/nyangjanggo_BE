@@ -1,13 +1,12 @@
 package com.hanghae99_team3.login.jwt;
 
-import com.hanghae99_team3.login.jwt.dto.TokenRequestDto;
+import com.hanghae99_team3.login.jwt.dto.TokenResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 public class TokenController {
@@ -20,10 +19,8 @@ public class TokenController {
     }
 
     @PostMapping("/refresh")
-    public Map<String, String> refresh(@RequestBody TokenRequestDto tokenRequestDto){
-        Map<String, String> accessToken = new HashMap<>();
-        String newAccessToken = tokenService.refresh(tokenRequestDto);
-        accessToken.put("Access-Token", newAccessToken);
-        return accessToken;
+    public TokenResponseDto refresh(HttpServletRequest request, HttpServletResponse response){
+
+        return tokenService.refresh(request, response);
     }
 }

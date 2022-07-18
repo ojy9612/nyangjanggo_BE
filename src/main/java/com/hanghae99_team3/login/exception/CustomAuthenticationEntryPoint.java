@@ -1,6 +1,9 @@
 package com.hanghae99_team3.login.exception;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.net.httpserver.HttpsServer;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
@@ -17,11 +20,20 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             HttpServletResponse response,
             AuthenticationException authException
     ) throws IOException, ServletException {
-        authException.printStackTrace();
-        log.info("Responding with unauthorized error. Message := {}", authException.getMessage());
-        response.sendError(
-                HttpServletResponse.SC_UNAUTHORIZED,
-                authException.getLocalizedMessage()
-        );
+        ErrorCode errorCode = (ErrorCode) request.getAttribute("exception");
+        sendErrorResponse(response, errorCode);
+    }
+
+
+    private void sendErrorResponse(HttpServletResponse response, ErrorCode errorCode)
+            throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ExceptionCode exceptionCode = new ExceptionCode(errorCode.getCode(), errorCode.getMessage());
+
+        // response 설정
+        response.setCharacterEncoding("utf-8");
+        response.setStatus(errorCode.getStatus());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.getWriter().write(objectMapper.writeValueAsString(exceptionCode));
     }
 }

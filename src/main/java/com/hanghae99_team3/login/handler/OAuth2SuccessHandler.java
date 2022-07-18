@@ -1,6 +1,7 @@
 package com.hanghae99_team3.login.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hanghae99_team3.login.cookie.CookieUtil;
 import com.hanghae99_team3.login.jwt.JwtTokenProvider;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.login.jwt.TokenService;
@@ -30,6 +31,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             throws IOException{
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
+        // 새로운 회원인지 판별
         boolean isNew = principalDetails.isNew();
 
         // Token 발행
@@ -37,16 +39,13 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         log.info("{}", tokenDto.toString());
 
-        response.setContentType("text/html;charset=UTF-8");
-        response.addHeader("Access-Token",tokenDto.getAccessToken());
-        response.addHeader("Refresh-Token", tokenDto.getRefreshToken());
-        if (isNew) {
-            response.addHeader("isNew", "Y");
-        } else {
-            response.addHeader("isNew", "N");
-        }
+        // Cookie 설정
+        Long refreshTokenExpiry = tokenDto.getRefreshTokenExpireDate();
+        int cookieMaxAge = (int) (refreshTokenExpiry / 60);
+        CookieUtil.deleteCookie(request, response, "Refresh-Token");
+        CookieUtil.addCookie(response, "Refresh-Token", tokenDto.getRefreshToken(), cookieMaxAge);
 
-
+        // Redirect
         getRedirectStrategy().sendRedirect(request, response, makeRedirectUrl(tokenDto, isNew));
     }
 
@@ -55,10 +54,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private String makeRedirectUrl(TokenDto tokenDto, Boolean isNew) {
 
         return UriComponentsBuilder.fromUriString("http://localhost:3000/oauth2/redirect/")
-
                 .queryParam("Access-Token", tokenDto.getAccessToken())
-                .queryParam("Refresh-Token", tokenDto.getRefreshToken())
-
+                .queryParam("expireDate", tokenDto.getAccessTokenExpireDate())
                 .queryParam("isNew", isNew.toString())
                 .build().toUriString();
     }
