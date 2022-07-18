@@ -31,7 +31,7 @@ public class JwtTokenProvider {
 
     // 토큰 유효시간
 //    private final Long accessTokenValidTime = 14 * 24 * 60 * 60 * 1000L; // 14days
-    private final Long accessTokenValidTime = 300 * 1000L; //10초
+    private final Long accessTokenValidTime = 60 * 1000L; //10초
     private final Long refreshTokenValidTime = 14 * 24 * 60 * 60 * 1000L; // 14days
 //    private final Long refreshTokenValidTime = 600 * 1000L; // 60초
     private final UserDetailsService userDetailsService;
