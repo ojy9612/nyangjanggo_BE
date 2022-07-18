@@ -10,7 +10,9 @@ import com.hanghae99_team3.model.board.dto.response.BoardResponseDto;
 import com.hanghae99_team3.model.board.service.BoardDocumentService;
 import com.hanghae99_team3.model.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,15 +34,15 @@ public class BoardController {
         return new BoardDetailResponseDto(boardService.getOneBoard(boardId));
     }
 
-//    @GetMapping("/api/boards")
-//    public Page<BoardResponseDto> getAllBoards(@PageableDefault(size = 3) Pageable pageable) {
-//        return boardService.getAllBoards(pageable).map(BoardResponseDto::new);
-//    }
-
     @GetMapping("/api/boards")
-    public List<BoardResponseDto> getAllBoardDocument(Pageable pageable){
-        return boardDocumentService.getAllBoardDocument(pageable).stream()
-                .map(BoardResponseDto::new).collect(Collectors.toList());
+    public Page<BoardResponseDto> getAllBoards(@PageableDefault(size = 3) Pageable pageable) {
+        return boardService.getAllBoards(pageable).map(BoardResponseDto::new);
+    }
+
+    @GetMapping("/api/boards/elastic")
+    public Page<BoardResponseDto> getAllBoardDocument(Pageable pageable){
+        return boardDocumentService.getAllBoardDocument(pageable)
+                .map(BoardResponseDto::new);
     }
 
 //    @GetMapping("/api/boards/resource")
