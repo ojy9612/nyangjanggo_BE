@@ -22,4 +22,6 @@ public class GoodController {
         goodService.createAndRemoveGood(principalDetails,boardId);
     }
 
+
+
 }
