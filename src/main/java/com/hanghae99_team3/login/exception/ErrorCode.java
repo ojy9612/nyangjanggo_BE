@@ -15,7 +15,8 @@ public enum ErrorCode {
     REFRESH_SIGNATURE_NOT_MATCH(401, "TR004", "[Refresh-Token] 사용자 인증 실패"),
     REFRESH_TOKEN_NOT_FOUND(401, "T005", "Refresh-Token을 찾을 수 없습니다."),
     REFRESH_TOKEN_NOT_MATCH(401, "T006", "Refresh-Token이 일치하지 않습니다."),
-    REFRESH_TOKEN_NOT_EXIST(401, "T007", "Refresh-Token 내놔");
+    ACCESS_TOKEN_NOT_EXIST(401, "TA007", "Access-Token 내놔"),
+    REFRESH_TOKEN_NOT_EXIST(401, "TR007", "Refresh-Token 내놔");
 
     private final int status;
     private final String code;
