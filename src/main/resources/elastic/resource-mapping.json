@@ -1,14 +1,9 @@
 {
-  "resource": {
-    "mappings": {
+
       "properties": {
         "amount": {
           "type": "text",
           "fields": {
-            "nori": {
-              "type": "text",
-              "analyzer": "nori_analyzer"
-            },
             "keyword": {
               "type": "keyword",
               "ignore_above": 256
@@ -20,11 +15,10 @@
         },
         "category": {
           "type": "text",
+          "analyzer": "suggest_index_analyzer",
+          "search_analyzer": "suggest_search_analyzer",
           "fields": {
-            "nori": {
-              "type": "text",
-              "analyzer": "nori_analyzer"
-            },
+
             "keyword": {
               "type": "keyword",
               "ignore_above": 256
@@ -42,11 +36,9 @@
         },
         "resourceName": {
           "type": "text",
+          "analyzer": "suggest_index_analyzer",
+          "search_analyzer": "suggest_search_analyzer",
           "fields": {
-            "nori": {
-              "type": "text",
-              "analyzer": "nori_analyzer"
-            },
             "keyword": {
               "type": "keyword",
               "ignore_above": 256
@@ -55,5 +47,4 @@
         }
       }
     }
-  }
-}
+

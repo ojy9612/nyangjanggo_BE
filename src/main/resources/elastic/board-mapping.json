@@ -21,6 +21,7 @@
       "properties": {
         "amount": {
           "type": "text",
+
           "fields": {
             "keyword": {
               "type": "keyword",
@@ -33,6 +34,8 @@
         },
         "category": {
           "type": "text",
+          "analyzer": "suggest_index_analyzer",
+          "search_analyzer": "suggest_search_analyzer",
           "fields": {
             "keyword": {
               "type": "keyword",
@@ -45,6 +48,8 @@
         },
         "resourceName": {
           "type": "text",
+          "analyzer": "suggest_index_analyzer",
+          "search_analyzer": "suggest_search_analyzer",
           "fields": {
             "keyword": {
               "type": "keyword",
@@ -55,16 +60,13 @@
       }
     },
     "status": {
-      "type": "text",
-      "fields": {
-        "keyword": {
-          "type": "keyword",
-          "ignore_above": 256
-        }
-      }
+      "type": "keyword"
+
     },
     "title": {
       "type": "text",
+      "analyzer": "suggest_index_analyzer",
+      "search_analyzer": "suggest_search_analyzer",
       "fields": {
         "keyword": {
           "type": "keyword",

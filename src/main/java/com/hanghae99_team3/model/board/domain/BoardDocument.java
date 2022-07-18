@@ -1,16 +1,11 @@
 package com.hanghae99_team3.model.board.domain;
 
-import com.hanghae99_team3.model.resource.domain.Resource;
 import com.hanghae99_team3.model.resource.domain.ResourceDocument;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.data.elasticsearch.annotations.*;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,7 +19,7 @@ import static org.springframework.data.elasticsearch.annotations.DateFormat.epoc
 @Document(indexName = "board")
 @NoArgsConstructor
 @Mapping(mappingPath = "elastic/board-mapping.json")
-//@Setting(settingPath = "elastic/board-setting.json")
+@Setting(settingPath = "elastic/board-setting.json")
 public class BoardDocument {
 
     @Id
