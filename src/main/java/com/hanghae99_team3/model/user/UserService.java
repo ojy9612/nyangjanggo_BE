@@ -19,12 +19,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class UserService {
-    // Test용
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final AwsS3Service awsS3Service;
     private final FridgeService fridgeService;
-//    private final PasswordEncoder passwordEncoder;
+
 
     public User findUserByAuthEmail(PrincipalDetails principalDetails) {
         return userRepository.findByEmail(principalDetails.getUsername()).orElseThrow(
