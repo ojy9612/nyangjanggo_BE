@@ -54,34 +54,18 @@ public class JwtAuthFilter extends GenericFilterBean {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
-            chain.doFilter(request, response);
         } catch (ExpiredJwtException e) {
-            log.error("Expired Access Token", e);
-            sendErrorResponse((HttpServletResponse) response, ErrorCode.EXPIRED_ACCESS_TOKEN);
+            log.error(e.getMessage());
+            request.setAttribute("exception", ErrorCode.EXPIRED_ACCESS_TOKEN);
         } catch (SignatureException e) {
-            log.error(e.getMessage(), e);
-            sendErrorResponse((HttpServletResponse) response, ErrorCode.ACCESS_SIGNATURE_NOT_MATCH);
+            log.error(e.getMessage());
+            request.setAttribute("exception", ErrorCode.ACCESS_SIGNATURE_NOT_MATCH);
         } catch (JwtException e) {
-            log.error(e.getMessage(), e);
-            sendErrorResponse((HttpServletResponse) response, ErrorCode.INVALID_TOKEN);
+            log.error(e.getMessage());
+            request.setAttribute("exception", ErrorCode.INVALID_TOKEN);
         }
+
+        chain.doFilter(request, response);
     }
 
-    /**
-     * jwt 예외처리 응답
-     *
-     * @param response
-     * @throws IOException
-     */
-    private void sendErrorResponse(HttpServletResponse response, ErrorCode errorCode)
-            throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        ExceptionCode exceptionCode = new ExceptionCode(errorCode.getCode(), errorCode.getMessage());
-
-        // response 설정
-        response.setCharacterEncoding("utf-8");
-        response.setStatus(errorCode.getStatus());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write(objectMapper.writeValueAsString(exceptionCode));
-    }
 }

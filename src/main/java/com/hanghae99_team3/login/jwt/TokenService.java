@@ -1,19 +1,26 @@
 package com.hanghae99_team3.login.jwt;
 
 
+import com.hanghae99_team3.login.cookie.CookieUtil;
 import com.hanghae99_team3.login.exception.RefreshTokenException;
+import com.hanghae99_team3.login.exception.NotExpiredTokenYetException;
 import com.hanghae99_team3.login.jwt.dto.TokenDto;
 import com.hanghae99_team3.login.jwt.dto.TokenRequestDto;
+import com.hanghae99_team3.login.jwt.dto.TokenResponseDto;
 import com.hanghae99_team3.login.jwt.entity.RefreshToken;
 import com.hanghae99_team3.login.jwt.repository.RefreshTokenRepository;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.repository.UserRepository;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @Slf4j
@@ -24,6 +31,7 @@ public class TokenService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Transactional
     public TokenDto login (PrincipalDetails principalDetails) {
@@ -50,29 +58,59 @@ public class TokenService {
 
 
     @Transactional
-    public String refresh(TokenRequestDto tokenRequestDto) {
+    public TokenResponseDto refresh(HttpServletRequest request, HttpServletResponse response) {
+
+        // Token 추출
+        String accessToken = jwtTokenProvider.resolveToken(request);
+        String refreshToken = CookieUtil.getCookie(request, "Refresh-Token")
+                .map(Cookie::getValue)
+                .orElse((null));
+
+        if (refreshToken == null) {
+            throw new RefreshTokenException("RefreshToken이 없습니다.");
+        }
+
+
+        // AccessToken not expired yet
+        try {
+            if (jwtTokenProvider.validateToken(accessToken)) {
+                throw new NotExpiredTokenYetException();
+            }
+        } catch (ExpiredJwtException e) {
+            log.info("[AccessToken 만료, 재발급 요청]");
+        }
+
 
         // accessToken 에서 User 불러오기
-        String accessToken = tokenRequestDto.getAccessToken();
         String userPk = jwtTokenProvider.getUserPkFromToken(accessToken);
-        User user = userRepository.findByEmail(userPk).orElseThrow(
-                () -> new UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다."));
+        PrincipalDetails principalDetails = (PrincipalDetails) userDetailsService.loadUserByUsername(userPk);
+//        User user = userRepository.findByEmail(userPk).orElseThrow(
+//                () -> new UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다."));
+
 
         // refreshToken valid 검증
-        jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken());
+        jwtTokenProvider.validateToken(refreshToken);
 
-//
+
+
         // DB에 저장된 refreshToken과 일치하는지 검증
-        RefreshToken refreshToken = refreshTokenRepository.findByUserId(user.getId()).orElseThrow(
+        RefreshToken userRefreshToken = refreshTokenRepository.findByUserId(principalDetails.getUserId()).orElseThrow(
                 () -> new RefreshTokenException("RefreshToken을 찾을 수 없습니다.")
         );
-        if (!tokenRequestDto.getRefreshToken().equals(refreshToken.getToken())) {
+        if (!refreshToken.equals(userRefreshToken.getToken())) {
             throw new RefreshTokenException("RefreshToken이 일치하지 않습니다.");
         }
 
-        // AccessToken, RefreshToken을 모두 재발급?
+        // AccessToken & RefreshToken 재발급
+        TokenDto tokenDto = login(principalDetails);
 
-        return jwtTokenProvider.createAccessTokenOnly(user.getEmail(), user.getRole());
+        // Cookie 설정
+        Long refreshTokenExpiry = tokenDto.getRefreshTokenExpireDate();
+        int cookieMaxAge = (int) (refreshTokenExpiry / 60);
+        CookieUtil.deleteCookie(request, response, "Refresh-Token");
+        CookieUtil.addCookie(response, "Refresh-Token", tokenDto.getRefreshToken(), cookieMaxAge);
+
+        return new TokenResponseDto(tokenDto.getAccessToken(), tokenDto.getAccessTokenExpireDate());
 
     }
 }

@@ -5,9 +5,11 @@ import com.hanghae99_team3.login.handler.TokenAccessDeniedHandler;
 import com.hanghae99_team3.login.jwt.JwtAuthFilter;
 import com.hanghae99_team3.login.jwt.JwtTokenProvider;
 import com.hanghae99_team3.login.handler.OAuth2SuccessHandler;
+import com.hanghae99_team3.model.user.domain.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -78,14 +80,15 @@ public class WebSecurityConfig {
                 .and()
                     .exceptionHandling()
                     .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                    .accessDeniedHandler(tokenAccessDeniedHandler)
 
                 // preAuth 로 refactor 할 것
                 .and()
                     .authorizeRequests() // 요청에 대한 사용권한 체크
-                    .antMatchers("/admin/**").hasRole("ADMIN")
-                    .antMatchers("/user/**").hasAnyAuthority("USER_TOKEN")
-                    .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
+
+                    .antMatchers(HttpMethod.GET, "api/board/**").permitAll()
+                    .anyRequest().hasRole("USER_TOKEN")
+
+//                    .antMatchers("/admin/**").hasRole("ADMIN")
 
                 .and()
                     .oauth2Login()

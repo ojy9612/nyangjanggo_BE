@@ -5,10 +5,10 @@ import com.hanghae99_team3.exception.newException.S3UploadFailedException;
 import com.hanghae99_team3.login.exception.ErrorCode;
 import com.hanghae99_team3.login.exception.ExceptionCode;
 import com.hanghae99_team3.login.exception.RefreshTokenException;
+import com.hanghae99_team3.login.exception.NotExpiredTokenYetException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.SignatureException;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,6 +55,7 @@ public class ApiException extends RuntimeException {
         ErrorCode errorCode;
         log.error(e.getMessage());
         switch (e.getMessage()) {
+
             case "RefreshToken을 찾을 수 없습니다.":
                 errorCode = ErrorCode.REFRESH_TOKEN_NOT_FOUND;
                 return ResponseEntity.status(errorCode.getStatus())
@@ -63,11 +64,24 @@ public class ApiException extends RuntimeException {
                 errorCode = ErrorCode.REFRESH_TOKEN_NOT_MATCH;
                 return ResponseEntity.status(errorCode.getStatus())
                         .body(new ExceptionCode(errorCode));
+            case "RefreshToken이 없습니다.":
+                errorCode = ErrorCode.REFRESH_TOKEN_NOT_EXIST;
+                return ResponseEntity.status(errorCode.getStatus())
+                        .body(new ExceptionCode(errorCode));
+            default:
+                errorCode = ErrorCode.INVALID_TOKEN;
+                return ResponseEntity.status(errorCode.getStatus())
+                        .body(new ExceptionCode(errorCode));
         }
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ExceptionCode("UNAUTHORIZED", e.getMessage()));
     }
+
+    @ExceptionHandler(NotExpiredTokenYetException.class)
+    public ResponseEntity<ExceptionCode> handleTokenExpiredYetException(NotExpiredTokenYetException e) {
+        log.error(e.getMessage());
+        ErrorCode errorCode = ErrorCode.NOT_EXPIRED_TOKEN_YET;
+        return ResponseEntity.status(errorCode.getStatus()).body(new ExceptionCode(errorCode));
+    }
+
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ExceptionCode> handleExpiredRefreshTokenException(ExpiredJwtException e) {
@@ -78,12 +92,14 @@ public class ApiException extends RuntimeException {
 
     @ExceptionHandler(SignatureException.class)
     public ResponseEntity<ExceptionCode> handleRefreshSignException(SignatureException e) {
+        log.error(e.getMessage());
         ErrorCode errorCode = ErrorCode.REFRESH_SIGNATURE_NOT_MATCH;
         return ResponseEntity.status(errorCode.getStatus()).body(new ExceptionCode(errorCode));
     }
 
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<ExceptionCode> handleRefreshTokenException(JwtException e) {
+        log.error(e.getMessage());
         ErrorCode errorCode = ErrorCode.INVALID_TOKEN;
         return ResponseEntity.status(errorCode.getStatus()).body(new ExceptionCode(errorCode));
     }
