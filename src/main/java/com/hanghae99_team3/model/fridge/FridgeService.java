@@ -13,6 +13,11 @@ public class FridgeService {
 
     private final FridgeRepository fridgeRepository;
 
+    public List<Fridge> getFridge(User user) {
+
+        return fridgeRepository.findAllByUser(user);
+    }
+
     public void createFridge(List<FridgeRequestDto> fridgeRequestDtoList, User user){
 
         fridgeRequestDtoList.forEach(fridgeRequestDto -> {

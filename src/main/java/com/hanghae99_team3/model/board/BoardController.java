@@ -10,6 +10,7 @@ import com.hanghae99_team3.model.board.dto.response.BoardResponseDto;
 import com.hanghae99_team3.model.board.service.BoardDocumentService;
 import com.hanghae99_team3.model.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -38,9 +39,9 @@ public class BoardController {
 //    }
 
     @GetMapping("/api/boards")
-    public List<BoardResponseDto> getAllBoardDocument(Pageable pageable){
-        return boardDocumentService.getAllBoardDocument(pageable).stream()
-                .map(BoardResponseDto::new).collect(Collectors.toList());
+    public Page<BoardResponseDto> getAllBoardDocument(Pageable pageable){
+        return boardDocumentService.getAllBoardDocument(pageable)
+                .map(BoardResponseDto::new);
     }
 
 //    @GetMapping("/api/boards/resource")

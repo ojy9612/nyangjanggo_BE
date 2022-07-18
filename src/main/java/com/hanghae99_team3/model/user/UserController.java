@@ -1,6 +1,7 @@
 package com.hanghae99_team3.model.user;
 
 import com.hanghae99_team3.model.fridge.dto.FridgeRequestDto;
+import com.hanghae99_team3.model.fridge.dto.FridgeResponseDto;
 import com.hanghae99_team3.model.user.domain.UserRole;
 import com.hanghae99_team3.model.user.dto.*;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
@@ -10,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -41,6 +43,12 @@ public class UserController {
     @DeleteMapping("/api/user")
     public void deleteUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         userService.deleteUser(principalDetails);
+    }
+
+    @GetMapping("/api/user/fridge")
+    public List<FridgeResponseDto> getFridge(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        return userService.getFridge(principalDetails).stream()
+                .map(FridgeResponseDto::new).collect(Collectors.toList());
     }
 
     @PostMapping("/api/user/fridge")
