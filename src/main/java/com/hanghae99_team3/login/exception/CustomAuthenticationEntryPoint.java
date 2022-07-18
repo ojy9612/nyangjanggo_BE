@@ -21,6 +21,9 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             AuthenticationException authException
     ) throws IOException, ServletException {
         ErrorCode errorCode = (ErrorCode) request.getAttribute("exception");
+        if (errorCode == null) {
+            errorCode = ErrorCode.ACCESS_TOKEN_NOT_EXIST;
+        }
         sendErrorResponse(response, errorCode);
     }
 
