@@ -1,7 +1,7 @@
 package com.hanghae99_team3.model.resource.domain;
 
 import com.hanghae99_team3.model.Timestamped;
-import com.hanghae99_team3.model.board.Board;
+import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,14 +36,14 @@ public class Resource extends Timestamped {
     @Builder
     public Resource(@NotNull ResourceRequestDto resourceRequestDto,
                     @NotNull Board board) {
-        this.resourceName = resourceRequestDto.getResourcename();
+        this.resourceName = resourceRequestDto.getResourceName();
         this.amount = resourceRequestDto.getAmount();
         this.category = resourceRequestDto.getCategory();
         board.addResource(this);
     }
 
     public Resource(@NotNull ResourceRequestDto resourceRequestDto) {
-        this.resourceName = resourceRequestDto.getResourcename();
+        this.resourceName = resourceRequestDto.getResourceName();
         this.amount = resourceRequestDto.getAmount();
         this.category = resourceRequestDto.getCategory();
     }

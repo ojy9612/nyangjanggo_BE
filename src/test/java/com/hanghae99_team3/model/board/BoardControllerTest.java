@@ -2,19 +2,21 @@ package com.hanghae99_team3.model.board;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanghae99_team3.docs.BoardDocumentation;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepMain;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepRecipe;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepResource;
-import com.hanghae99_team3.model.recipestep.RecipeStepService;
+import com.hanghae99_team3.login.jwt.JwtTokenProvider;
+import com.hanghae99_team3.login.jwt.PrincipalDetails;
+import com.hanghae99_team3.model.board.domain.Board;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepRecipe;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepResource;
+import com.hanghae99_team3.model.board.repository.BoardRepository;
+import com.hanghae99_team3.model.board.service.BoardDocumentService;
+import com.hanghae99_team3.model.board.service.BoardService;
 import com.hanghae99_team3.model.recipestep.dto.RecipeStepRequestDto;
-import com.hanghae99_team3.model.resource.service.ResourceService;
 import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;
 import com.hanghae99_team3.model.user.domain.AuthProvider;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.domain.UserRole;
 import com.hanghae99_team3.security.MockSpringSecurityFilter;
-import com.hanghae99_team3.login.jwt.JwtTokenProvider;
-import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,14 +44,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -62,8 +64,12 @@ class BoardControllerTest {
 
     MockMvc mockMvc;
     @MockBean JwtTokenProvider jwtTokenProvider;
-    @MockBean BoardService boardService;
-    @MockBean BoardRepository boardRepository;
+    @MockBean
+    BoardService boardService;
+    @MockBean
+    BoardDocumentService boardDocumentService;
+    @MockBean
+    BoardRepository boardRepository;
     final String accessToken = "JwtAccessToken";
     User baseUser;
     Principal mockPrincipal;

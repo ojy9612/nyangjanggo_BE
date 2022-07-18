@@ -1,11 +1,12 @@
-package com.hanghae99_team3.model.board;
+package com.hanghae99_team3.model.board.service;
 
 
 import com.hanghae99_team3.exception.newException.IdDuplicateException;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepMain;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepRecipe;
-import com.hanghae99_team3.model.board.dto.BoardRequestDtoStepResource;
-import com.hanghae99_team3.model.board.dto.BoardResponseDto;
+import com.hanghae99_team3.model.board.domain.Board;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepRecipe;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepResource;
+import com.hanghae99_team3.model.board.repository.BoardRepository;
 import com.hanghae99_team3.model.recipestep.RecipeStepService;
 import com.hanghae99_team3.model.resource.service.ResourceService;
 import com.hanghae99_team3.model.s3.AwsS3Service;
@@ -20,9 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static com.hanghae99_team3.exception.ErrorMessage.BOARD_NOT_FOUND;
 import static com.hanghae99_team3.exception.ErrorMessage.ID_DUPLICATE;
@@ -33,6 +32,7 @@ import static com.hanghae99_team3.exception.ErrorMessage.ID_DUPLICATE;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final BoardDocumentService boardDocumentService;
     private final UserService userService;
     private final AwsS3Service awsS3Service;
     private final ResourceService resourceService;
@@ -49,16 +49,9 @@ public class BoardService {
         return this.findBoardById(boardId);
     }
 
-    public Page<BoardResponseDto> getAllBoards(Pageable pageable) {
+    public Page<Board> getAllBoards(Pageable pageable) {
 
-
-        Page<Board> all = boardRepository.findAll(pageable);
-        List<Board> content1 = all.getContent();
-        Page<BoardResponseDto> map1 = boardRepository.findAll(pageable)
-                .map(BoardResponseDto::new);
-        List<BoardResponseDto> content = map1.getContent();
-
-        return map1;
+        return boardRepository.findAll(pageable);
     }
 
 
@@ -117,6 +110,8 @@ public class BoardService {
         if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
 
         board.setStatus("complete");
+
+        boardDocumentService.createBoard(board);
     }
 
 

@@ -1,6 +1,6 @@
 package com.hanghae99_team3.model.good;
 
-import com.hanghae99_team3.model.board.Board;
+import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

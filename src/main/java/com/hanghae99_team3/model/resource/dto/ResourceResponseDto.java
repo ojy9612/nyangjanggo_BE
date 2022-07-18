@@ -16,17 +16,10 @@ public class ResourceResponseDto {
     private String amount;
     private String category;
 
-    @Builder(builderMethodName = "Resource")
+    @Builder
     public ResourceResponseDto(@NotNull Resource resource) {
         this.resourcename = resource.getResourceName();
         this.amount = resource.getAmount();
         this.category = resource.getCategory();
     }
-    @Builder(builderMethodName = "ResourceDocument")
-    public ResourceResponseDto(@NotNull ResourceDocument resourceDocument) {
-        this.resourcename = resourceDocument.getResourcename();
-        this.amount = resourceDocument.getAmount();
-        this.category = resourceDocument.getCategory();
-    }
-
 }
