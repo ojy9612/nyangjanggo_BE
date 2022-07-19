@@ -75,6 +75,18 @@ public class BoardController {
 //        return boardService.getByResource(searchWord,pageable).map(BoardResponseDto::new);
 //    }
 
+    @PostMapping("/api/board/image")
+    public Map<String, String> createImage(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                           @RequestPart MultipartFile multipartFile,
+                                           @RequestParam Long boardId){
+
+        Map<String, String> result = new HashMap<>();
+        result.put("imageLink",
+                boardService.createImage(multipartFile, boardId)
+        );
+        return result;
+    }
+
     @GetMapping(value = "/api/board/step/0")
     public BoardDetailResponseDto createBoardStepStart(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 

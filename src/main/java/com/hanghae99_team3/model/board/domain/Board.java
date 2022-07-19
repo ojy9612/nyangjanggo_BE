@@ -5,6 +5,7 @@ import com.hanghae99_team3.model.Timestamped;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
 import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.good.Good;
+import com.hanghae99_team3.model.images.Images;
 import com.hanghae99_team3.model.recipestep.RecipeStep;
 import com.hanghae99_team3.model.resource.domain.Resource;
 import com.hanghae99_team3.model.user.domain.User;
@@ -50,10 +51,8 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<Good> goodList = new ArrayList<>();
 
-/*
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<Images> imagesList = new ArrayList<>();
-*/
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<Resource> resourceList = new ArrayList<>();
@@ -71,12 +70,10 @@ public class Board extends Timestamped {
         this.goodList.add(good);
     }
 
-/*
     public void addImages(Images images) {
         images.setBoard(this);
         this.imagesList.add(images);
     }
-*/
 
     public void addResource(Resource resource) {
         resource.setBoard(this);
