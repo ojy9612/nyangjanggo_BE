@@ -1,7 +1,6 @@
 package com.hanghae99_team3.model.resource.dto;
 
 import com.hanghae99_team3.model.resource.domain.Resource;
-import com.hanghae99_team3.model.resource.domain.ResourceDocument;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
