@@ -53,7 +53,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private String makeRedirectUrl(TokenDto tokenDto, Boolean isNew) {
 
-        return UriComponentsBuilder.fromUriString("https://nyangjanggo.com/oauth2/redirect/")
+        return UriComponentsBuilder.fromUriString("http://nyangjanggo.com/oauth2/redirect/")
                 .queryParam("Access-Token", tokenDto.getAccessToken())
                 .queryParam("expireDate", tokenDto.getAccessTokenExpireDate())
                 .queryParam("isNew", isNew.toString())
