@@ -29,7 +29,7 @@ public class Images extends Timestamped {
     @Builder
     public Images(@NotNull String imageLink, @NotNull Board board) {
         this.imageLink = imageLink;
-//        board.addImages(this);
+        board.addImages(this);
     }
 
 }

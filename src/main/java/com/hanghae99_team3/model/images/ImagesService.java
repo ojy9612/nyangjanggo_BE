@@ -15,20 +15,18 @@ public class ImagesService {
     private final ImagesRepository imagesRepository;
     private final AwsS3Service awsS3Service;
 
-    public void createImages(List<MultipartFile> multipartFileList, Board board) {
+    public String createImages(MultipartFile multipartFile, Board board) {
 
-        multipartFileList.forEach(multipartFile -> {
-            String imgLink = awsS3Service.uploadFile(multipartFile);
-            if (!imgLink.equals("")) {
-                Images images = Images.builder()
-                        .imageLink(imgLink)
-                        .board(board)
-                        .build();
+        String imgLink = awsS3Service.uploadFile(multipartFile);
+        if (!imgLink.equals("")) {
+            Images images = Images.builder()
+                    .imageLink(imgLink)
+                    .board(board)
+                    .build();
 
-                imagesRepository.save(images);
-            }
-        });
-
+            return imagesRepository.save(images).getImageLink();
+        }
+        throw new IllegalArgumentException("올바른 이미지파일이 아니에요 윤교님.");
     }
 
     public void removeImages(Board board) {
