@@ -85,10 +85,12 @@ public class WebSecurityConfig {
                 // preAuth 로 refactor 할 것
                 .and()
                     .authorizeRequests() // 요청에 대한 사용권한 체크
+                    .antMatchers("/").permitAll()
                     .antMatchers("/api/boards/**").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/board/**").permitAll()
                     .antMatchers("/refresh/**").permitAll()
                     .antMatchers("/docs/**").permitAll()
+//                    .antMatchers("/oauth2").permitAll()
                     .anyRequest().hasAnyRole("USER", "ADMIN")
 
 
