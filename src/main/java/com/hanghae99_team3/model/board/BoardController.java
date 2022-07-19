@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,6 +33,17 @@ public class BoardController {
         return new BoardDetailResponseDto(boardService.getOneBoard(boardId));
     }
 
+    @GetMapping("/api/board/title/recommend")
+    public List<String> recommendBoardDocumentByTitle(@RequestParam String titleWords){
+        return boardDocumentService.recommendBoardDocumentByTitle(titleWords);
+    }
+
+    @GetMapping("/api/boards/title")
+    public Page<BoardResponseDto> getBoardDocumentsByTitle(@RequestParam String titleWords,
+                                                           Pageable pageable){
+        return boardDocumentService.getBoardDocumentsByTitle(titleWords,pageable).map(BoardResponseDto::new);
+    }
+
     @GetMapping("/api/boards")
     public Page<BoardResponseDto> getAllBoards(@PageableDefault(size = 3) Pageable pageable) {
         return boardService.getAllBoards(pageable).map(BoardResponseDto::new);
@@ -44,6 +54,7 @@ public class BoardController {
         return boardDocumentService.getAllBoardDocument(pageable)
                 .map(BoardResponseDto::new);
     }
+
 
 //    @GetMapping("/api/boards/resource")
 //    public Page<BoardResponseDto> getByResource(@RequestParam String searchWord,
