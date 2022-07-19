@@ -88,6 +88,7 @@ public class WebSecurityConfig {
                     .antMatchers("/api/boards/**").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/board/**").permitAll()
                     .antMatchers("/refresh/**").permitAll()
+                    .antMatchers("/docs/**").permitAll()
                     .anyRequest().hasAnyRole("USER", "ADMIN")
 
 
