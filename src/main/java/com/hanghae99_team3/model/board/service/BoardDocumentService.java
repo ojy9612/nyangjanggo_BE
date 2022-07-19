@@ -37,6 +37,20 @@ public class BoardDocumentService {
         return boardRepository.findAllByIdIn(boardIdList, pageable);
     }
 
+    public Page<Board> getBoardDocumentsByTitle(String titleWords, Pageable pageable) {
+
+        List<Long> boardIdList = boardSearchRepository.findByTitle(titleWords).stream()
+                .map(BoardDocument::getId).collect(Collectors.toList());
+
+        return boardRepository.findAllByIdIn(boardIdList,pageable);
+    }
+
+    public List<String> recommendBoardDocumentByTitle(String titleWords) {
+
+        return boardSearchRepository.findByTitle(titleWords).stream()
+                .map(BoardDocument::getTitle).collect(Collectors.toList());
+    }
+
 //    public Page<Board> getByResource(String searchWord,Pageable pageable) {
 //
 //        Set<Long> boardIdSet = resourceSearchService.getByResourceName(searchWord);
