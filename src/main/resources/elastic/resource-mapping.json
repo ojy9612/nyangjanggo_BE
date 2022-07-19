@@ -1,50 +1,22 @@
 {
-
-      "properties": {
-        "amount": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "board_id": {
-          "type": "long"
-        },
-        "category": {
-          "type": "text",
-          "analyzer": "suggest_index_analyzer",
-          "search_analyzer": "suggest_search_analyzer",
-          "fields": {
-
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "createdAt": {
-          "type": "date"
-        },
-        "id": {
-          "type": "long"
-        },
-        "modifiedAt": {
-          "type": "date"
-        },
-        "resourceName": {
-          "type": "text",
-          "analyzer": "suggest_index_analyzer",
-          "search_analyzer": "suggest_search_analyzer",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
+  "properties": {
+    "id": {
+      "type": "long"
+    },
+    "cnt": {
+      "type": "integer"
+    },
+    "resourceName": {
+      "type": "text",
+      "analyzer": "suggest_index_analyzer",
+      "search_analyzer": "suggest_search_analyzer",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 256
         }
       }
     }
+  }
+}
 

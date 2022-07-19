@@ -1,6 +1,5 @@
 package com.hanghae99_team3.model.board.domain;
 
-import com.hanghae99_team3.model.resource.domain.ResourceDocument;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +18,7 @@ import static org.springframework.data.elasticsearch.annotations.DateFormat.epoc
 @Document(indexName = "board")
 @NoArgsConstructor
 @Mapping(mappingPath = "elastic/board-mapping.json")
-@Setting(settingPath = "elastic/board-setting.json")
+@Setting(settingPath = "elastic/nori-setting.json")
 public class BoardDocument {
 
     @Id
@@ -31,7 +30,7 @@ public class BoardDocument {
 
     private String status;
 
-    private List<ResourceDocument> resourceDocumentList = new ArrayList<>();
+    private List<ResourceInBoard> resourceInBoardList = new ArrayList<>();
 
     @Field(type = FieldType.Date, format = {date_hour_minute_second_millis, epoch_millis})
     private LocalDateTime createdAt;
@@ -44,8 +43,8 @@ public class BoardDocument {
         this.title = board.getTitle();
         this.content = board.getContent();
         this.status = board.getStatus();
-        this.resourceDocumentList = board.getResourceList().stream()
-                .map(ResourceDocument::new).collect(Collectors.toList());
+        this.resourceInBoardList = board.getResourceList().stream()
+                .map(ResourceInBoard::new).collect(Collectors.toList());
         this.createdAt = board.getCreatedAt();
         this.modifiedAt = board.getModifiedAt();
     }
