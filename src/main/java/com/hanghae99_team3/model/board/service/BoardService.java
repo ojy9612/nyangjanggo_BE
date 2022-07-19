@@ -7,6 +7,7 @@ import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepRecipe;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepResource;
 import com.hanghae99_team3.model.board.repository.BoardRepository;
+import com.hanghae99_team3.model.images.ImagesService;
 import com.hanghae99_team3.model.recipestep.RecipeStepService;
 import com.hanghae99_team3.model.resource.service.ResourceService;
 import com.hanghae99_team3.model.s3.AwsS3Service;
@@ -34,6 +35,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardDocumentService boardDocumentService;
     private final UserService userService;
+    private final ImagesService imagesService;
     private final AwsS3Service awsS3Service;
     private final ResourceService resourceService;
     private final RecipeStepService recipeStepService;
@@ -54,6 +56,12 @@ public class BoardService {
         return boardRepository.findAll(pageable);
     }
 
+
+    public String createImage(MultipartFile multipartFile, Long boardId) {
+        Board board = this.findBoardById(boardId);
+
+        return imagesService.createImages(multipartFile,board);
+    }
 
     public Optional<Board> createBoardStepStart(PrincipalDetails principalDetails) {
         User user = userService.findUserByAuthEmail(principalDetails);
