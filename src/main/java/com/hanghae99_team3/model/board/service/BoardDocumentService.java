@@ -35,6 +35,15 @@ public class BoardDocumentService {
         boardSearchRepository.save(boardDocument);
     }
 
+    public void updateBoard(Board board) {
+        this.deleteBoard(board);
+        this.createBoard(board);
+    }
+
+    public void deleteBoard(Board board){
+        boardSearchRepository.deleteById(board.getId());
+    }
+
     public Page<Board> getAllBoardDocument(Pageable pageable){
         List<Long> boardIdList = boardSearchRepository.findAll().stream()
                 .map(BoardDocument::getId).collect(Collectors.toList());
@@ -69,6 +78,7 @@ public class BoardDocumentService {
         return resourceSearchRepository.findAllByResourceNameAndCntGreaterThan(resourceName, 2).stream()
                 .map(ResourceKeywordDocument::getResourceName).collect(Collectors.toList());
     }
+
 
 //    public Page<Board> getByResource(String searchWord,Pageable pageable) {
 //

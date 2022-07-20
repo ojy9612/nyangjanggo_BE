@@ -101,6 +101,28 @@ public class BoardService {
         board.setStatus("modifying");
     }
 
+    @Transactional
+    public void updateBoard(PrincipalDetails principalDetails, Long boardId, BoardRequestDto boardRequestDto) {
+        User user = userService.findUserByAuthEmail(principalDetails);
+        Board board = this.findBoardById(boardId);
+        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
+
+        board.updateStepMain(boardRequestDto);
+        resourceService.updateResource(boardRequestDto.getResourceRequestDtoList(),board);
+        recipeStepService.updateRecipeStep(boardRequestDto.getRecipeStepRequestDtoList(),board);
+
+        boardDocumentService.updateBoard(board);
+        board.setStatus("complete");
+    }
+
+    public void deleteBoard(PrincipalDetails principalDetails, Long boardId) {
+        User user = userService.findUserByAuthEmail(principalDetails);
+        Board board = this.findBoardById(boardId);
+        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
+
+        boardDocumentService.deleteBoard(board);
+        boardRepository.delete(board);
+    }
 
 //    @Transactional
 //    public Long createBoardStepMain(BoardRequestDtoStepMain boardRequestDtoStepMain, MultipartFile multipartFile, PrincipalDetails principalDetails) {
@@ -201,13 +223,6 @@ public class BoardService {
 //
 //        recipeStepService.removeAndResortRecipeStep(board,stepNum);
 //    }
-//
-//    public void deleteBoard(PrincipalDetails principalDetails, Long boardId) {
-//        User user = userService.findUserByAuthEmail(principalDetails);
-//        Board board = this.findBoardById(boardId);
-//        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
-//
-//        boardRepository.delete(board);
-//    }
+
 
 }
