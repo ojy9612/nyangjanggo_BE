@@ -82,13 +82,18 @@ public class WebSecurityConfig {
                     .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                     .accessDeniedHandler(tokenAccessDeniedHandler)
 
-                // preAuth 로 refactor 할 것
+                // 권한 체크
                 .and()
-                    .authorizeRequests() // 요청에 대한 사용권한 체크
+                    .authorizeRequests()
+                    .antMatchers("/").permitAll()
                     .antMatchers("/api/boards/**").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/board/**").permitAll()
                     .antMatchers("/refresh/**").permitAll()
-                    .anyRequest().hasAnyRole("USER", "ADMIN")
+                    .antMatchers("/docs/**").permitAll()
+                    .antMatchers("/**").hasAnyRole("USER")
+//                    .anyRequest().permitAll()
+//                    .anyRequest().hasAnyRole("USER")
+
 
 
                 .and()
