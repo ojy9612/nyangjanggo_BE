@@ -3,9 +3,6 @@ package com.hanghae99_team3.model.board;
 
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.board.dto.BoardRequestDto;
-import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
-import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepRecipe;
-import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepResource;
 import com.hanghae99_team3.model.board.dto.response.BoardDetailResponseDto;
 import com.hanghae99_team3.model.board.dto.response.BoardResponseDto;
 import com.hanghae99_team3.model.board.service.BoardDocumentService;
@@ -97,12 +94,22 @@ public class BoardController {
     }
 
     @PostMapping("/api/board/temp")
+    public void createTempBoard(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                            @RequestParam Long boardId,
+                            @RequestPart BoardRequestDto boardRequestDto){
+
+        boardService.createTempBoard(principalDetails,boardId,boardRequestDto);
+    }
+
+    @PostMapping("/api/board")
     public void createBoard(@AuthenticationPrincipal PrincipalDetails principalDetails,
                             @RequestParam Long boardId,
                             @RequestPart BoardRequestDto boardRequestDto){
 
         boardService.createBoard(principalDetails,boardId,boardRequestDto);
     }
+
+
 
 //
 //    @PostMapping(value = "/api/board/step/1")

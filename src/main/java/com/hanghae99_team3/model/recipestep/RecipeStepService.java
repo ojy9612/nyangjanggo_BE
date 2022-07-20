@@ -29,35 +29,14 @@ public class RecipeStepService {
         });
     }
 
-//    public void updateStep(Board board,
-////                           RecipeStepRequestDto recipeStepRequestDto){
-////        List<RecipeStep> recipeStepList = recipeStepRepository.findAllByBoard(board);
-////
-////        recipeStepList.forEach(recipeStep -> {
-////            if (recipeStep.getStepNum().equals(recipeStepRequestDto.getStepNum()))
-////                recipeStep.updateRecipeStep(recipeStepRequestDto);
-////        });
-////    }
-////
-////    public void removeAndResortRecipeStep(Board board, Integer step){
-////        List<RecipeStep> recipeStepList = recipeStepRepository.findAllByBoard(board);
-////
-////        recipeStepList.forEach(recipeStep -> {
-////            Integer stepNum = recipeStep.getStepNum();
-////            if (stepNum.equals(step)){
-////                recipeStepRepository.delete(recipeStep);
-////            }
-////            else if (stepNum > step){
-////                recipeStep.setStepNum(stepNum - 1);
-////            }
-////        });
-////    }
-////
-////    public void removeAllRecipeStep(Board board) {
-////        List<RecipeStep> recipeStepList = recipeStepRepository.findAllByBoard(board);
-////
-////        recipeStepList.forEach(recipeStep -> awsS3Service.deleteFile(recipeStep.getImageLink()));
-////
-////        recipeStepRepository.deleteAll(recipeStepList);
-////    }
+    public void updateRecipeStep(List<RecipeStepRequestDto> recipeStepRequestDtoList, Board board){
+        this.removeAllRecipeStep(board);
+        this.createRecipeStep(recipeStepRequestDtoList,board);
+    }
+
+
+    public void removeAllRecipeStep(Board board) {
+        List<RecipeStep> recipeStepList = recipeStepRepository.findAllByBoard(board);
+        recipeStepRepository.deleteAll(recipeStepList);
+    }
 }
