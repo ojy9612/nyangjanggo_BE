@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
@@ -19,7 +18,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     Page<Board> findAllByIdIn(List<Long> boardIdSet, Pageable pageable);
 
-    Optional<Board> findByMainImage(String imageLink);
+    Optional<Board> findByMainImageLink(String imageLink);
 
     Optional<Board> findByUserAndStatus(User user, String status);
 }
