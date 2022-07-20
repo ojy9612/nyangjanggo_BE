@@ -86,6 +86,7 @@ public class WebSecurityConfig {
                 .and()
                     .authorizeRequests() // 요청에 대한 사용권한 체크
                     .antMatchers("/").permitAll()
+                    .antMatchers("/login/**").permitAll()
                     .antMatchers("/api/boards/**").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/board/**").permitAll()
                     .antMatchers("/refresh/**").permitAll()
