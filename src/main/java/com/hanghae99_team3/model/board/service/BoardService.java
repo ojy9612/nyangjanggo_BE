@@ -68,7 +68,7 @@ public class BoardService {
         if (optionalBoard.isPresent()){
             return optionalBoard.get();
         }else{
-            Board board = Board.EmptyBuilder().user(user).build();
+            Board board = Board.emptyBuilder().user(user).build();
             return boardRepository.save(board);
         }
     }
