@@ -33,6 +33,6 @@ public class ResourceKeywordDocument {
     public ResourceKeywordDocument(Resource resource) {
         this.id = resource.getId();
         this.resourceName = resource.getResourceName();
-        this.cnt = 0;
+        this.cnt = 1;
     }
 }

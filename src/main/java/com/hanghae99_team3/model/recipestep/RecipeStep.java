@@ -35,19 +35,17 @@ public class RecipeStep extends Timestamped {
 
     @Builder
     public RecipeStep(@NotNull RecipeStepRequestDto recipeStepRequestDto,
-                      String imageLink,
                       @NotNull Board board) {
         this.stepNum = recipeStepRequestDto.getStepNum();
         this.content = recipeStepRequestDto.getStepContent();
-        this.imageLink = imageLink;
+        this.imageLink = recipeStepRequestDto.getImageLink();
         board.addRecipeStep(this);
     }
 
-    public void updateRecipeStep(@NotNull RecipeStepRequestDto recipeStepRequestDto,
-                                 String imageLink){
+    public void updateRecipeStep(@NotNull RecipeStepRequestDto recipeStepRequestDto){
         this.stepNum = recipeStepRequestDto.getStepNum();
         this.content = recipeStepRequestDto.getStepContent();
-        this.imageLink = imageLink;
+        this.imageLink = recipeStepRequestDto.getImageLink();
     }
 
 }

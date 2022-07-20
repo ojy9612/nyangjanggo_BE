@@ -37,7 +37,7 @@ public class BoardResponseDto {
         this.title = board.getTitle();
         this.subTitle = board.getSubTitle();
         this.content = board.getContent();
-        this.mainImg = board.getMainImage();
+        this.mainImg = board.getMainImageLink();
         this.commentCount = board.getCommentList().size();
         this.goodCount = board.getGoodList().size();
         this.resourceResponseDtoList = board.getResourceList().stream().map(ResourceResponseDto::new).collect(Collectors.toList());

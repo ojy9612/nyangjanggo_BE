@@ -3,6 +3,7 @@ package com.hanghae99_team3.model.board.service;
 
 import com.hanghae99_team3.exception.newException.IdDuplicateException;
 import com.hanghae99_team3.model.board.domain.Board;
+import com.hanghae99_team3.model.board.dto.BoardRequestDto;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepRecipe;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepResource;
@@ -36,7 +37,6 @@ public class BoardService {
     private final BoardDocumentService boardDocumentService;
     private final UserService userService;
     private final ImagesService imagesService;
-    private final AwsS3Service awsS3Service;
     private final ResourceService resourceService;
     private final RecipeStepService recipeStepService;
 
@@ -57,124 +57,140 @@ public class BoardService {
     }
 
 
+    @Transactional
     public String createImage(MultipartFile multipartFile, Long boardId) {
         Board board = this.findBoardById(boardId);
 
         return imagesService.createImages(multipartFile,board);
     }
 
-    public Optional<Board> createBoardStepStart(PrincipalDetails principalDetails) {
+    public Board checkModifyingBoard(PrincipalDetails principalDetails) {
         User user = userService.findUserByAuthEmail(principalDetails);
-
-        return boardRepository.findByUserAndStatusStartsWith(user,"step");
+        return boardRepository.findByUserAndStatus(user,"modifying")
+                .orElseGet(()->Board.EmptyBuilder().user(user).build());
     }
 
-    @Transactional
-    public Long createBoardStepMain(BoardRequestDtoStepMain boardRequestDtoStepMain, MultipartFile multipartFile, PrincipalDetails principalDetails) {
-        User user = userService.findUserByAuthEmail(principalDetails);
-
-        Board board = Board.builder()
-                .user(user)
-                .boardRequestDtoStepMain(boardRequestDtoStepMain)
-                .mainImage(awsS3Service.uploadFile(multipartFile))
-                .status("step 1")
-                .build();
-
-        boardRepository.save(board);
-
-        return board.getId();
-    }
 
     @Transactional
-    public Long createBoardStepResource(BoardRequestDtoStepResource boardRequestDtoStepResource, PrincipalDetails principalDetails) {
-        User user = userService.findUserByAuthEmail(principalDetails);
-        Board board = this.findBoardById(boardRequestDtoStepResource.getBoardId());
-        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
-
-        resourceService.createResource(boardRequestDtoStepResource.getResourceRequestDtoList(),board);
-
-        board.setStatus("step 2");
-
-        return board.getId();
-    }
-
-    @Transactional
-    public Long createBoardStepRecipe(BoardRequestDtoStepRecipe boardRequestDtoStepRecipe, MultipartFile multipartFile, PrincipalDetails principalDetails) {
-        User user = userService.findUserByAuthEmail(principalDetails);
-        Board board = this.findBoardById(boardRequestDtoStepRecipe.getBoardId());
-        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
-
-        recipeStepService.createRecipeStep(boardRequestDtoStepRecipe.getRecipeStepRequestDto(),multipartFile, board);
-
-        board.setStatus("step 3");
-
-        return board.getId();
-    }
-
-    @Transactional
-    public void createBoardStepEnd(Long boardId, PrincipalDetails principalDetails) {
+    public void createBoard(PrincipalDetails principalDetails, Long boardId, BoardRequestDto boardRequestDto) {
         User user = userService.findUserByAuthEmail(principalDetails);
         Board board = this.findBoardById(boardId);
         if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
 
-        board.setStatus("complete");
+        board.updateStepMain(boardRequestDto);
+        resourceService.createResource(boardRequestDto.getResourceRequestDtoList(),board);
+        recipeStepService.createRecipeStep(boardRequestDto.getRecipeStepRequestDtoList(),board);
 
         boardDocumentService.createBoard(board);
+        board.setStatus("complete");
     }
-
-
-    @Transactional
-    public Long updateBoardStepMain(Long boardId,BoardRequestDtoStepMain boardRequestDtoStepMain, MultipartFile multipartFile, PrincipalDetails principalDetails) {
-        User user = userService.findUserByAuthEmail(principalDetails);
-        Board board = this.findBoardById(boardId);
-        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
-
-        if (Objects.equals(multipartFile.getOriginalFilename(), "")){
-            awsS3Service.deleteFile(board.getMainImage());
-            board.updateStepMain(boardRequestDtoStepMain,awsS3Service.uploadFile(multipartFile));
-            return board.getId();
-        }
-
-        board.updateStepMain(boardRequestDtoStepMain,board.getMainImage());
-        return board.getId();
-    }
-
-    @Transactional
-    public Long updateBoardStepResource(BoardRequestDtoStepResource boardRequestDtoStepResource, PrincipalDetails principalDetails) {
-        User user = userService.findUserByAuthEmail(principalDetails);
-        Board board = this.findBoardById(boardRequestDtoStepResource.getBoardId());
-        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
-
-        resourceService.updateResource(boardRequestDtoStepResource.getResourceRequestDtoList(),board);
-
-        return board.getId();
-    }
-
-    @Transactional
-    public Long updateBoardStepRecipe(BoardRequestDtoStepRecipe boardRequestDtoStepRecipe, MultipartFile multipartFile, PrincipalDetails principalDetails) {
-        User user = userService.findUserByAuthEmail(principalDetails);
-        Board board = this.findBoardById(boardRequestDtoStepRecipe.getBoardId());
-        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
-
-        recipeStepService.updateStep(board,boardRequestDtoStepRecipe.getRecipeStepRequestDto(),multipartFile);
-
-        return board.getId();
-    }
-
-    public void deleteRecipeStep(Long boardId, Integer stepNum, PrincipalDetails principalDetails) {
-        User user = userService.findUserByAuthEmail(principalDetails);
-        Board board = this.findBoardById(boardId);
-        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
-
-        recipeStepService.removeAndResortRecipeStep(board,stepNum);
-    }
-
-    public void deleteBoard(PrincipalDetails principalDetails, Long boardId) {
-        User user = userService.findUserByAuthEmail(principalDetails);
-        Board board = this.findBoardById(boardId);
-        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
-
-        boardRepository.delete(board);
-    }
+//
+//    @Transactional
+//    public Long createBoardStepMain(BoardRequestDtoStepMain boardRequestDtoStepMain, MultipartFile multipartFile, PrincipalDetails principalDetails) {
+//        User user = userService.findUserByAuthEmail(principalDetails);
+//
+//        Board board = Board.builder()
+//                .user(user)
+//                .boardRequestDtoStepMain(boardRequestDtoStepMain)
+//                .mainImage(awsS3Service.uploadFile(multipartFile))
+//                .status("step 1")
+//                .build();
+//
+//        boardRepository.save(board);
+//
+//        return board.getId();
+//    }
+//
+//    @Transactional
+//    public Long createBoardStepResource(BoardRequestDtoStepResource boardRequestDtoStepResource, PrincipalDetails principalDetails) {
+//        User user = userService.findUserByAuthEmail(principalDetails);
+//        Board board = this.findBoardById(boardRequestDtoStepResource.getBoardId());
+//        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
+//
+//        resourceService.createResource(boardRequestDtoStepResource.getResourceRequestDtoList(),board);
+//
+//        board.setStatus("step 2");
+//
+//        return board.getId();
+//    }
+//
+//    @Transactional
+//    public Long createBoardStepRecipe(BoardRequestDtoStepRecipe boardRequestDtoStepRecipe, MultipartFile multipartFile, PrincipalDetails principalDetails) {
+//        User user = userService.findUserByAuthEmail(principalDetails);
+//        Board board = this.findBoardById(boardRequestDtoStepRecipe.getBoardId());
+//        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
+//
+//        recipeStepService.createRecipeStep(boardRequestDtoStepRecipe.getRecipeStepRequestDto(),multipartFile, board);
+//
+//        board.setStatus("step 3");
+//
+//        return board.getId();
+//    }
+//
+//    @Transactional
+//    public void createBoardStepEnd(Long boardId, PrincipalDetails principalDetails) {
+//        User user = userService.findUserByAuthEmail(principalDetails);
+//        Board board = this.findBoardById(boardId);
+//        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
+//
+//        board.setStatus("complete");
+//
+//        boardDocumentService.createBoard(board);
+//    }
+//
+//
+//    @Transactional
+//    public Long updateBoardStepMain(Long boardId,BoardRequestDtoStepMain boardRequestDtoStepMain, MultipartFile multipartFile, PrincipalDetails principalDetails) {
+//        User user = userService.findUserByAuthEmail(principalDetails);
+//        Board board = this.findBoardById(boardId);
+//        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
+//
+//        if (Objects.equals(multipartFile.getOriginalFilename(), "")){
+//            awsS3Service.deleteFile(board.getMainImageLink());
+//            board.updateStepMain(boardRequestDtoStepMain,awsS3Service.uploadFile(multipartFile));
+//            return board.getId();
+//        }
+//
+//        board.updateStepMain(boardRequestDtoStepMain,board.getMainImageLink());
+//        return board.getId();
+//    }
+//
+//    @Transactional
+//    public Long updateBoardStepResource(BoardRequestDtoStepResource boardRequestDtoStepResource, PrincipalDetails principalDetails) {
+//        User user = userService.findUserByAuthEmail(principalDetails);
+//        Board board = this.findBoardById(boardRequestDtoStepResource.getBoardId());
+//        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
+//
+//        resourceService.updateResource(boardRequestDtoStepResource.getResourceRequestDtoList(),board);
+//
+//        return board.getId();
+//    }
+//
+//    @Transactional
+//    public Long updateBoardStepRecipe(BoardRequestDtoStepRecipe boardRequestDtoStepRecipe, MultipartFile multipartFile, PrincipalDetails principalDetails) {
+//        User user = userService.findUserByAuthEmail(principalDetails);
+//        Board board = this.findBoardById(boardRequestDtoStepRecipe.getBoardId());
+//        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
+//
+//        recipeStepService.updateStep(board,boardRequestDtoStepRecipe.getRecipeStepRequestDto(),multipartFile);
+//
+//        return board.getId();
+//    }
+//
+//    public void deleteRecipeStep(Long boardId, Integer stepNum, PrincipalDetails principalDetails) {
+//        User user = userService.findUserByAuthEmail(principalDetails);
+//        Board board = this.findBoardById(boardId);
+//        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
+//
+//        recipeStepService.removeAndResortRecipeStep(board,stepNum);
+//    }
+//
+//    public void deleteBoard(PrincipalDetails principalDetails, Long boardId) {
+//        User user = userService.findUserByAuthEmail(principalDetails);
+//        Board board = this.findBoardById(boardId);
+//        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
+//
+//        boardRepository.delete(board);
+//    }
 
 }
