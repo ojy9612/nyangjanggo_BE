@@ -11,10 +11,14 @@ import javax.validation.constraints.NotNull;
 public class RecipeStepRequestDto {
     private Integer stepNum;
     private String stepContent;
+    private String imageLink;
 
     @Builder
-    public RecipeStepRequestDto(@NotNull Integer stepNum, @NotNull String stepContent) {
+    public RecipeStepRequestDto(@NotNull Integer stepNum,
+                                @NotNull String stepContent,
+                                String imageLink) {
         this.stepNum = stepNum;
         this.stepContent = stepContent;
+        this.imageLink = imageLink;
     }
 }

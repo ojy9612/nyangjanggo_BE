@@ -2,6 +2,7 @@ package com.hanghae99_team3.model.board;
 
 
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
+import com.hanghae99_team3.model.board.dto.BoardRequestDto;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepRecipe;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepResource;
@@ -87,110 +88,118 @@ public class BoardController {
         return result;
     }
 
-    @GetMapping(value = "/api/board/step/0")
-    public BoardDetailResponseDto createBoardStepStart(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    @PostMapping("/api/board/check")
+    public BoardDetailResponseDto checkModifyingBoard(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        return boardService.createBoardStepStart(principalDetails)
-                .map(BoardDetailResponseDto::new).orElse(null);
-
-    }
-
-    @PostMapping(value = "/api/board/step/1")
-    public Map<String, Long> createBoardStepMain(@RequestPart BoardRequestDtoStepMain boardRequestDtoStepMain,
-                                                 @RequestPart MultipartFile multipartFile,
-                                                 @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Map<String, Long> result = new HashMap<>();
-        result.put("boardId",
-                boardService.createBoardStepMain(boardRequestDtoStepMain, multipartFile, principalDetails)
+        return new BoardDetailResponseDto(
+                boardService.checkModifyingBoard(principalDetails)
         );
-        return result;
-
     }
 
-    @PostMapping(value = "/api/board/step/2")
-    public Map<String, Long> createBoardStepResource(@RequestPart BoardRequestDtoStepResource boardRequestDtoStepResource,
-                                                     @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    @PostMapping("/api/board/temp")
+    public void createBoard(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                            @RequestParam Long boardId,
+                            @RequestPart BoardRequestDto boardRequestDto){
 
-        Map<String, Long> result = new HashMap<>();
-        result.put("boardId",
-                boardService.createBoardStepResource(boardRequestDtoStepResource, principalDetails)
-        );
-        return result;
-
+        boardService.createBoard(principalDetails,boardId,boardRequestDto);
     }
 
-    @PostMapping(value = "/api/board/step/3")
-    public Map<String, Long> createBoardStepRecipe(@RequestPart BoardRequestDtoStepRecipe boardRequestDtoStepRecipe,
-                                                   @RequestPart MultipartFile multipartFile,
-                                                   @AuthenticationPrincipal PrincipalDetails principalDetails) {
-
-        Map<String, Long> result = new HashMap<>();
-        result.put("boardId",
-                boardService.createBoardStepRecipe(boardRequestDtoStepRecipe, multipartFile, principalDetails)
-        );
-        return result;
-
-    }
-
-    @PostMapping(value = "/api/board/step/-1")
-    public void createBoardStepEnd(@RequestPart Long boardId,
-                                   @AuthenticationPrincipal PrincipalDetails principalDetails) {
-
-        boardService.createBoardStepEnd(boardId, principalDetails);
-
-    }
-
-    @PutMapping("/api/board/step/1")
-    public Map<String, Long> updateBoardStepMain(@RequestPart Long boardId,
-                                                 @RequestPart BoardRequestDtoStepMain boardRequestDtoStepMain,
-                                                 @RequestPart MultipartFile multipartFile,
-                                                 @AuthenticationPrincipal PrincipalDetails principalDetails) {
-
-        Map<String, Long> result = new HashMap<>();
-        result.put("boardId",
-                boardService.updateBoardStepMain(boardId, boardRequestDtoStepMain, multipartFile, principalDetails)
-        );
-        return result;
-
-    }
-
-    @PutMapping("/api/board/step/2")
-    public Map<String, Long> updateBoardStepResource(@RequestPart BoardRequestDtoStepResource boardRequestDtoStepResource,
-                                                     @AuthenticationPrincipal PrincipalDetails principalDetails) {
-
-        Map<String, Long> result = new HashMap<>();
-        result.put("boardId",
-                boardService.updateBoardStepResource(boardRequestDtoStepResource, principalDetails)
-        );
-        return result;
-    }
-
-    @PutMapping("/api/board/step/3")
-    public Map<String, Long> updateBoardStepRecipe(@RequestPart BoardRequestDtoStepRecipe boardRequestDtoStepRecipe,
-                                                   @RequestPart MultipartFile multipartFile,
-                                                   @AuthenticationPrincipal PrincipalDetails principalDetails) {
-
-        Map<String, Long> result = new HashMap<>();
-        result.put("boardId",
-                boardService.updateBoardStepRecipe(boardRequestDtoStepRecipe, multipartFile, principalDetails)
-        );
-        return result;
-    }
-
-    @DeleteMapping("/api/board/step/3")
-    public void deleteRecipeStep(@RequestPart Long boardId,
-                                 @RequestPart Integer stepNum,
-                                 @AuthenticationPrincipal PrincipalDetails principalDetails) {
-
-        boardService.deleteRecipeStep(boardId, stepNum, principalDetails);
-    }
-
-    @DeleteMapping("/api/board/{boardId}")
-    public void deleteBoard(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                            @PathVariable Long boardId) {
-
-        boardService.deleteBoard(principalDetails, boardId);
-    }
+//
+//    @PostMapping(value = "/api/board/step/1")
+//    public Map<String, Long> createBoardStepMain(@RequestPart BoardRequestDtoStepMain boardRequestDtoStepMain,
+//                                                 @RequestPart MultipartFile multipartFile,
+//                                                 @AuthenticationPrincipal PrincipalDetails principalDetails) {
+//        Map<String, Long> result = new HashMap<>();
+//        result.put("boardId",
+//                boardService.createBoardStepMain(boardRequestDtoStepMain, multipartFile, principalDetails)
+//        );
+//        return result;
+//    }
+//
+//    @PostMapping(value = "/api/board/step/2")
+//    public Map<String, Long> createBoardStepResource(@RequestPart BoardRequestDtoStepResource boardRequestDtoStepResource,
+//                                                     @AuthenticationPrincipal PrincipalDetails principalDetails) {
+//
+//        Map<String, Long> result = new HashMap<>();
+//        result.put("boardId",
+//                boardService.createBoardStepResource(boardRequestDtoStepResource, principalDetails)
+//        );
+//        return result;
+//
+//    }
+//
+//    @PostMapping(value = "/api/board/step/3")
+//    public Map<String, Long> createBoardStepRecipe(@RequestPart BoardRequestDtoStepRecipe boardRequestDtoStepRecipe,
+//                                                   @RequestPart MultipartFile multipartFile,
+//                                                   @AuthenticationPrincipal PrincipalDetails principalDetails) {
+//
+//        Map<String, Long> result = new HashMap<>();
+//        result.put("boardId",
+//                boardService.createBoardStepRecipe(boardRequestDtoStepRecipe, multipartFile, principalDetails)
+//        );
+//        return result;
+//
+//    }
+//
+//    @PostMapping(value = "/api/board/step/-1")
+//    public void createBoardStepEnd(@RequestPart Long boardId,
+//                                   @AuthenticationPrincipal PrincipalDetails principalDetails) {
+//
+//        boardService.createBoardStepEnd(boardId, principalDetails);
+//
+//    }
+//
+//    @PutMapping("/api/board/step/1")
+//    public Map<String, Long> updateBoardStepMain(@RequestPart Long boardId,
+//                                                 @RequestPart BoardRequestDtoStepMain boardRequestDtoStepMain,
+//                                                 @RequestPart MultipartFile multipartFile,
+//                                                 @AuthenticationPrincipal PrincipalDetails principalDetails) {
+//
+//        Map<String, Long> result = new HashMap<>();
+//        result.put("boardId",
+//                boardService.updateBoardStepMain(boardId, boardRequestDtoStepMain, multipartFile, principalDetails)
+//        );
+//        return result;
+//
+//    }
+//
+//    @PutMapping("/api/board/step/2")
+//    public Map<String, Long> updateBoardStepResource(@RequestPart BoardRequestDtoStepResource boardRequestDtoStepResource,
+//                                                     @AuthenticationPrincipal PrincipalDetails principalDetails) {
+//
+//        Map<String, Long> result = new HashMap<>();
+//        result.put("boardId",
+//                boardService.updateBoardStepResource(boardRequestDtoStepResource, principalDetails)
+//        );
+//        return result;
+//    }
+//
+//    @PutMapping("/api/board/step/3")
+//    public Map<String, Long> updateBoardStepRecipe(@RequestPart BoardRequestDtoStepRecipe boardRequestDtoStepRecipe,
+//                                                   @RequestPart MultipartFile multipartFile,
+//                                                   @AuthenticationPrincipal PrincipalDetails principalDetails) {
+//
+//        Map<String, Long> result = new HashMap<>();
+//        result.put("boardId",
+//                boardService.updateBoardStepRecipe(boardRequestDtoStepRecipe, multipartFile, principalDetails)
+//        );
+//        return result;
+//    }
+//
+//    @DeleteMapping("/api/board/step/3")
+//    public void deleteRecipeStep(@RequestPart Long boardId,
+//                                 @RequestPart Integer stepNum,
+//                                 @AuthenticationPrincipal PrincipalDetails principalDetails) {
+//
+//        boardService.deleteRecipeStep(boardId, stepNum, principalDetails);
+//    }
+//
+//    @DeleteMapping("/api/board/{boardId}")
+//    public void deleteBoard(@AuthenticationPrincipal PrincipalDetails principalDetails,
+//                            @PathVariable Long boardId) {
+//
+//        boardService.deleteBoard(principalDetails, boardId);
+//    }
 
     @PostMapping("/test")
     public Map<String, String> test(@RequestPart MultipartFile multipartFile){

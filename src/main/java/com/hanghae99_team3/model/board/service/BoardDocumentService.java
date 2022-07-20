@@ -56,18 +56,18 @@ public class BoardDocumentService {
                 .map(BoardDocument::getTitle).collect(Collectors.toSet());
     }
 
-    public List<String> recommendResource(String resourceName) {
-
-        return resourceSearchRepository.findAllByResourceNameAndCntGreaterThan(resourceName, 2).stream()
-                .map(ResourceKeywordDocument::getResourceName).collect(Collectors.toList());
-    }
-
     public Page<Board> getBoardDocumentsByResource(String resourceNameWords, Pageable pageable) {
 
         List<Long> boardIdList = boardSearchRepository.searchByResourceNameWords(resourceNameWords).stream()
                 .map(BoardDocument::getId).collect(Collectors.toList());
 
         return boardRepository.findAllByIdIn(boardIdList,pageable);
+    }
+
+    public List<String> recommendResource(String resourceName) {
+
+        return resourceSearchRepository.findAllByResourceNameAndCntGreaterThan(resourceName, 2).stream()
+                .map(ResourceKeywordDocument::getResourceName).collect(Collectors.toList());
     }
 
 //    public Page<Board> getByResource(String searchWord,Pageable pageable) {
