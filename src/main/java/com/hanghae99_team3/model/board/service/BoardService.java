@@ -4,14 +4,10 @@ package com.hanghae99_team3.model.board.service;
 import com.hanghae99_team3.exception.newException.IdDuplicateException;
 import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.dto.BoardRequestDto;
-import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
-import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepRecipe;
-import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepResource;
 import com.hanghae99_team3.model.board.repository.BoardRepository;
 import com.hanghae99_team3.model.images.ImagesService;
 import com.hanghae99_team3.model.recipestep.RecipeStepService;
 import com.hanghae99_team3.model.resource.service.ResourceService;
-import com.hanghae99_team3.model.s3.AwsS3Service;
 import com.hanghae99_team3.model.user.UserService;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
@@ -64,10 +60,17 @@ public class BoardService {
         return imagesService.createImages(multipartFile,board);
     }
 
+    @Transactional
     public Board checkModifyingBoard(PrincipalDetails principalDetails) {
         User user = userService.findUserByAuthEmail(principalDetails);
-        return boardRepository.findByUserAndStatus(user,"modifying")
-                .orElseGet(()->Board.EmptyBuilder().user(user).build());
+        Optional<Board> optionalBoard = boardRepository.findByUserAndStatus(user, "modifying");
+
+        if (optionalBoard.isPresent()){
+            return optionalBoard.get();
+        }else{
+            Board board = Board.EmptyBuilder().user(user).build();
+            return boardRepository.save(board);
+        }
     }
 
 
@@ -84,7 +87,21 @@ public class BoardService {
         boardDocumentService.createBoard(board);
         board.setStatus("complete");
     }
-//
+
+    @Transactional
+    public void createTempBoard(PrincipalDetails principalDetails, Long boardId, BoardRequestDto boardRequestDto) {
+        User user = userService.findUserByAuthEmail(principalDetails);
+        Board board = this.findBoardById(boardId);
+        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
+
+        board.updateStepMain(boardRequestDto);
+        resourceService.updateResource(boardRequestDto.getResourceRequestDtoList(),board);
+        recipeStepService.updateRecipeStep(boardRequestDto.getRecipeStepRequestDtoList(),board);
+
+        board.setStatus("modifying");
+    }
+
+
 //    @Transactional
 //    public Long createBoardStepMain(BoardRequestDtoStepMain boardRequestDtoStepMain, MultipartFile multipartFile, PrincipalDetails principalDetails) {
 //        User user = userService.findUserByAuthEmail(principalDetails);
