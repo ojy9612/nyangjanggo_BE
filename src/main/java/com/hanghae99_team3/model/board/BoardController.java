@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,7 +56,7 @@ public class BoardController {
     }
 
     @GetMapping("/api/boards")
-    public Page<BoardResponseDto> getAllBoards(@PageableDefault(size = 3) Pageable pageable) {
+    public Page<BoardResponseDto> getAllBoards(Pageable pageable) {
         return boardService.getAllBoards(pageable).map(BoardResponseDto::new);
     }
 
@@ -86,11 +87,12 @@ public class BoardController {
     }
 
     @PostMapping("/api/board/check")
-    public BoardDetailResponseDto checkModifyingBoard(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<BoardDetailResponseDto> checkModifyingBoard(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        return new BoardDetailResponseDto(
+
+        return ResponseEntity.ok(new BoardDetailResponseDto(
                 boardService.checkModifyingBoard(principalDetails)
-        );
+        ));
     }
 
     @PutMapping("/api/board/temp")

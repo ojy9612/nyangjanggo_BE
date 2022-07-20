@@ -13,8 +13,7 @@ import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    @Override
-    Page<Board> findAll(Pageable pageable);
+    Page<Board> queryFirst5By(Pageable pageable);
 
     Page<Board> findAllByIdIn(List<Long> boardIdSet, Pageable pageable);
 

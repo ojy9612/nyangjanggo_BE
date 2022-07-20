@@ -46,7 +46,6 @@ public class WebSecurityConfig {
         return source;
     }
 
-
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         // h2-console 사용에 대한 허용 (CSRF, FrameOptions 무시)
