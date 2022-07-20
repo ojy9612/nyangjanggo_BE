@@ -49,7 +49,7 @@ public class BoardService {
 
     public Page<Board> getAllBoards(Pageable pageable) {
 
-        return boardRepository.findAll(pageable);
+        return boardRepository.queryFirst5By(pageable);
     }
 
 

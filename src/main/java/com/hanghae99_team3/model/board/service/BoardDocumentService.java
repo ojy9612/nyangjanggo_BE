@@ -44,7 +44,7 @@ public class BoardDocumentService {
     }
 
     public Page<Board> getAllBoardDocument(Pageable pageable){
-        List<Long> boardIdList = boardSearchRepository.findAll().stream()
+        List<Long> boardIdList = boardSearchRepository.findFirst2By().stream()
                 .map(BoardDocument::getId).collect(Collectors.toList());
 
         return boardRepository.findAllByIdIn(boardIdList, pageable);
