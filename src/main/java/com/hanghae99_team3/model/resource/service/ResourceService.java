@@ -53,11 +53,17 @@ public class ResourceService {
         List<String> resourceNameList = board.getResourceList().stream()
                 .map(Resource::getResourceName).collect(Collectors.toList());
 
-        resourceNameList.forEach(s ->
-                resourceSearchRepository.findByResourceName(s)
-                        .ifPresent(ResourceKeywordDocument::minusCnt)
-        );
+        resourceNameList.forEach(s -> {
+            resourceSearchRepository.findByResourceName(s).ifPresent(resourceKeywordDocument -> {
+                        resourceKeywordDocument.minusCnt();
+                        if (resourceKeywordDocument.getCnt() <= 0) {
+                            resourceSearchRepository.delete(resourceKeywordDocument);
+                        }
+                    }
+            );
+        });
 
         resourceRepository.deleteAll(resourceRepository.findAllByBoard(board));
     }
+
 }
