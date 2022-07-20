@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -78,7 +77,6 @@ public class BoardDocumentService {
         return resourceSearchRepository.findAllByResourceNameAndCntGreaterThan(resourceName, 2).stream()
                 .map(ResourceKeywordDocument::getResourceName).collect(Collectors.toList());
     }
-
 
 //    public Page<Board> getByResource(String searchWord,Pageable pageable) {
 //

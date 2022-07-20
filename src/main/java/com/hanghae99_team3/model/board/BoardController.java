@@ -117,9 +117,9 @@ public class BoardController {
         boardService.updateBoard(principalDetails,boardId,boardRequestDto);
     }
 
-    @DeleteMapping("/api/board/{boardId}")
+    @DeleteMapping("/api/board")
     public void deleteBoard(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                            @PathVariable Long boardId) {
+                            @RequestParam Long boardId) {
 
         boardService.deleteBoard(principalDetails, boardId);
     }
