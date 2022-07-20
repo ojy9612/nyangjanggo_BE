@@ -65,7 +65,7 @@ public class TokenService {
         String refreshToken = CookieUtil.getCookie(request, "Refresh-Token")
                 .map(Cookie::getValue)
                 .orElse((null));
-
+        log.info(refreshToken);
         if (refreshToken == null) {
             throw new RefreshTokenException("RefreshToken이 없습니다.");
         }
