@@ -21,5 +21,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     Optional<Board> findByMainImage(String imageLink);
 
-    Optional<Board> findByUserAndStatusStartsWith(User user, String status);
+    Optional<Board> findByUserAndStatus(User user, String status);
 }

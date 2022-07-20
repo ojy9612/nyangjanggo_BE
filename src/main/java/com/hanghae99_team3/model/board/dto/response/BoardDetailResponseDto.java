@@ -41,7 +41,7 @@ public class BoardDetailResponseDto {
         this.title = board.getTitle();
         this.subTitle = board.getSubTitle();
         this.content = board.getContent();
-        this.mainImg = board.getMainImage();
+        this.mainImg = board.getMainImageLink();
         this.resourceResponseDtoList = board.getResourceList().stream().map(ResourceResponseDto::new).collect(Collectors.toList());
         this.recipeStepResponseDtoList = board.getRecipeStepList().stream().map(RecipeStepResponseDto::new).collect(Collectors.toList());
         this.commentList = board.getCommentList().stream().map(CommentResponseDto::new).collect(Collectors.toList());

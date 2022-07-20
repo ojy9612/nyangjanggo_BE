@@ -2,6 +2,7 @@ package com.hanghae99_team3.model.board.domain;
 
 
 import com.hanghae99_team3.model.Timestamped;
+import com.hanghae99_team3.model.board.dto.BoardRequestDto;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
 import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.good.Good;
@@ -32,7 +33,7 @@ public class Board extends Timestamped {
     private String subTitle;
 
     @Column
-    private String mainImage;
+    private String mainImageLink;
 
     @Column
     private String content;
@@ -88,22 +89,26 @@ public class Board extends Timestamped {
     @Builder
     public Board(@NotNull User user,
                  @NotNull BoardRequestDtoStepMain boardRequestDtoStepMain,
-                 @NotNull String mainImage,
+                 @NotNull String mainImageLink,
                  @NotNull String status) {
         user.addBoard(this);
         this.title = boardRequestDtoStepMain.getTitle();
         this.subTitle = boardRequestDtoStepMain.getSubTitle();
         this.content = boardRequestDtoStepMain.getContent();
-        this.mainImage = mainImage;
+        this.mainImageLink = mainImageLink;
         this.status = status;
     }
 
-    public void updateStepMain(BoardRequestDtoStepMain boardRequestDtoStepMain,
-                               String mainImage) {
-        this.title = boardRequestDtoStepMain.getTitle();
-        this.subTitle = boardRequestDtoStepMain.getSubTitle();
-        this.content = boardRequestDtoStepMain.getContent();
-        this.mainImage = mainImage;
+    @Builder(builderMethodName = "EmptyBuilder")
+    public Board(@NotNull User user){
+        user.addBoard(this);
+    }
+
+    public void updateStepMain(BoardRequestDto boardRequestDto) {
+        this.title = boardRequestDto.getTitle();
+        this.subTitle = boardRequestDto.getSubTitle();
+        this.content = boardRequestDto.getContent();
+        this.mainImageLink = boardRequestDto.getMainImageLink();
     }
 
 
