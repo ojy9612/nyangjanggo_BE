@@ -93,7 +93,7 @@ public class BoardController {
         );
     }
 
-    @PostMapping("/api/board/temp")
+    @PutMapping("/api/board/temp")
     public void createTempBoard(@AuthenticationPrincipal PrincipalDetails principalDetails,
                             @RequestParam Long boardId,
                             @RequestPart BoardRequestDto boardRequestDto){
@@ -109,6 +109,20 @@ public class BoardController {
         boardService.createBoard(principalDetails,boardId,boardRequestDto);
     }
 
+    @PutMapping("/api/board")
+    public void updateBoard(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                            @RequestParam Long boardId,
+                            @RequestPart BoardRequestDto boardRequestDto){
+
+        boardService.updateBoard(principalDetails,boardId,boardRequestDto);
+    }
+
+    @DeleteMapping("/api/board/{boardId}")
+    public void deleteBoard(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                            @PathVariable Long boardId) {
+
+        boardService.deleteBoard(principalDetails, boardId);
+    }
 
 
 //
@@ -201,11 +215,6 @@ public class BoardController {
 //        boardService.deleteRecipeStep(boardId, stepNum, principalDetails);
 //    }
 //
-//    @DeleteMapping("/api/board/{boardId}")
-//    public void deleteBoard(@AuthenticationPrincipal PrincipalDetails principalDetails,
-//                            @PathVariable Long boardId) {
-//
-//        boardService.deleteBoard(principalDetails, boardId);
-//    }
+
 
 }
