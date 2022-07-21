@@ -68,131 +68,131 @@ include::{snippets}/put-updateFridge/request-body.adoc[]
 [[board-post]]
 === Board 하나 불러오기
 ==== curl request
-include::{snippets}/get-getOneBoard/curl-request.adoc[]
+include::{snippets}/R_getOneBoard/curl-request.adoc[]
 ==== response fields
-include::{snippets}/get-getOneBoard/response-fields.adoc[]
+include::{snippets}/R_getOneBoard/response-fields.adoc[]
 ==== response data
-include::{snippets}/get-getOneBoard/response-body.adoc[]
+include::{snippets}/R_getOneBoard/response-body.adoc[]
 
 === Board 전체 불러오기
-개발중입니다.
-//==== curl request
-//include::{snippets}/get-getAllBoards/curl-request.adoc[]
-//==== response fields
-//include::{snippets}/get-getAllBoards/response-fields.adoc[]
-//==== response data
-//include::{snippets}/get-getAllBoards/response-body.adoc[]
-
-=== Board 생성 0단계 - 작성중인 파일 있을 때
 ==== curl request
-include::{snippets}/get-createBoardStepStart/curl-request.adoc[]
-==== request header
-include::{snippets}/get-createBoardStepStart/request-headers.adoc[]
-==== request body
-include::{snippets}/get-createBoardStepStart/request-body.adoc[]
+include::{snippets}/R_getAllBoards/curl-request.adoc[]
+==== request parameter
+include::{snippets}/R_getAllBoards/request-parameters.adoc[]
 ==== response fields
-include::{snippets}/get-createBoardStepStart/response-fields.adoc[]
+include::{snippets}/R_getAllBoards/response-fields.adoc[]
 ==== response data
-include::{snippets}/get-createBoardStepStart/response-body.adoc[]
+include::{snippets}/R_getAllBoards/response-body.adoc[]
 
-=== Board 생성 1단계 - 게시글 정보 등록
+=== 재료 검색시 추천 검색어
 ==== curl request
-include::{snippets}/post-createBoardStepMain/curl-request.adoc[]
-==== request header
-include::{snippets}/post-createBoardStepMain/request-headers.adoc[]
-==== request body
-include::{snippets}/post-createBoardStepMain/request-parts.adoc[]
+include::{snippets}/R_recommendResource/curl-request.adoc[]
+==== request parameter
+include::{snippets}/R_recommendResource/request-parameters.adoc[]
 ==== response fields
-include::{snippets}/post-createBoardStepMain/response-fields.adoc[]
+include::{snippets}/R_recommendResource/response-fields.adoc[]
 ==== response data
-include::{snippets}/post-createBoardStepMain/response-body.adoc[]
+include::{snippets}/R_recommendResource/response-body.adoc[]
 
-=== Board 생성 2단계 - 재료 등록
+=== 게시글 제목 검색시 추천 검색어
 ==== curl request
-include::{snippets}/post-createBoardStepResource/curl-request.adoc[]
-==== request header
-include::{snippets}/post-createBoardStepResource/request-headers.adoc[]
-==== request fields
-include::{snippets}/post-createBoardStepResource/request-fields.adoc[]
-==== request data
-include::{snippets}/post-createBoardStepResource/request-body.adoc[]
+include::{snippets}/R_recommendBoardDocumentByTitle/curl-request.adoc[]
+==== request parameter
+include::{snippets}/R_recommendBoardDocumentByTitle/request-parameters.adoc[]
 ==== response fields
-include::{snippets}/post-createBoardStepResource/response-fields.adoc[]
+include::{snippets}/R_recommendBoardDocumentByTitle/response-fields.adoc[]
 ==== response data
-include::{snippets}/post-createBoardStepResource/response-body.adoc[]
+include::{snippets}/R_recommendBoardDocumentByTitle/response-body.adoc[]
 
-=== Board 생성 3단계 - 게시글 레시피 등록
+=== 재료기반 게시글 검색
 ==== curl request
-include::{snippets}/post-createBoardStepRecipe/curl-request.adoc[]
-==== request header
-include::{snippets}/post-createBoardStepRecipe/request-headers.adoc[]
-==== request body
-include::{snippets}/post-createBoardStepRecipe/request-parts.adoc[]
+include::{snippets}/R_getBoardDocumentsByResource/curl-request.adoc[]
+==== request parameter
+include::{snippets}/R_getBoardDocumentsByResource/request-parameters.adoc[]
 ==== response fields
-include::{snippets}/post-createBoardStepRecipe/response-fields.adoc[]
+include::{snippets}/R_getBoardDocumentsByResource/response-fields.adoc[]
 ==== response data
-include::{snippets}/post-createBoardStepRecipe/response-body.adoc[]
+include::{snippets}/R_getBoardDocumentsByResource/response-body.adoc[]
 
-=== Board 생성 4단계 - 게시글 등록
+=== 제목기반 게시글 검색
 ==== curl request
-include::{snippets}/post-createBoardStepEnd/curl-request.adoc[]
-==== request header
-include::{snippets}/post-createBoardStepEnd/request-headers.adoc[]
-==== request fields
-include::{snippets}/post-createBoardStepEnd/request-parts.adoc[]
-
-=== Board 수정 1단계 - 게시글 정보 수정
-==== curl request
-include::{snippets}/put-updateBoardStepMain/curl-request.adoc[]
-==== request header
-include::{snippets}/put-updateBoardStepMain/request-headers.adoc[]
-==== request body
-include::{snippets}/put-updateBoardStepMain/request-parts.adoc[]
+include::{snippets}/R_getBoardDocumentsByTitle/curl-request.adoc[]
+==== request parameter
+include::{snippets}/R_getBoardDocumentsByTitle/request-parameters.adoc[]
 ==== response fields
-include::{snippets}/put-updateBoardStepMain/response-fields.adoc[]
+include::{snippets}/R_getBoardDocumentsByTitle/response-fields.adoc[]
 ==== response data
-include::{snippets}/put-updateBoardStepMain/response-body.adoc[]
+include::{snippets}/R_getBoardDocumentsByTitle/response-body.adoc[]
 
-=== Board 수정 2단계 - 재료 수정
+=== 이미지 등록
 ==== curl request
-include::{snippets}/put-updateBoardStepResource/curl-request.adoc[]
+include::{snippets}/R_createImage/curl-request.adoc[]
 ==== request header
-include::{snippets}/put-updateBoardStepResource/request-headers.adoc[]
-==== request fields
-include::{snippets}/put-updateBoardStepResource/request-fields.adoc[]
-==== request data
-include::{snippets}/put-updateBoardStepResource/request-body.adoc[]
+include::{snippets}/R_createImage/request-headers.adoc[]
+==== request parameter
+include::{snippets}/R_createImage/request-parameters.adoc[]
+==== request parts
+include::{snippets}/R_createImage/request-parts.adoc[]
 ==== response fields
-include::{snippets}/put-updateBoardStepResource/response-fields.adoc[]
+include::{snippets}/R_createImage/response-fields.adoc[]
 ==== response data
-include::{snippets}/put-updateBoardStepResource/response-body.adoc[]
+include::{snippets}/R_createImage/response-body.adoc[]
 
-=== Board 수정 3단계 - 게시글 레시피 수정
+=== 작성중인 게시글 조회 or 빈 게시글 생성
 ==== curl request
-include::{snippets}/put-updateBoardStepRecipe/curl-request.adoc[]
+include::{snippets}/R_checkModifyingBoard/curl-request.adoc[]
 ==== request header
-include::{snippets}/put-updateBoardStepRecipe/request-headers.adoc[]
-==== request body
-include::{snippets}/put-updateBoardStepRecipe/request-parts.adoc[]
+include::{snippets}/R_checkModifyingBoard/request-headers.adoc[]
 ==== response fields
-include::{snippets}/put-updateBoardStepRecipe/response-fields.adoc[]
+include::{snippets}/R_checkModifyingBoard/response-fields.adoc[]
 ==== response data
-include::{snippets}/put-updateBoardStepRecipe/response-body.adoc[]
+include::{snippets}/R_checkModifyingBoard/response-body.adoc[]
 
-=== Board 삭제 3단계 - 게시글 레시피 삭제"
+=== 임시(작성중인) 게시글 저장
 ==== curl request
-include::{snippets}/delete-deleteRecipeStep/curl-request.adoc[]
+include::{snippets}/R_createTempBoard/curl-request.adoc[]
 ==== request header
-include::{snippets}/delete-deleteRecipeStep/request-headers.adoc[]
-==== request body
-include::{snippets}/delete-deleteRecipeStep/request-parts.adoc[]
+include::{snippets}/R_createTempBoard/request-headers.adoc[]
+==== request parameter
+include::{snippets}/R_createTempBoard/request-parameters.adoc[]
+==== request parts
+include::{snippets}/R_createTempBoard/request-parts.adoc[]
+==== response data
+include::{snippets}/R_createTempBoard/response-body.adoc[]
+
+=== 게시글 생성
+==== curl request
+include::{snippets}/R_createBoard/curl-request.adoc[]
+==== request header
+include::{snippets}/R_createBoard/request-headers.adoc[]
+==== request parameter
+include::{snippets}/R_createBoard/request-parameters.adoc[]
+==== request parts
+include::{snippets}/R_createBoard/request-parts.adoc[]
+==== response data
+include::{snippets}/R_createBoard/response-body.adoc[]
+
+=== 게시글 수정
+==== curl request
+include::{snippets}/R_updateBoard/curl-request.adoc[]
+==== request header
+include::{snippets}/R_updateBoard/request-headers.adoc[]
+==== request parameter
+include::{snippets}/R_updateBoard/request-parameters.adoc[]
+==== request parts
+include::{snippets}/R_updateBoard/request-parts.adoc[]
+==== response data
+include::{snippets}/R_updateBoard/response-body.adoc[]
 
 === Board 삭제
 ==== curl request
-include::{snippets}/delete-deleteBoard/curl-request.adoc[]
+include::{snippets}/R_deleteBoard/curl-request.adoc[]
 ==== request header
-include::{snippets}/delete-deleteBoard/request-headers.adoc[]
-
+include::{snippets}/R_deleteBoard/request-headers.adoc[]
+==== request parameter
+include::{snippets}/R_deleteBoard/request-parameters.adoc[]
+==== response data
+include::{snippets}/R_deleteBoard/response-body.adoc[]
 
 == Comment Api
 

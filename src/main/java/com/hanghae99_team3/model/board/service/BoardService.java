@@ -69,7 +69,6 @@ public class BoardService {
             return optionalBoard.get();
         }else{
             Board board = Board.emptyBuilder().user(user).build();
-            board.setStatus("modifying");
             return boardRepository.save(board);
         }
     }
@@ -98,8 +97,6 @@ public class BoardService {
         board.updateStepMain(boardRequestDto);
         resourceService.updateResource(boardRequestDto.getResourceRequestDtoList(),board);
         recipeStepService.updateRecipeStep(boardRequestDto.getRecipeStepRequestDtoList(),board);
-
-        board.setStatus("modifying");
     }
 
     @Transactional
@@ -113,7 +110,6 @@ public class BoardService {
         recipeStepService.updateRecipeStep(boardRequestDto.getRecipeStepRequestDtoList(),board);
 
         boardDocumentService.updateBoard(board);
-        board.setStatus("complete");
     }
 
     public void deleteBoard(PrincipalDetails principalDetails, Long boardId) {

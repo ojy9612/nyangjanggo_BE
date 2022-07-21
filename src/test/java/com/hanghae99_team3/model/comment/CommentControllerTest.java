@@ -5,8 +5,11 @@ import com.hanghae99_team3.docs.CommentDocumentation;
 import com.hanghae99_team3.login.jwt.JwtTokenProvider;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.board.domain.Board;
+import com.hanghae99_team3.model.board.dto.BoardRequestDto;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
 import com.hanghae99_team3.model.comment.dto.CommentRequestDto;
+import com.hanghae99_team3.model.recipestep.dto.RecipeStepRequestDto;
+import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;
 import com.hanghae99_team3.model.user.domain.AuthProvider;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.domain.UserRole;
@@ -34,6 +37,8 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -86,17 +91,40 @@ class CommentControllerTest {
         baseUserDetails = new PrincipalDetails(baseUser);
         mockPrincipal = new UsernamePasswordAuthenticationToken(baseUserDetails, "", baseUserDetails.getAuthorities());
 
-        BoardRequestDtoStepMain boardRequestDtoStepMain = BoardRequestDtoStepMain.builder()
+        List<ResourceRequestDto> resourceRequestDtoList = new ArrayList<>();
+
+        for(int i = 0; i < 2; i ++){
+            resourceRequestDtoList.add(ResourceRequestDto.builder()
+                    .resourceName("재료 이름")
+                    .amount("재료 수량")
+                    .category("재료 카테고리")
+                    .build()
+            );
+        }
+
+        List<RecipeStepRequestDto> recipeStepRequestDtoList = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            recipeStepRequestDtoList.add(RecipeStepRequestDto.builder()
+                    .stepNum(i)
+                    .stepContent("레시피 Step 내용")
+                    .imageLink("레시피 이미지 Link")
+                    .build()
+            );
+        }
+
+        BoardRequestDto boardRequestDto = BoardRequestDto.builder()
                 .title("제목")
-                .subTitle("부제목")
                 .content("내용")
+                .mainImageLink("이미지 Link")
+                .resourceRequestDtoList(resourceRequestDtoList)
+                .recipeStepRequestDtoList(recipeStepRequestDtoList)
                 .build();
 
         baseBoard = Board.builder()
-                .boardRequestDtoStepMain(boardRequestDtoStepMain)
-                .status("complete")
+                .boardRequestDto(boardRequestDto)
                 .user(baseUser)
                 .build();
+
     }
 
     @Test
