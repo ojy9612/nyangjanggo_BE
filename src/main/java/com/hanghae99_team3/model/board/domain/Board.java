@@ -30,9 +30,6 @@ public class Board extends Timestamped {
     private String title;
 
     @Column
-    private String subTitle;
-
-    @Column
     private String mainImageLink;
 
     @Column
@@ -40,7 +37,7 @@ public class Board extends Timestamped {
 
     @Setter
     @Column
-    private String status;
+    private String status = "modifying";
 
     @Setter
     @ManyToOne(fetch = FetchType.EAGER)
@@ -88,15 +85,11 @@ public class Board extends Timestamped {
 
     @Builder
     public Board(@NotNull User user,
-                 @NotNull BoardRequestDtoStepMain boardRequestDtoStepMain,
-                 @NotNull String mainImageLink,
-                 @NotNull String status) {
+                 @NotNull BoardRequestDto boardRequestDto) {
         user.addBoard(this);
-        this.title = boardRequestDtoStepMain.getTitle();
-        this.subTitle = boardRequestDtoStepMain.getSubTitle();
-        this.content = boardRequestDtoStepMain.getContent();
-        this.mainImageLink = mainImageLink;
-        this.status = status;
+        this.title = boardRequestDto.getTitle();
+        this.content = boardRequestDto.getContent();
+        this.mainImageLink = boardRequestDto.getMainImageLink();
     }
 
     @Builder(builderClassName = "EmptyBuilder",builderMethodName = "emptyBuilder")
@@ -106,7 +99,6 @@ public class Board extends Timestamped {
 
     public void updateStepMain(BoardRequestDto boardRequestDto) {
         this.title = boardRequestDto.getTitle();
-        this.subTitle = boardRequestDto.getSubTitle();
         this.content = boardRequestDto.getContent();
         this.mainImageLink = boardRequestDto.getMainImageLink();
     }

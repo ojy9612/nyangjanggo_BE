@@ -19,7 +19,6 @@ public class BoardResponseDto {
     private String nickname;
     private String userImg;
     private String title;
-    private String subTitle;
     private String content;
     private String mainImg;
     private int commentCount;
@@ -35,7 +34,6 @@ public class BoardResponseDto {
         this.nickname = board.getUser().getNickname();
         this.userImg = board.getUser().getUserImg();
         this.title = board.getTitle();
-        this.subTitle = board.getSubTitle();
         this.content = board.getContent();
         this.mainImg = board.getMainImageLink();
         this.commentCount = board.getCommentList().size();
