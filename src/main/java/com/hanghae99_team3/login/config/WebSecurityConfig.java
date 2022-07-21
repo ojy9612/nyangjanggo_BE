@@ -90,6 +90,11 @@ public class WebSecurityConfig {
                     .antMatchers(HttpMethod.GET, "/api/board/**").permitAll()
                     .antMatchers("/refresh/**").permitAll()
                     .antMatchers("/docs/**").permitAll()
+
+                    //SSE
+                    .antMatchers("/api/subscribe/**").permitAll()
+                    .antMatchers("/api/publish/**").permitAll()
+                    .antMatchers("/sseTest.html").permitAll()
                     .antMatchers("/**").hasAnyRole("USER")
 //                    .anyRequest().permitAll()
 //                    .anyRequest().hasAnyRole("USER")
