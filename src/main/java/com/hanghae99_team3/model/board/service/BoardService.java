@@ -69,6 +69,7 @@ public class BoardService {
             return optionalBoard.get();
         }else{
             Board board = Board.emptyBuilder().user(user).build();
+            board.setStatus("modifying");
             return boardRepository.save(board);
         }
     }

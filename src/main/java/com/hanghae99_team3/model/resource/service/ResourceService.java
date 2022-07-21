@@ -30,9 +30,13 @@ public class ResourceService {
                     .board(board)
                     .build();
 
-            Optional<ResourceKeywordDocument> optionalResourceKeywordDocument = resourceSearchRepository.findByResourceName(resource.getResourceName());
+            Optional<ResourceKeywordDocument> optionalResourceKeywordDocument =
+                    resourceSearchRepository.findByResourceNameKeyword(resource.getResourceName());
+
             if (optionalResourceKeywordDocument.isPresent()) {
-                optionalResourceKeywordDocument.get().plusCnt();
+                ResourceKeywordDocument resourceKeywordDocument = optionalResourceKeywordDocument.get();
+                resourceKeywordDocument.plusCnt();
+                resourceSearchRepository.save(resourceKeywordDocument);
             } else {
                 resourceSearchRepository.save(ResourceKeywordDocument.builder()
                         .resource(resource)
@@ -54,7 +58,7 @@ public class ResourceService {
                 .map(Resource::getResourceName).collect(Collectors.toList());
 
         resourceNameList.forEach(s -> {
-            resourceSearchRepository.findByResourceName(s).ifPresent(resourceKeywordDocument -> {
+            resourceSearchRepository.findByResourceNameKeyword(s).ifPresent(resourceKeywordDocument -> {
                         resourceKeywordDocument.minusCnt();
                         if (resourceKeywordDocument.getCnt() <= 0) {
                             resourceSearchRepository.delete(resourceKeywordDocument);

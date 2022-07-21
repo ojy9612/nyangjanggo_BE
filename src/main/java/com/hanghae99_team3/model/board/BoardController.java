@@ -10,8 +10,6 @@ import com.hanghae99_team3.model.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -87,11 +85,11 @@ public class BoardController {
     }
 
     @GetMapping("/api/board/check")
-    public ResponseEntity<BoardDetailResponseDto> checkModifyingBoard(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public BoardDetailResponseDto checkModifyingBoard(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        return ResponseEntity.ok().body(new BoardDetailResponseDto(
+        return new BoardDetailResponseDto(
                 boardService.checkModifyingBoard(principalDetails)
-        ));
+        );
     }
 
     @PutMapping("/api/board/temp")

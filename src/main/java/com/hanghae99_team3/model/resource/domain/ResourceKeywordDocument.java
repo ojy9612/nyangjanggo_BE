@@ -15,7 +15,7 @@ import javax.persistence.Id;
 public class ResourceKeywordDocument {
 
     @Id
-    private Long id;
+    private String id;
 
     private String resourceName;
 
@@ -31,7 +31,6 @@ public class ResourceKeywordDocument {
 
     @Builder
     public ResourceKeywordDocument(Resource resource) {
-        this.id = resource.getId();
         this.resourceName = resource.getResourceName();
         this.cnt = 1;
     }
