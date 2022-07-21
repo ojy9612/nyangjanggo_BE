@@ -41,6 +41,7 @@ public class WebSecurityConfig {
         configuration.addAllowedOrigin("https://nyangjanggo.com");
         configuration.addAllowedOrigin("https://api.nyangjanggo.com");
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "OPTIONS", "PUT","DELETE"));
+        configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Arrays.asList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
