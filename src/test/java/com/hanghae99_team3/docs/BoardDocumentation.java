@@ -72,14 +72,6 @@ public class BoardDocumentation {
 
 
 
-    public static ResultHandler getOneBoard() {
-
-        return document("get-getOneBoard",
-                responseFields(
-                        boardDetailResponseDto
-                )
-        );
-    }
 
     public static ResultHandler getAllBoards() {
 
@@ -223,13 +215,5 @@ public class BoardDocumentation {
         );
     }
 
-    public static ResultHandler deleteBoard() {
-
-        return document("delete-deleteBoard",
-                requestHeaders(
-                        headerWithName("Access-Token").description("Jwt Access-Token")
-                )
-        );
-    }
 
 }
