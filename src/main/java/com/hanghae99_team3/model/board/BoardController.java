@@ -87,9 +87,9 @@ public class BoardController {
     @GetMapping("/api/board/check")
     public BoardDetailResponseDto checkModifyingBoard(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        return ResponseEntity.ok().body(new BoardDetailResponseDto(
+        return new BoardDetailResponseDto(
                 boardService.checkModifyingBoard(principalDetails)
-        ));
+        );
     }
 
     @PutMapping("/api/board/temp")
