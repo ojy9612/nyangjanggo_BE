@@ -58,10 +58,10 @@ public class BoardDocumentService {
         return boardRepository.findAllByIdIn(boardIdList,pageable);
     }
 
-    public Set<String> recommendBoardDocumentByTitle(String titleWords) {
+    public List<String> recommendBoardDocumentByTitle(String titleWords) {
 
         return boardSearchRepository.findByTitle(titleWords).stream()
-                .map(BoardDocument::getTitle).collect(Collectors.toSet());
+                .map(BoardDocument::getTitle).collect(Collectors.toList());
     }
 
     public Page<Board> getBoardDocumentsByResource(String resourceNameWords, Pageable pageable) {
