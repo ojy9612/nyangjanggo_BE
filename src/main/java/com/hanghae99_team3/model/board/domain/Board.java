@@ -99,7 +99,7 @@ public class Board extends Timestamped {
         this.status = status;
     }
 
-    @Builder(builderMethodName = "EmptyBuilder")
+    @Builder(builderClassName = "EmptyBuilder",builderMethodName = "emptyBuilder")
     public Board(@NotNull User user){
         user.addBoard(this);
     }

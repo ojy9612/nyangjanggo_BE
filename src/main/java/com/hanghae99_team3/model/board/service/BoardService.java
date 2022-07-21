@@ -49,7 +49,7 @@ public class BoardService {
 
     public Page<Board> getAllBoards(Pageable pageable) {
 
-        return boardRepository.findAll(pageable);
+        return boardRepository.queryFirst5By(pageable);
     }
 
 
@@ -68,7 +68,8 @@ public class BoardService {
         if (optionalBoard.isPresent()){
             return optionalBoard.get();
         }else{
-            Board board = Board.EmptyBuilder().user(user).build();
+            Board board = Board.emptyBuilder().user(user).build();
+            board.setStatus("modifying");
             return boardRepository.save(board);
         }
     }
