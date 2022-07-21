@@ -87,9 +87,9 @@ public class BoardController {
     @GetMapping("/api/board/check")
     public BoardDetailResponseDto checkModifyingBoard(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        return new BoardDetailResponseDto(
+        return ResponseEntity.ok().body(new BoardDetailResponseDto(
                 boardService.checkModifyingBoard(principalDetails)
-        );
+        ));
     }
 
     @PutMapping("/api/board/temp")
@@ -215,5 +215,18 @@ public class BoardController {
 //    }
 //
 
+
+    @PostMapping("/test")
+    public Map<String, String> test(@RequestPart MultipartFile multipartFile){
+
+        Map<String, String> testmap = new HashMap<>();
+
+        testmap.put("contentType",multipartFile.getContentType());
+        testmap.put("OriginalFilename",multipartFile.getOriginalFilename());
+        testmap.put("Name",multipartFile.getName());
+        testmap.put("비교!", (multipartFile.getContentType() == null ? "null이 맞네요" : "null이 아니네요 ㅠ") );
+
+        return testmap;
+    }
 
 }
