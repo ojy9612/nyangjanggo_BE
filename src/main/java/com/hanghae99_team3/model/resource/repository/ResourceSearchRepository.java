@@ -10,9 +10,10 @@ import java.util.Optional;
 
 public interface ResourceSearchRepository extends ElasticsearchRepository<ResourceKeywordDocument,Long> {
 
+
+    List<ResourceKeywordDocument> findAll();
     @Query("{\"match\": {\"resourceName.keyword\": \"?0\"}}}")
     Optional<ResourceKeywordDocument> findByResourceNameKeyword(String resourceName);
-
     List<ResourceKeywordDocument> findAllByResourceNameAndCntGreaterThan(String resourceName, Integer cnt);
 
 }
