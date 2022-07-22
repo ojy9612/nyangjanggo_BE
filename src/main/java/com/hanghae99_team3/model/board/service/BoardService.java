@@ -45,11 +45,11 @@ public class BoardService {
     }
 
     public List<Board> getBoardsBySortPreview(String entityName) {
-        return boardRepository.findFirst2By(Sort.by(Sort.Direction.DESC,entityName));
+        return boardRepository.findFirst2By(Sort.by(entityName));
     }
 
-    public Page<Board> getAllBoardsBySort(Pageable pageable, String entityName) {
-        return boardRepository.findAll(pageable,Sort.by(Sort.Direction.DESC,entityName));
+    public Page<Board> getAllBoardsBySort(Pageable pageable) {
+        return boardRepository.findAll(pageable);
     }
 
     @Transactional

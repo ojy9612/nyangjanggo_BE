@@ -18,7 +18,7 @@ import static org.springframework.data.elasticsearch.annotations.DateFormat.epoc
 @Document(indexName = "board")
 @NoArgsConstructor
 @Mapping(mappingPath = "elastic/board-mapping.json")
-@Setting(settingPath = "elastic/nori-setting.json")
+@Setting(settingPath = "elastic/jaso-setting.json")
 public class BoardDocument {
 
     @Id

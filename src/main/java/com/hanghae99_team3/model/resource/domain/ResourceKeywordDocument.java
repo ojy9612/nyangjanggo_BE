@@ -11,7 +11,7 @@ import javax.persistence.Id;
 @Document(indexName = "resource_keyword")
 @NoArgsConstructor
 @Mapping(mappingPath = "elastic/resource-mapping.json")
-@Setting(settingPath = "elastic/nori-setting.json")
+@Setting(settingPath = "elastic/jaso-setting.json")
 public class ResourceKeywordDocument {
 
     @Id
