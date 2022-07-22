@@ -35,7 +35,7 @@ public class Board extends Timestamped {
     @Column
     private String content;
 
-    @Formula("(select count(*) from good g where g.board_id=id)")
+    @Formula("(select count(*) from Good g where g.board_id=id)")
     private Integer goodCount;
 
     @Setter
