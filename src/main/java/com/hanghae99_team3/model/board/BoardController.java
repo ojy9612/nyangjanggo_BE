@@ -32,19 +32,27 @@ public class BoardController {
     }
 
     @GetMapping("/api/board/resource/recommend")
-    public List<String> recommendResource(@RequestParam String resourceName){
-        return boardDocumentService.recommendResource(resourceName);
+    public Map<String, List<String>> recommendResource(@RequestParam String resourceName){
+        Map<String, List<String>> result = new HashMap<>();
+        result.put("resourceRecommendList",
+                boardDocumentService.recommendResource(resourceName)
+        );
+        return result;
     }
 
     @GetMapping("/api/boards/resource")
-    public Page<BoardResponseDto> getBoardDocumentsByResource(@RequestParam String resourceNameWords,
+    public Page<BoardResponseDto> getBoardDocumentsByResource(@RequestParam String resourceName,
                                                               Pageable pageable){
-        return boardDocumentService.getBoardDocumentsByResource(resourceNameWords,pageable).map(BoardResponseDto::new);
+        return boardDocumentService.getBoardDocumentsByResource(resourceName,pageable).map(BoardResponseDto::new);
     }
 
     @GetMapping("/api/board/title/recommend")
-    public Set<String> recommendBoardDocumentByTitle(@RequestParam String titleWords){
-        return boardDocumentService.recommendBoardDocumentByTitle(titleWords);
+    public Map<String, List<String>> recommendBoardDocumentByTitle(@RequestParam String titleWords){
+        Map<String, List<String>> result = new HashMap<>();
+        result.put("titleRecommendList",
+            boardDocumentService.recommendBoardDocumentByTitle(titleWords)
+        );
+        return result;
     }
 
     @GetMapping("/api/boards/title")
@@ -73,8 +81,7 @@ public class BoardController {
 //    }
 
     @PostMapping("/api/board/image")
-    public Map<String, String> createImage(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                           @RequestPart MultipartFile multipartFile,
+    public Map<String, String> createImage(@RequestPart MultipartFile multipartFile,
                                            @RequestParam Long boardId){
 
         Map<String, String> result = new HashMap<>();
@@ -214,19 +221,5 @@ public class BoardController {
 //        boardService.deleteRecipeStep(boardId, stepNum, principalDetails);
 //    }
 //
-
-
-    @PostMapping("/test")
-    public Map<String, String> test(@RequestPart MultipartFile multipartFile){
-
-        Map<String, String> testmap = new HashMap<>();
-
-        testmap.put("contentType",multipartFile.getContentType());
-        testmap.put("OriginalFilename",multipartFile.getOriginalFilename());
-        testmap.put("Name",multipartFile.getName());
-        testmap.put("비교!", (multipartFile.getContentType() == null ? "null이 맞네요" : "null이 아니네요 ㅠ") );
-
-        return testmap;
-    }
 
 }
