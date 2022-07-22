@@ -23,5 +23,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findFirst2By(Sort sort);
 
-    Page<Board> findAll(Pageable pageable, Sort sort);
+    Page<Board> findAll(Pageable pageable);
 }

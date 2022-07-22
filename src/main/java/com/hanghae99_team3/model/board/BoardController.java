@@ -38,8 +38,8 @@ public class BoardController {
     }
 
     @GetMapping("/api/boards")
-    public Page<BoardResponseDto> getAllBoardsBySort(Pageable pageable,@RequestParam String entityName){
-        return boardService.getAllBoardsBySort(pageable,entityName).map(BoardResponseDto::new);
+    public Page<BoardResponseDto> getAllBoardsBySort(Pageable pageable) {
+        return boardService.getAllBoardsBySort(pageable).map(BoardResponseDto::new);
     }
 
     @GetMapping("/api/boards/resource")
