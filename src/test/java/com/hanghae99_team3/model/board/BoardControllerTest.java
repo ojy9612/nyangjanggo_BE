@@ -4,8 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanghae99_team3.login.jwt.JwtTokenProvider;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.board.domain.Board;
-import com.hanghae99_team3.model.board.dto.BoardRequestDto;
-import com.hanghae99_team3.model.board.repository.BoardRepository;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDto;
 import com.hanghae99_team3.model.board.service.BoardDocumentService;
 import com.hanghae99_team3.model.board.service.BoardService;
 import com.hanghae99_team3.model.recipestep.dto.RecipeStepRequestDto;
@@ -35,7 +34,6 @@ import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfig
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -44,9 +42,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
@@ -70,13 +66,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class BoardControllerTest {
 
     MockMvc mockMvc;
-    @MockBean JwtTokenProvider jwtTokenProvider;
+    @MockBean
+    JwtTokenProvider jwtTokenProvider;
     @MockBean
     BoardService boardService;
     @MockBean
     BoardDocumentService boardDocumentService;
-    @MockBean
-    BoardRepository boardRepository;
     final String accessToken = "JwtAccessToken";
     User baseUser;
     Principal mockPrincipal;
@@ -111,6 +106,24 @@ class BoardControllerTest {
             fieldWithPath("goodList[].userImg").type(JsonFieldType.STRING).description("좋아요 유저 이미지").optional(),
             fieldWithPath("createdAt").type(JsonFieldType.STRING).description("게시글 생성 날짜").optional(),
             fieldWithPath("modifiedAt").type(JsonFieldType.STRING).description("게시글 수정 날짜").optional()
+    };
+
+    static FieldDescriptor[] listBoardResponseDto = new FieldDescriptor[]{
+            fieldWithPath("[].boardId").type(JsonFieldType.NUMBER).description("게시글 ID").optional(),
+            fieldWithPath("[].status").type(JsonFieldType.STRING).description("게시글 상태(modifying, complete)").optional(),
+            fieldWithPath("[].nickname").type(JsonFieldType.STRING).description("유저 닉네임").optional(),
+            fieldWithPath("[].userImg").type(JsonFieldType.STRING).description("유저 이미지").optional(),
+            fieldWithPath("[].title").type(JsonFieldType.STRING).description("게시글 제목").optional(),
+            fieldWithPath("[].content").type(JsonFieldType.STRING).description("게시글 내용").optional(),
+            fieldWithPath("[].mainImg").type(JsonFieldType.STRING).description("게시글 대표 이미지").optional(),
+            fieldWithPath("[].commentCount").type(JsonFieldType.NUMBER).description("댓글 수").optional(),
+            fieldWithPath("[].goodCount").type(JsonFieldType.NUMBER).description("좋아요 수").optional(),
+            fieldWithPath("[].resourceResponseDtoList").type(JsonFieldType.ARRAY).description("재료 리스트").optional(),
+            fieldWithPath("[].resourceResponseDtoList[].resourceName").type(JsonFieldType.STRING).description("재료 이름").optional(),
+            fieldWithPath("[].resourceResponseDtoList[].amount").type(JsonFieldType.STRING).description("재료 수량").optional(),
+            fieldWithPath("[].resourceResponseDtoList[].category").type(JsonFieldType.STRING).description("재료 카테고리").optional(),
+            fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("게시글 생성 날짜").optional(),
+            fieldWithPath("[].modifiedAt").type(JsonFieldType.STRING).description("게시글 수정 날짜").optional(),
     };
 
     static FieldDescriptor[] pageBoardResponseDto = new FieldDescriptor[] {
@@ -210,7 +223,7 @@ class BoardControllerTest {
                 .build();
 
         //when
-        when(boardService.getOneBoard(
+        when(boardService.findBoardById(
                 anyLong()
         ))
                 .thenReturn(board);
@@ -225,6 +238,82 @@ class BoardControllerTest {
                 .andDo(document("R_getOneBoard",
                         responseFields(
                             boardDetailResponseDto
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("조건별 게시글 전체 조회")
+    void getAllBoardsBySort() throws Exception {
+        //given
+        List<Board> boardList = new ArrayList<>();
+        for(int i = 0; i < 15; i ++){
+            boardList.add(Board.emptyBuilder()
+                    .user(baseUser)
+                    .build()
+            );
+        }
+
+        Page<Board> boardPage = new PageImpl<>(boardList);
+
+        //when
+        when(boardService.getAllBoardsBySort(
+                any(Pageable.class),
+                anyString()
+        ))
+                .thenReturn(boardPage);
+
+        ResultActions resultActions = mockMvc.perform(
+                get("/api/boards?entityName=goodCount&page=0&size=5"));
+
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("R_getAllBoardsBySort",
+                        requestParameters(
+                                parameterWithName("entityName").description("정렬하고자 하는 Entity 의 이름(goodCount,createdAt)").optional(),
+                                parameterWithName("page").description("페이지 번호(0부터 시작)").optional(),
+                                parameterWithName("size").description("한 페이지에 불러올 게시글 수").optional()
+                        ),
+                        responseFields(
+                                pageBoardResponseDto
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("조건별 게시글 10개만 불러오기")
+    void getBoardsBySortPreview() throws Exception {
+        //given
+
+        List<Board> boardList = new ArrayList<>();
+        for (int i = 0 ; i < 15; i++){
+            boardList.add(Board.emptyBuilder()
+                    .user(baseUser)
+                    .build()
+            );
+        }
+
+        //when
+        when(boardService.getBoardsBySortPreview(
+                anyString()
+        ))
+                .thenReturn(boardList);
+
+        ResultActions resultActions = mockMvc.perform(
+                get("/api/boards/preview?entityName=goodCount"));
+
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("R_getBoardsBySortPreview",
+                        requestParameters(
+                                parameterWithName("entityName").description("정렬하고자 하는 Entity 의 이름(goodCount,createdAt)").optional()
+                        ),
+                        responseFields(
+                                listBoardResponseDto
                         )
                 ));
     }
@@ -373,43 +462,6 @@ class BoardControllerTest {
                 ));
     }
 
-    @Test
-    @DisplayName("게시글 전체 검색")
-    void getAllBoards() throws Exception {
-        //given
-        List<Board> boardList = new ArrayList<>();
-        for(int i = 0; i < 5; i ++){
-            boardList.add(Board.emptyBuilder()
-                    .user(baseUser)
-                    .build()
-            );
-        }
-
-        Page<Board> boardPage = new PageImpl<>(boardList);
-
-        //when
-        when(boardService.getAllBoards(
-                any(Pageable.class)
-        ))
-                .thenReturn(boardPage);
-
-        ResultActions resultActions = mockMvc.perform(
-                get("/api/boards?page=0&size=5"));
-
-        //then
-        resultActions
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("R_getAllBoards",
-                        requestParameters(
-                                parameterWithName("page").description("페이지 번호(0부터 시작)").optional(),
-                                parameterWithName("size").description("한 페이지에 불러올 게시글 수").optional()
-                        ),
-                        responseFields(
-                                pageBoardResponseDto
-                        )
-                ));
-    }
 
     @Test
     @DisplayName("Board 이미지 등록")
