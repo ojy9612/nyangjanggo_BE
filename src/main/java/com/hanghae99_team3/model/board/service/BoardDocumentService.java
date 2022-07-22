@@ -26,6 +26,35 @@ public class BoardDocumentService {
     private final BoardRepository boardRepository;
     private final ResourceSearchRepository resourceSearchRepository;
 
+    public Page<Board> getBoardDocumentsByResource(String resourceNameWords, Pageable pageable) {
+
+        List<Long> boardIdList = boardSearchRepository.searchByResourceNameWords(resourceNameWords).stream()
+                .map(BoardDocument::getId).collect(Collectors.toList());
+
+        return boardRepository.findAllByIdIn(boardIdList,pageable);
+    }
+
+    public Page<Board> getBoardDocumentsByTitle(String titleWords, Pageable pageable) {
+
+        List<Long> boardIdList = boardSearchRepository.findByTitle(titleWords).stream()
+                .map(BoardDocument::getId).collect(Collectors.toList());
+
+        return boardRepository.findAllByIdIn(boardIdList,pageable);
+    }
+
+    public List<String> recommendResource(String resourceName) {
+
+        return resourceSearchRepository.findAllByResourceNameAndCntGreaterThan(resourceName, 2).stream()
+                .map(ResourceKeywordDocument::getResourceName).collect(Collectors.toList());
+    }
+
+    public List<String> recommendBoardDocumentByTitle(String titleWords) {
+
+        return boardSearchRepository.findByTitle(titleWords).stream()
+                .map(BoardDocument::getTitle).collect(Collectors.toList());
+    }
+
+
     public void createBoard(Board board){
         BoardDocument boardDocument = BoardDocument.builder()
                 .board(board)
@@ -43,46 +72,5 @@ public class BoardDocumentService {
         boardSearchRepository.deleteById(board.getId());
     }
 
-    public Page<Board> getAllBoardDocument(Pageable pageable){
-        List<Long> boardIdList = boardSearchRepository.findFirst2By().stream()
-                .map(BoardDocument::getId).collect(Collectors.toList());
-
-        return boardRepository.findAllByIdIn(boardIdList, pageable);
-    }
-
-    public Page<Board> getBoardDocumentsByTitle(String titleWords, Pageable pageable) {
-
-        List<Long> boardIdList = boardSearchRepository.findByTitle(titleWords).stream()
-                .map(BoardDocument::getId).collect(Collectors.toList());
-
-        return boardRepository.findAllByIdIn(boardIdList,pageable);
-    }
-
-    public List<String> recommendBoardDocumentByTitle(String titleWords) {
-
-        return boardSearchRepository.findByTitle(titleWords).stream()
-                .map(BoardDocument::getTitle).collect(Collectors.toList());
-    }
-
-    public Page<Board> getBoardDocumentsByResource(String resourceNameWords, Pageable pageable) {
-
-        List<Long> boardIdList = boardSearchRepository.searchByResourceNameWords(resourceNameWords).stream()
-                .map(BoardDocument::getId).collect(Collectors.toList());
-
-        return boardRepository.findAllByIdIn(boardIdList,pageable);
-    }
-
-    public List<String> recommendResource(String resourceName) {
-
-        return resourceSearchRepository.findAllByResourceNameAndCntGreaterThan(resourceName, 2).stream()
-                .map(ResourceKeywordDocument::getResourceName).collect(Collectors.toList());
-    }
-
-//    public Page<Board> getByResource(String searchWord,Pageable pageable) {
-//
-//        Set<Long> boardIdSet = resourceSearchService.getByResourceName(searchWord);
-//
-//        return boardRepository.findAllByIdIn(boardIdSet,pageable);
-//    }
 
 }

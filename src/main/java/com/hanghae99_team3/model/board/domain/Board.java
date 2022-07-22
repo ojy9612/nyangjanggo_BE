@@ -2,8 +2,7 @@ package com.hanghae99_team3.model.board.domain;
 
 
 import com.hanghae99_team3.model.Timestamped;
-import com.hanghae99_team3.model.board.dto.BoardRequestDto;
-import com.hanghae99_team3.model.board.dto.request.BoardRequestDtoStepMain;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDto;
 import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.good.Good;
 import com.hanghae99_team3.model.images.Images;
@@ -11,6 +10,7 @@ import com.hanghae99_team3.model.recipestep.RecipeStep;
 import com.hanghae99_team3.model.resource.domain.Resource;
 import com.hanghae99_team3.model.user.domain.User;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,7 +24,7 @@ import java.util.List;
 public class Board extends Timestamped {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long id;
+    private Long id;
 
     @Column
     private String title;
@@ -34,6 +34,9 @@ public class Board extends Timestamped {
 
     @Column
     private String content;
+
+    @Formula("(select count(*) from good g where g.board_id=id)")
+    private Integer goodCount;
 
     @Setter
     @Column
