@@ -258,13 +258,12 @@ class BoardControllerTest {
 
         //when
         when(boardService.getAllBoardsBySort(
-                any(Pageable.class),
-                anyString()
+                any(Pageable.class)
         ))
                 .thenReturn(boardPage);
 
         ResultActions resultActions = mockMvc.perform(
-                get("/api/boards?entityName=goodCount&page=0&size=5"));
+                get("/api/boards?page=0&size=5&sort=goodCount,desc"));
 
         //then
         resultActions
@@ -272,7 +271,7 @@ class BoardControllerTest {
                 .andExpect(status().isOk())
                 .andDo(document("R_getAllBoardsBySort",
                         requestParameters(
-                                parameterWithName("entityName").description("정렬하고자 하는 Entity 의 이름(goodCount,createdAt)").optional(),
+                                parameterWithName("sort").description("정렬하고자 하는 Entity 의 이름(goodCount,createdAt)과 정렬방식(desc,asc)").optional(),
                                 parameterWithName("page").description("페이지 번호(0부터 시작)").optional(),
                                 parameterWithName("size").description("한 페이지에 불러올 게시글 수").optional()
                         ),
