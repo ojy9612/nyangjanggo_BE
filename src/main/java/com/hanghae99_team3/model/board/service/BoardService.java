@@ -45,7 +45,7 @@ public class BoardService {
     }
 
     public List<Board> getBoardsBySortPreview(String entityName) {
-        return boardRepository.findFirst2By(Sort.by(entityName));
+        return boardRepository.findFirst10By(Sort.by(entityName));
     }
 
     public Page<Board> getAllBoardsBySort(Pageable pageable) {
