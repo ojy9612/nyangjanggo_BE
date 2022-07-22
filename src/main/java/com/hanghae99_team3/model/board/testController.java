@@ -40,10 +40,10 @@ public class testController {
     }
 
     @PostMapping("/test/resources")
-    public void createManyResources(@RequestBody List<String> resources){
+    public void createManyResources(@RequestBody TestWrapper resources){
         List<ResourceKeywordDocument> resourceKeywordDocumentList = new ArrayList<>();
 
-        resources.forEach(resource -> {
+        resources.getResources().forEach(resource -> {
             Resource resource1 = new Resource (
                     ResourceRequestDto.builder().resourceName(resource).amount("1").category("카테고리").build()
             );
@@ -61,3 +61,4 @@ public class testController {
         resourceSearchRepository.saveAll(resourceKeywordDocumentList);
     }
 }
+
