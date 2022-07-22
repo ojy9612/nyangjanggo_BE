@@ -38,8 +38,11 @@ public class WebSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*");
+        configuration.addAllowedOrigin("https://nyangjanggo.com");
+        configuration.addAllowedOrigin("https://api.nyangjanggo.com");
+        configuration.addAllowedOrigin("http://localhost:3000");
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "OPTIONS", "PUT","DELETE"));
+        configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Arrays.asList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -89,6 +92,11 @@ public class WebSecurityConfig {
                     .antMatchers(HttpMethod.GET, "/api/board/**").permitAll()
                     .antMatchers("/refresh/**").permitAll()
                     .antMatchers("/docs/**").permitAll()
+
+                    //SSE
+                    .antMatchers("/api/subscribe/**").permitAll()
+                    .antMatchers("/api/publish/**").permitAll()
+                    .antMatchers("/sseTest.html").permitAll()
                     .antMatchers("/**").hasAnyRole("USER")
 //                    .anyRequest().permitAll()
 //                    .anyRequest().hasAnyRole("USER")
