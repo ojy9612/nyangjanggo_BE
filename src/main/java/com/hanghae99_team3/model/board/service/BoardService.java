@@ -3,7 +3,7 @@ package com.hanghae99_team3.model.board.service;
 
 import com.hanghae99_team3.exception.newException.IdDuplicateException;
 import com.hanghae99_team3.model.board.domain.Board;
-import com.hanghae99_team3.model.board.dto.BoardRequestDto;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDto;
 import com.hanghae99_team3.model.board.repository.BoardRepository;
 import com.hanghae99_team3.model.images.ImagesService;
 import com.hanghae99_team3.model.recipestep.RecipeStepService;
@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,15 +44,13 @@ public class BoardService {
         );
     }
 
-    public Board getOneBoard(Long boardId) {
-        return this.findBoardById(boardId);
+    public List<Board> getBoardsBySortPreview(String entityName) {
+        return boardRepository.findFirst2By(Sort.by(Sort.Direction.DESC,entityName));
     }
 
-    public Page<Board> getAllBoards(Pageable pageable) {
-
-        return boardRepository.queryFirst5By(pageable);
+    public Page<Board> getAllBoardsBySort(Pageable pageable, String entityName) {
+        return boardRepository.findAll(pageable,Sort.by(Sort.Direction.DESC,entityName));
     }
-
 
     @Transactional
     public String createImage(MultipartFile multipartFile, Long boardId) {
@@ -73,6 +72,16 @@ public class BoardService {
         }
     }
 
+    @Transactional
+    public void createTempBoard(PrincipalDetails principalDetails, Long boardId, BoardRequestDto boardRequestDto) {
+        User user = userService.findUserByAuthEmail(principalDetails);
+        Board board = this.findBoardById(boardId);
+        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
+
+        board.updateStepMain(boardRequestDto);
+        resourceService.updateResource(boardRequestDto.getResourceRequestDtoList(),board);
+        recipeStepService.updateRecipeStep(boardRequestDto.getRecipeStepRequestDtoList(),board);
+    }
 
     @Transactional
     public void createBoard(PrincipalDetails principalDetails, Long boardId, BoardRequestDto boardRequestDto) {
@@ -86,17 +95,6 @@ public class BoardService {
 
         boardDocumentService.createBoard(board);
         board.setStatus("complete");
-    }
-
-    @Transactional
-    public void createTempBoard(PrincipalDetails principalDetails, Long boardId, BoardRequestDto boardRequestDto) {
-        User user = userService.findUserByAuthEmail(principalDetails);
-        Board board = this.findBoardById(boardId);
-        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
-
-        board.updateStepMain(boardRequestDto);
-        resourceService.updateResource(boardRequestDto.getResourceRequestDtoList(),board);
-        recipeStepService.updateRecipeStep(boardRequestDto.getRecipeStepRequestDtoList(),board);
     }
 
     @Transactional
@@ -120,6 +118,7 @@ public class BoardService {
         boardDocumentService.deleteBoard(board);
         boardRepository.delete(board);
     }
+
 
 //    @Transactional
 //    public Long createBoardStepMain(BoardRequestDtoStepMain boardRequestDtoStepMain, MultipartFile multipartFile, PrincipalDetails principalDetails) {

@@ -2,7 +2,7 @@ package com.hanghae99_team3.model.board;
 
 
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
-import com.hanghae99_team3.model.board.dto.BoardRequestDto;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDto;
 import com.hanghae99_team3.model.board.dto.response.BoardDetailResponseDto;
 import com.hanghae99_team3.model.board.dto.response.BoardResponseDto;
 import com.hanghae99_team3.model.board.service.BoardDocumentService;
@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +28,30 @@ public class BoardController {
 
     @GetMapping("/api/board/{boardId}")
     public BoardDetailResponseDto getOneBoard(@PathVariable Long boardId) {
-        return new BoardDetailResponseDto(boardService.getOneBoard(boardId));
+        return new BoardDetailResponseDto(boardService.findBoardById(boardId));
+    }
+
+    @GetMapping("/api/boards/preview")
+    public List<BoardResponseDto> getBoardsBySortPreview(@RequestParam String entityName){
+        return boardService.getBoardsBySortPreview(entityName).stream()
+                .map(BoardResponseDto::new).collect(Collectors.toList());
+    }
+
+    @GetMapping("/api/boards")
+    public Page<BoardResponseDto> getAllBoardsBySort(Pageable pageable,@RequestParam String entityName){
+        return boardService.getAllBoardsBySort(pageable,entityName).map(BoardResponseDto::new);
+    }
+
+    @GetMapping("/api/boards/resource")
+    public Page<BoardResponseDto> getBoardDocumentsByResource(@RequestParam String resourceName,
+                                                              Pageable pageable){
+        return boardDocumentService.getBoardDocumentsByResource(resourceName,pageable).map(BoardResponseDto::new);
+    }
+
+    @GetMapping("/api/boards/title")
+    public Page<BoardResponseDto> getBoardDocumentsByTitle(@RequestParam String titleWords,
+                                                           Pageable pageable){
+        return boardDocumentService.getBoardDocumentsByTitle(titleWords,pageable).map(BoardResponseDto::new);
     }
 
     @GetMapping("/api/board/resource/recommend")
@@ -40,12 +63,6 @@ public class BoardController {
         return result;
     }
 
-    @GetMapping("/api/boards/resource")
-    public Page<BoardResponseDto> getBoardDocumentsByResource(@RequestParam String resourceName,
-                                                              Pageable pageable){
-        return boardDocumentService.getBoardDocumentsByResource(resourceName,pageable).map(BoardResponseDto::new);
-    }
-
     @GetMapping("/api/board/title/recommend")
     public Map<String, List<String>> recommendBoardDocumentByTitle(@RequestParam String titleWords){
         Map<String, List<String>> result = new HashMap<>();
@@ -53,23 +70,6 @@ public class BoardController {
             boardDocumentService.recommendBoardDocumentByTitle(titleWords)
         );
         return result;
-    }
-
-    @GetMapping("/api/boards/title")
-    public Page<BoardResponseDto> getBoardDocumentsByTitle(@RequestParam String titleWords,
-                                                           Pageable pageable){
-        return boardDocumentService.getBoardDocumentsByTitle(titleWords,pageable).map(BoardResponseDto::new);
-    }
-
-    @GetMapping("/api/boards")
-    public Page<BoardResponseDto> getAllBoards(Pageable pageable) {
-        return boardService.getAllBoards(pageable).map(BoardResponseDto::new);
-    }
-
-    @GetMapping("/api/boards/elastic")
-    public Page<BoardResponseDto> getAllBoardDocument(Pageable pageable){
-        return boardDocumentService.getAllBoardDocument(pageable)
-                .map(BoardResponseDto::new);
     }
 
 

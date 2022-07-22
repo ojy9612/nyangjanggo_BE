@@ -74,35 +74,25 @@ include::{snippets}/R_getOneBoard/response-fields.adoc[]
 ==== response data
 include::{snippets}/R_getOneBoard/response-body.adoc[]
 
-=== Board 전체 불러오기
+=== Board 전체 정렬로 불러오기
 ==== curl request
-include::{snippets}/R_getAllBoards/curl-request.adoc[]
+include::{snippets}/R_getAllBoardsBySort/curl-request.adoc[]
 ==== request parameter
-include::{snippets}/R_getAllBoards/request-parameters.adoc[]
+include::{snippets}/R_getAllBoardsBySort/request-parameters.adoc[]
 ==== response fields
-include::{snippets}/R_getAllBoards/response-fields.adoc[]
+include::{snippets}/R_getAllBoardsBySort/response-fields.adoc[]
 ==== response data
-include::{snippets}/R_getAllBoards/response-body.adoc[]
+include::{snippets}/R_getAllBoardsBySort/response-body.adoc[]
 
-=== 재료 검색시 추천 검색어
+=== Board 10개 정렬로 불러오기
 ==== curl request
-include::{snippets}/R_recommendResource/curl-request.adoc[]
+include::{snippets}/R_getBoardsBySortPreview/curl-request.adoc[]
 ==== request parameter
-include::{snippets}/R_recommendResource/request-parameters.adoc[]
+include::{snippets}/R_getBoardsBySortPreview/request-parameters.adoc[]
 ==== response fields
-include::{snippets}/R_recommendResource/response-fields.adoc[]
+include::{snippets}/R_getBoardsBySortPreview/response-fields.adoc[]
 ==== response data
-include::{snippets}/R_recommendResource/response-body.adoc[]
-
-=== 게시글 제목 검색시 추천 검색어
-==== curl request
-include::{snippets}/R_recommendBoardDocumentByTitle/curl-request.adoc[]
-==== request parameter
-include::{snippets}/R_recommendBoardDocumentByTitle/request-parameters.adoc[]
-==== response fields
-include::{snippets}/R_recommendBoardDocumentByTitle/response-fields.adoc[]
-==== response data
-include::{snippets}/R_recommendBoardDocumentByTitle/response-body.adoc[]
+include::{snippets}/R_getBoardsBySortPreview/response-body.adoc[]
 
 === 재료기반 게시글 검색
 ==== curl request
@@ -123,6 +113,26 @@ include::{snippets}/R_getBoardDocumentsByTitle/request-parameters.adoc[]
 include::{snippets}/R_getBoardDocumentsByTitle/response-fields.adoc[]
 ==== response data
 include::{snippets}/R_getBoardDocumentsByTitle/response-body.adoc[]
+
+=== 재료 검색시 추천 검색어
+==== curl request
+include::{snippets}/R_recommendResource/curl-request.adoc[]
+==== request parameter
+include::{snippets}/R_recommendResource/request-parameters.adoc[]
+==== response fields
+include::{snippets}/R_recommendResource/response-fields.adoc[]
+==== response data
+include::{snippets}/R_recommendResource/response-body.adoc[]
+
+=== 게시글 제목 검색시 추천 검색어
+==== curl request
+include::{snippets}/R_recommendBoardDocumentByTitle/curl-request.adoc[]
+==== request parameter
+include::{snippets}/R_recommendBoardDocumentByTitle/request-parameters.adoc[]
+==== response fields
+include::{snippets}/R_recommendBoardDocumentByTitle/response-fields.adoc[]
+==== response data
+include::{snippets}/R_recommendBoardDocumentByTitle/response-body.adoc[]
 
 === 이미지 등록
 ==== curl request
