@@ -6,6 +6,7 @@ import com.hanghae99_team3.model.board.domain.BoardDocument;
 import com.hanghae99_team3.model.board.dto.response.BoardResponseDto;
 import com.hanghae99_team3.model.board.repository.BoardRepository;
 import com.hanghae99_team3.model.board.repository.BoardSearchRepository;
+import com.hanghae99_team3.model.board.service.BoardDocumentService;
 import com.hanghae99_team3.model.recipestep.RecipeStepService;
 import com.hanghae99_team3.model.resource.domain.Resource;
 import com.hanghae99_team3.model.resource.domain.ResourceKeywordDocument;
@@ -34,6 +35,7 @@ public class testController {
 
     private final BoardSearchRepository boardSearchRepository;
     private final BoardRepository boardRepository;
+    private final BoardDocumentService boardDocumentService;
     private final ResourceSearchRepository resourceSearchRepository;
     private final UserService userService;
     private final ResourceService resourceService;
@@ -90,6 +92,7 @@ public class testController {
             resourceService.createResource(boardRequestDto.getResourceRequestDtoList(), board);
             recipeStepService.createRecipeStep(boardRequestDto.getRecipeStepRequestDtoList(),board);
 
+            boardDocumentService.createBoard(board);
             boardRepository.save(board);
         });
 
