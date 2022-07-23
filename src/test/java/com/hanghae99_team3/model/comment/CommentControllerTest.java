@@ -1,7 +1,6 @@
 package com.hanghae99_team3.model.comment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hanghae99_team3.docs.CommentDocumentation;
 import com.hanghae99_team3.login.jwt.JwtTokenProvider;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.board.domain.Board;
@@ -40,9 +39,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -53,10 +56,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class CommentControllerTest {
 
     MockMvc mockMvc;
-    @MockBean JwtTokenProvider jwtTokenProvider;
-    @MockBean UserRepository userRepository;
-    @MockBean CommentService commentService;
-    @MockBean CommentRepository commentRepository;
+    @MockBean
+    JwtTokenProvider jwtTokenProvider;
+    @MockBean
+    UserRepository userRepository;
+    @MockBean
+    CommentService commentService;
+    @MockBean
+    CommentRepository commentRepository;
     final String accessToken = "JwtAccessToken";
     User baseUser;
     Principal mockPrincipal;
@@ -92,7 +99,7 @@ class CommentControllerTest {
 
         List<ResourceRequestDto> resourceRequestDtoList = new ArrayList<>();
 
-        for(int i = 0; i < 2; i ++){
+        for (int i = 0; i < 2; i++) {
             resourceRequestDtoList.add(ResourceRequestDto.builder()
                     .resourceName("재료 이름")
                     .amount("재료 수량")
@@ -145,7 +152,7 @@ class CommentControllerTest {
         doNothing().when(commentService);
 
         MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(
-                "/api/board/{boardId}/comment",1L);
+                "/api/board/{boardId}/comment", 1L);
 
         //then
         mockMvc.perform(builder
@@ -156,7 +163,14 @@ class CommentControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(CommentDocumentation.createComment(commentRequestDto));
+                .andDo(document("post-createComment",
+                        requestHeaders(
+                                headerWithName("Access-Token").description("Jwt Access-Token")
+                        ),
+                        requestParts(
+                                partWithName("commentRequestDto").description(objectMapper.writeValueAsString(commentRequestDto))
+                        )
+                ));
 
     }
 
@@ -179,7 +193,7 @@ class CommentControllerTest {
         doNothing().when(commentService);
 
         MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(
-                "/api/board/{boardId}/comment/{commentId}",1L,1L);
+                "/api/board/{boardId}/comment/{commentId}", 1L, 1L);
         builder.with(request -> {
             request.setMethod("PUT");
             return request;
@@ -194,7 +208,14 @@ class CommentControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(CommentDocumentation.updateComment(commentRequestDto));
+                .andDo(document("put-updateComment",
+                        requestHeaders(
+                                headerWithName("Access-Token").description("Jwt Access-Token")
+                        ),
+                        requestParts(
+                                partWithName("commentRequestDto").description(objectMapper.writeValueAsString(commentRequestDto))
+                        )
+                ));
 
     }
 
@@ -206,7 +227,7 @@ class CommentControllerTest {
         doNothing().when(commentService);
 
         MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(
-                "/api/board/{boardId}/comment/{commentId}",1L,1L);
+                "/api/board/{boardId}/comment/{commentId}", 1L, 1L);
         builder.with(request -> {
             request.setMethod("DELETE");
             return request;
@@ -219,8 +240,11 @@ class CommentControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(CommentDocumentation.removeComment());
-
+                .andDo(document("delete-removeComment",
+                        requestHeaders(
+                                headerWithName("Access-Token").description("Jwt Access-Token")
+                        )
+                ));
     }
 
 }

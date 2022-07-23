@@ -1,0 +1,47 @@
+{
+    "boardRequestDtoList" : [{
+        "title" : "",
+        "content" : "",
+        "mainImageLink" : "",
+        "resourceRequestDtoList" : [{
+            "resourceName" : "",
+            "amount" : "",
+            "category" : ""
+        },{
+            "resourceName" : "",
+            "amount" : "",
+            "category" : ""
+        }],
+        "recipeStepRequestDtoList" : [{
+            "stepNum" : 1,
+            "stepContent" : "",
+            "imageLink" : ""
+        },{
+            "stepNum" : 2,
+            "stepContent" : "",
+            "imageLink" : ""
+        }]
+    }, {
+        "title" : "",
+        "content" : "",
+        "mainImageLink" : "",
+        "resourceRequestDtoList" : [{
+            "resourceName" : "",
+            "amount" : "",
+            "category" : ""
+        },{
+            "resourceName" : "",
+            "amount" : "",
+            "category" : ""
+        }],
+        "recipeStepRequestDtoList" : [{
+            "stepNum" : 1,
+            "stepContent" : "",
+            "imageLink" : ""
+        },{
+            "stepNum" : 2,
+            "stepContent" : "",
+            "imageLink" : ""
+        }]
+    }]
+}
