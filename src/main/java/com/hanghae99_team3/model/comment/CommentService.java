@@ -1,6 +1,6 @@
 package com.hanghae99_team3.model.comment;
 
-import com.hanghae99_team3.exception.newException.IdDuplicateException;
+import com.hanghae99_team3.exception.newException.IdDifferentException;
 import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.service.BoardService;
 import com.hanghae99_team3.model.comment.dto.CommentRequestDto;
@@ -14,9 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import static com.hanghae99_team3.exception.ErrorMessage.COMMENT_NOT_FOUND;
-import static com.hanghae99_team3.exception.ErrorMessage.ID_DUPLICATE;
+import static com.hanghae99_team3.exception.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor
@@ -51,12 +49,11 @@ public class CommentService {
     @Transactional
     public void updateComment(PrincipalDetails principalDetails, CommentRequestDto commentRequestDto, Long boardId, Long commentId) {
         User user = userService.findUserByAuthEmail(principalDetails);
-        Board board = boardService.findBoardById(boardId);
-
-        if (!board.getUser().getEmail().equals(user.getEmail()) ) throw new IdDuplicateException(ID_DUPLICATE);
-
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 ()-> new IllegalArgumentException(COMMENT_NOT_FOUND));
+
+        if (!comment.getBoard().getId().equals(boardId)) throw new IdDifferentException(COMMENT_NOT_FOUND);
+        if (!comment.getUser().getEmail().equals(user.getEmail()) ) throw new IdDifferentException(USER_ID_DIFFERENT);
 
         comment.updateContent(commentRequestDto);
 
@@ -64,12 +61,12 @@ public class CommentService {
 
     public void removeComment(PrincipalDetails principalDetails, Long boardId, Long commentId) {
         User user = userService.findUserByAuthEmail(principalDetails);
-        Board board = boardService.findBoardById(boardId);
-
-        if (!board.getUser().getEmail().equals(user.getEmail()) ) throw new IdDuplicateException(ID_DUPLICATE);
-
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 ()-> new IllegalArgumentException(COMMENT_NOT_FOUND));
+
+        if (!comment.getBoard().getId().equals(boardId)) throw new IdDifferentException(COMMENT_NOT_FOUND);
+        if (!comment.getUser().getEmail().equals(user.getEmail()) ) throw new IdDifferentException(USER_ID_DIFFERENT);
+
 
         commentRepository.delete(comment);
 
