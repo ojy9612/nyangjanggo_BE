@@ -1,5 +1,7 @@
 package com.hanghae99_team3.model.board;
 
+import com.hanghae99_team3.login.jwt.PrincipalDetails;
+import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.domain.BoardDocument;
 import com.hanghae99_team3.model.board.dto.response.BoardResponseDto;
 import com.hanghae99_team3.model.board.repository.BoardRepository;
@@ -8,10 +10,16 @@ import com.hanghae99_team3.model.resource.domain.Resource;
 import com.hanghae99_team3.model.resource.domain.ResourceKeywordDocument;
 import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;
 import com.hanghae99_team3.model.resource.repository.ResourceSearchRepository;
+import com.hanghae99_team3.model.user.UserService;
+import com.hanghae99_team3.model.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +32,7 @@ public class testController {
     private final BoardSearchRepository boardSearchRepository;
     private final BoardRepository boardRepository;
     private final ResourceSearchRepository resourceSearchRepository;
+    private final UserService userService;
 
 
     @GetMapping("/api/boards/elastic")
@@ -60,5 +69,22 @@ public class testController {
 
         resourceSearchRepository.saveAll(resourceKeywordDocumentList);
     }
+
+    @PostMapping("/test/boards111")
+    public void createManyBoards(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                 @RequestBody TestBoardDtoList testBoardDtoList){
+        User user = userService.findUserByAuthEmail(principalDetails);
+
+        List<Board> boardList = new ArrayList<>();
+        testBoardDtoList.getBoardRequestDtoList().forEach(boardRequestDto -> {
+            boardList.add(Board.builder()
+                    .boardRequestDto(boardRequestDto)
+                    .user(user)
+                    .build());
+        });
+
+        boardRepository.saveAll(boardList);
+    }
+
 }
 

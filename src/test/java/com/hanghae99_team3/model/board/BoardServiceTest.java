@@ -1,5 +1,6 @@
 package com.hanghae99_team3.model.board;
 
+import com.hanghae99_team3.exception.newException.IdDifferentException;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDto;
@@ -7,8 +8,10 @@ import com.hanghae99_team3.model.board.repository.BoardRepository;
 import com.hanghae99_team3.model.board.service.BoardDocumentService;
 import com.hanghae99_team3.model.board.service.BoardService;
 import com.hanghae99_team3.model.images.ImagesService;
+import com.hanghae99_team3.model.recipestep.RecipeStepService;
 import com.hanghae99_team3.model.recipestep.dto.RecipeStepRequestDto;
 import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;
+import com.hanghae99_team3.model.resource.service.ResourceService;
 import com.hanghae99_team3.model.user.UserService;
 import com.hanghae99_team3.model.user.domain.AuthProvider;
 import com.hanghae99_team3.model.user.domain.User;
@@ -20,22 +23,22 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static com.hanghae99_team3.exception.ErrorMessage.BOARD_NOT_FOUND;
+import static com.hanghae99_team3.exception.ErrorMessage.USER_ID_DIFFERENT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -51,6 +54,10 @@ class BoardServiceTest {
     UserService userService;
     @Mock
     ImagesService imagesService;
+    @Mock
+    ResourceService resourceService;
+    @Mock
+    RecipeStepService recipeStepService;
     @InjectMocks
     BoardService boardService;
 
@@ -93,14 +100,14 @@ class BoardServiceTest {
                     anyLong()
             )).thenReturn(Optional.of(board));
 
-            Board resultBoard = boardService.findBoardById(board.getId());
+            Board resultBoard = boardService.findBoardById(1L);
 
             //then
             assertThat(resultBoard.getUser().getEmail()).isEqualTo("email@test.com");
         }
 
         @Test
-        @DisplayName("게시글 10개만 미리 보기")
+        @DisplayName("게시글 프리뷰")
         void getBoardsBySortPreview() {
             //given
             List<Board> boardList = new ArrayList<>();
@@ -150,7 +157,7 @@ class BoardServiceTest {
 
         @Test
         @DisplayName("이미지 생성")
-        void createImage() throws IOException {
+        void createImage() {
             //given
             Board board = Board.emptyBuilder()
                     .user(baseUser)
@@ -391,10 +398,70 @@ class BoardServiceTest {
         }
 
         @Test
-        @DisplayName("게시글 삭제")
+        @DisplayName("통합테스트에서 해야할 듯 게시글 삭제")
         void deleteBoard(){
             //given
+            Board board = Board.emptyBuilder()
+                    .user(baseUser)
+                    .build();
+
+            //when
+            when(userService.findUserByAuthEmail(
+                    any(PrincipalDetails.class)
+            )).thenReturn(baseUser);
+
+            when(boardRepository.findById(
+                    anyLong()
+            )).thenReturn(Optional.of(board));
+
+            boardService.deleteBoard(baseUserDetails, 1L);
+
+            //then
+            verify(boardRepository, times(1)).delete(any());
+
+        }
+
+    }
+
+    @Nested
+    @DisplayName("실패 테스트")
+    class FailTest{
+
+        @Test
+        @DisplayName("존재하지 않는 게시글 접근")
+        void findBoardByIdWrongId(){
+            //given
+            //when
+            Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                    boardService.findBoardById(-1L)
+            );
+            //then
+            assertThat(exception.getMessage()).isEqualTo(BOARD_NOT_FOUND);
+        }
+
+        @Test
+        @DisplayName("게시글 프리뷰 - 잘못된 엔티티 이름 주입")
+        void getBoardsBySortPreviewWrongEntityName() {
+            //given
+            //when
+            when(boardRepository.findFirst10By(
+                    any(Sort.class)
+            )).thenThrow(new MockitoException("PropertyReferenceException 에러 발생"));
+            // PropertyReferenceException
+
+            Exception exception = assertThrows(MockitoException.class, () ->
+                    boardService.getBoardsBySortPreview("wrongEntity")
+            );
+            //then
+            assertThat(exception.getMessage()).isEqualTo("PropertyReferenceException 에러 발생");
+        }
+
+        @Test
+        @DisplayName("다른 사용자의 게시글에 접근")
+        void createTempBoardAnotherUser() {
+            //given
             List<ResourceRequestDto> resourceRequestDtoList = new ArrayList<>();
+
             for (int i = 0; i < 2; i++) {
                 resourceRequestDtoList.add(ResourceRequestDto.builder()
                         .resourceName("재료 이름")
@@ -422,70 +489,38 @@ class BoardServiceTest {
                     .recipeStepRequestDtoList(recipeStepRequestDtoList)
                     .build();
 
-            Board board = Board.builder()
+            Board board = Board.emptyBuilder()
                     .user(baseUser)
-                    .boardRequestDto(boardRequestDto)
                     .build();
+
+            User anotherUser = User.testRegister()
+                    .email("email@test.com")
+                    .password("password")
+                    .userImg("userImgLink")
+                    .provider(AuthProvider.kakao)
+                    .providerId("providerId")
+                    .nickname("nickname")
+                    .role(UserRole.USER)
+                    .userDescription("description")
+                    .build();
+
+            PrincipalDetails anotherUserDetails = new PrincipalDetails(anotherUser);
 
             //when
             when(userService.findUserByAuthEmail(
                     any(PrincipalDetails.class)
-            )).thenReturn(baseUser);
+            )).thenReturn(anotherUser);
 
             when(boardRepository.findById(
                     anyLong()
             )).thenReturn(Optional.of(board));
 
-            boardService.deleteBoard(baseUserDetails, 1L);
 
-            //then
-            //?? 어캐 검증해야 하죠?
-
-        }
-
-    }
-
-    @Nested
-    @DisplayName("실패 테스트")
-    class FailTest{
-
-        @Test
-        @DisplayName("게시글 하나 불러오기 - 존재하지 않는 게시글 접근")
-        void findBoardByIdWrongId(){
-            //given
-            //when
-            when(boardRepository.findById(
-                    anyLong()
-            )).thenThrow(new IllegalArgumentException(BOARD_NOT_FOUND));
-
-            Exception exception = assertThrows(IllegalArgumentException.class, () ->
-                    boardService.findBoardById(1L)
+            Exception exception = assertThrows(IdDifferentException.class, () ->
+                    boardService.createTempBoard(anotherUserDetails, 1L, boardRequestDto)
             );
             //then
-            assertThat(exception.getMessage()).isEqualTo(BOARD_NOT_FOUND);
-        }
-
-        @Test
-        @DisplayName("게시글 10개만 미리 보기 - 잘못된 엔티티 이름 주입")
-        void getBoardsBySortPreviewWrongEntityName() {
-            //given
-            List<Board> boardList = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
-                boardList.add(Board.emptyBuilder()
-                        .user(baseUser)
-                        .build()
-                );
-            }
-
-            //when
-//            when(boardRepository.findFirst10By(
-//                    any(Sort.class)
-//            )).thenThrow(new PropertyReferenceException());
-
-            List<Board> resultBoard = boardService.getBoardsBySortPreview("goodCounta");
-
-            //then
-            assertThat(resultBoard.get(0).getUser().getEmail()).isEqualTo("email@test.com");
+            assertThat(exception.getMessage()).isEqualTo(USER_ID_DIFFERENT);
         }
 
     }

@@ -26,7 +26,7 @@ public class ImagesService {
 
             return imagesRepository.save(images).getImageLink();
         }
-        throw new IllegalArgumentException("올바른 이미지파일이 아니에요 윤교님.");
+        throw new IllegalArgumentException("올바른 이미지파일이 아닙니다.");
     }
 
     public void removeImages(Board board) {
