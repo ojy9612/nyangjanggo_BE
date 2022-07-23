@@ -11,7 +11,7 @@ public class ErrorMessage {
     public static final String COMMENT_NOT_FOUND = "생성된 댓글이 없습니다.";
 
     // 403
-    public static final String ID_DUPLICATE = "게시글 작성자가 아닙니다.";
+    public static final String USER_ID_DIFFERENT = "작성자가 아닙니다.";
 
 }
 

@@ -21,7 +21,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     Optional<Board> findByUserAndStatus(User user, String status);
 
-    List<Board> findFirst2By(Sort sort);
+    List<Board> findFirst10By(Sort sort);
 
     Page<Board> findAll(Pageable pageable);
 }

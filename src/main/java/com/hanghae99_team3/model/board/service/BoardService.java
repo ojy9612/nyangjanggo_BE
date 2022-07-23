@@ -1,7 +1,7 @@
 package com.hanghae99_team3.model.board.service;
 
 
-import com.hanghae99_team3.exception.newException.IdDuplicateException;
+import com.hanghae99_team3.exception.newException.IdDifferentException;
 import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDto;
 import com.hanghae99_team3.model.board.repository.BoardRepository;
@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.*;
 
 import static com.hanghae99_team3.exception.ErrorMessage.BOARD_NOT_FOUND;
-import static com.hanghae99_team3.exception.ErrorMessage.ID_DUPLICATE;
+import static com.hanghae99_team3.exception.ErrorMessage.USER_ID_DIFFERENT;
 
 @Slf4j
 @Service
@@ -45,7 +45,7 @@ public class BoardService {
     }
 
     public List<Board> getBoardsBySortPreview(String entityName) {
-        return boardRepository.findFirst2By(Sort.by(entityName));
+        return boardRepository.findFirst10By(Sort.by(entityName));
     }
 
     public Page<Board> getAllBoardsBySort(Pageable pageable) {
@@ -76,7 +76,7 @@ public class BoardService {
     public void createTempBoard(PrincipalDetails principalDetails, Long boardId, BoardRequestDto boardRequestDto) {
         User user = userService.findUserByAuthEmail(principalDetails);
         Board board = this.findBoardById(boardId);
-        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
+        if (user != board.getUser()) throw new IdDifferentException(USER_ID_DIFFERENT);
 
         board.updateStepMain(boardRequestDto);
         resourceService.updateResource(boardRequestDto.getResourceRequestDtoList(),board);
@@ -87,7 +87,7 @@ public class BoardService {
     public void createBoard(PrincipalDetails principalDetails, Long boardId, BoardRequestDto boardRequestDto) {
         User user = userService.findUserByAuthEmail(principalDetails);
         Board board = this.findBoardById(boardId);
-        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
+        if (user != board.getUser()) throw new IdDifferentException(USER_ID_DIFFERENT);
 
         board.updateStepMain(boardRequestDto);
         resourceService.createResource(boardRequestDto.getResourceRequestDtoList(),board);
@@ -101,7 +101,7 @@ public class BoardService {
     public void updateBoard(PrincipalDetails principalDetails, Long boardId, BoardRequestDto boardRequestDto) {
         User user = userService.findUserByAuthEmail(principalDetails);
         Board board = this.findBoardById(boardId);
-        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
+        if (user != board.getUser()) throw new IdDifferentException(USER_ID_DIFFERENT);
 
         board.updateStepMain(boardRequestDto);
         resourceService.updateResource(boardRequestDto.getResourceRequestDtoList(),board);
@@ -113,7 +113,7 @@ public class BoardService {
     public void deleteBoard(PrincipalDetails principalDetails, Long boardId) {
         User user = userService.findUserByAuthEmail(principalDetails);
         Board board = this.findBoardById(boardId);
-        if (user != board.getUser()) throw new IdDuplicateException(ID_DUPLICATE);
+        if (user != board.getUser()) throw new IdDifferentException(USER_ID_DIFFERENT);
 
         boardDocumentService.deleteBoard(board);
         boardRepository.delete(board);

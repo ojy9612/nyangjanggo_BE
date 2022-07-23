@@ -1,6 +1,6 @@
 package com.hanghae99_team3.exception;
 
-import com.hanghae99_team3.exception.newException.IdDuplicateException;
+import com.hanghae99_team3.exception.newException.IdDifferentException;
 import com.hanghae99_team3.exception.newException.S3UploadFailedException;
 import com.hanghae99_team3.login.exception.ErrorCode;
 import com.hanghae99_team3.login.exception.ExceptionCode;
@@ -10,6 +10,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,8 +39,8 @@ public class ApiException extends RuntimeException {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
-    @ExceptionHandler(IdDuplicateException.class)
-    public ResponseEntity<Map<String, String>> handleIdDuplicateException(IdDuplicateException e) {
+    @ExceptionHandler(IdDifferentException.class)
+    public ResponseEntity<Map<String, String>> handleIdDuplicateException(IdDifferentException e) {
         Map<String, String> errors = new HashMap<>();
         errors.put("IdDuplicateException", e.getMessage());
 
@@ -103,4 +104,14 @@ public class ApiException extends RuntimeException {
         ErrorCode errorCode = ErrorCode.INVALID_TOKEN;
         return ResponseEntity.status(errorCode.getStatus()).body(new ExceptionCode(errorCode));
     }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<Map<String,String>> handlePropertyReferenceException(PropertyReferenceException e) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("PropertyReferenceException", e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
+
 }
