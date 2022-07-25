@@ -50,13 +50,7 @@ public class ApiException extends RuntimeException {
     /**
      * SseEmitter Exception Handler
      */
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, String>> handleSseRuntimeException(RuntimeException e) {
-        Map<String, String> errors = new HashMap<>();
-        errors.put("SSE 연결 오류!", e.getMessage());
 
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errors);
-    }
 
 
     /**
