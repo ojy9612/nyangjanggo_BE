@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,8 +43,10 @@ public class UserController {
     }
 
     @PutMapping("/api/user")
-    public void updateUser(@ModelAttribute UserReqDto userDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        userService.updateUser(userDto, principalDetails);
+    public void updateUser(@RequestPart UserReqDto userDto,
+                           @RequestPart MultipartFile multipartFile,
+                           @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        userService.updateUser(userDto, multipartFile, principalDetails);
     }
 
     @DeleteMapping("/api/user")

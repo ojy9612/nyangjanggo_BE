@@ -13,6 +13,7 @@ import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,15 +33,12 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(UserReqDto userReqDto, PrincipalDetails principalDetails) {
+    public void updateUser(UserReqDto userReqDto, MultipartFile multipartFile, PrincipalDetails principalDetails) {
         User user = this.findUserByAuthEmail(principalDetails);
         //기존 이미지 삭제
         awsS3Service.deleteFile(user.getUserImg());
-        //s3에 이미지 저장
-        List<String> imgLinkList = awsS3Service.uploadFile(userReqDto.getUserImg());
-        String imgUrl = imgLinkList.get(0);
 
-        userReqDto.setImgUrl(imgUrl);
+        userReqDto.setImgUrl(awsS3Service.uploadFile(multipartFile));
         user.update(userReqDto);
     }
 
