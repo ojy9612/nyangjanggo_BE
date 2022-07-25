@@ -36,11 +36,8 @@ public class UserService {
         User user = this.findUserByAuthEmail(principalDetails);
         //기존 이미지 삭제
         awsS3Service.deleteFile(user.getUserImg());
-        //s3에 이미지 저장
-        List<String> imgLinkList = awsS3Service.uploadFile(userReqDto.getUserImg());
-        String imgUrl = imgLinkList.get(0);
 
-        userReqDto.setImgUrl(imgUrl);
+        userReqDto.setImgUrl(awsS3Service.uploadFile(userReqDto.getUserImg()));
         user.update(userReqDto);
     }
 

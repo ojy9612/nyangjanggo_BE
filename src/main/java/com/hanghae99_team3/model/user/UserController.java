@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @PutMapping("/api/user")
-    public void updateUser(@ModelAttribute UserReqDto userDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public void updateUser(@RequestPart UserReqDto userDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         userService.updateUser(userDto, principalDetails);
     }
 
