@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -49,6 +50,11 @@ public class UserService {
         //기존 이미지 삭제
         awsS3Service.deleteFile(user.getUserImg());
         userRepository.deleteById(user.getId());
+    }
+
+    public boolean checkNicknameDup(String nickname) {
+        Optional<User> user = userRepository.findByNickname(nickname);
+        return user.isEmpty();
     }
 
     @Transactional(readOnly = true)

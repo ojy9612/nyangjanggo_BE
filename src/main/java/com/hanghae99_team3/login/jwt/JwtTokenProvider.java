@@ -119,7 +119,7 @@ public class JwtTokenProvider {
     // Request의 Header에서 token 값을 가져옵니다. "Access-Token" : "TOKEN값'
     public String resolveToken(HttpServletRequest request) {
         String headerValue = request.getHeader("Access-Token");
-
+        log.info("[Access-Token] = " + headerValue);
         if (headerValue == null) {
             return null;
         } else {
