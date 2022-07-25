@@ -128,49 +128,49 @@ class UserControllerTest {
                 ));
 
     }
-
-    @Test
-    @DisplayName("회원정보 수정")
-    void updateUser() throws Exception {
-        //given
-        MockMultipartFile image = new MockMultipartFile(
-                "userImg",
-                "userImg.png",
-                "image/png",
-                "<<png data>>".getBytes(StandardCharsets.UTF_8));
-
-        //when
-        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/user");
-        builder.with(request -> {
-            request.setMethod("PUT");
-            return request;
-        });
-
-        ResultActions resultActions = this.mockMvc.perform(builder
-                .file(image)
-                        .param("nickname", "nickname")
-                        .param("userDescription", "userDescription")
-                .header("Access-Token", accessToken)
-                .contentType(MediaType.MULTIPART_FORM_DATA)
-                .principal(mockPrincipal));
-
-        //then
-        resultActions.andExpect(status().isOk())
-                .andDo(print())
-                .andDo(document("put-user",
-                        requestHeaders(
-                                headerWithName("Access-Token").description("Jwt Access-Token")
-                        ),
-                        requestParameters(
-                                parameterWithName("nickname").description("변경할 닉네임"),
-                                parameterWithName("userDescription").description("변경할 유저 소개글")
-                        ),
-                        requestParts(
-                                partWithName("userImg").description("변경할 프로필 이미지 ")
-                        )
-                ));
-
-    }
+//
+//    @Test
+//    @DisplayName("회원정보 수정")
+//    void updateUser() throws Exception {
+//        //given
+//        MockMultipartFile image = new MockMultipartFile(
+//                "userImg",
+//                "userImg.png",
+//                "image/png",
+//                "<<png data>>".getBytes(StandardCharsets.UTF_8));
+//
+//        //when
+//        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/user");
+//        builder.with(request -> {
+//            request.setMethod("PUT");
+//            return request;
+//        });
+//
+//        ResultActions resultActions = this.mockMvc.perform(builder
+//                .file(image)
+//                        .param("nickname", "nickname")
+//                        .param("userDescription", "userDescription")
+//                .header("Access-Token", accessToken)
+//                .contentType(MediaType.MULTIPART_FORM_DATA)
+//                .principal(mockPrincipal));
+//
+//        //then
+//        resultActions.andExpect(status().isOk())
+//                .andDo(print())
+//                .andDo(document("put-user",
+//                        requestHeaders(
+//                                headerWithName("Access-Token").description("Jwt Access-Token")
+//                        ),
+//                        requestParameters(
+//                                parameterWithName("nickname").description("변경할 닉네임"),
+//                                parameterWithName("userDescription").description("변경할 유저 소개글")
+//                        ),
+//                        requestParts(
+//                                partWithName("userImg").description("변경할 프로필 이미지 ")
+//                        )
+//                ));
+//
+//    }
 
     @Test
     @DisplayName("회원 탈퇴")
