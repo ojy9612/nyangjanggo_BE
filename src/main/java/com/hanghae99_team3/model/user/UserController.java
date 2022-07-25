@@ -4,14 +4,19 @@ import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.fridge.dto.FridgeRequestDto;
 import com.hanghae99_team3.model.fridge.dto.FridgeResponseDto;
 import com.hanghae99_team3.model.user.domain.UserRole;
+import com.hanghae99_team3.model.user.dto.NicknameDto;
 import com.hanghae99_team3.model.user.dto.UserInfoDto;
 import com.hanghae99_team3.model.user.dto.UserReqDto;
 import com.hanghae99_team3.model.user.dto.UserResDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -44,6 +49,18 @@ public class UserController {
     @DeleteMapping("/api/user")
     public void deleteUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         userService.deleteUser(principalDetails);
+    }
+
+    // 닉네임 중복 확인
+    @GetMapping("/api/user/checkNickname")
+    public ResponseEntity<Map<String, String>> checkNickname(@RequestBody NicknameDto nicknameDto) {
+        Map<String, String> response = new HashMap<>();
+        if (userService.checkNicknameDup(nicknameDto.getNickname())) {
+            response.put("check", "true");
+        } else {
+            response.put("check", "false");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/api/user/fridge")
