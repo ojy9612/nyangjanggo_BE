@@ -20,6 +20,15 @@ if [ ! -z ${TARGET_PID} ]; then
   sudo kill ${TARGET_PID}
 fi
 
-nohup java -jar -Dserver.port=${TARGET_PORT} /home/ubuntu/hanghae99_team3/build/libs/* > /home/ubuntu/hanghae99_team3/nohup.out 2>&1 &
+REPOSITORY=/home/ubuntu/hanghae99_team3
+# shellcheck disable=SC2164
+cd $REPOSITORY
+
+APP_NAME=hanghae99_team3 #1
+# shellcheck disable=SC2010
+JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep 'SNAPSHOT.jar' | tail -n 1)
+JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
+
+nohup java -jar -Dserver.port=${TARGET_PORT} ${JAR_PATH} > /home/ubuntu/hanghae99_team3/nohup.out 2>&1 &
 echo "> Now new WAS runs at ${TARGET_PORT}."
 exit 0
