@@ -32,7 +32,7 @@ public class Board extends Timestamped {
     @Column
     private String mainImageLink;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @Formula("(select count(*) from Good g where g.board_id=id)")
