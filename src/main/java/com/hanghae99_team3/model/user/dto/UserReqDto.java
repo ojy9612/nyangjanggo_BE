@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class UserReqDto {
     private String nickname;
-    private MultipartFile userImg;
     private String userDescription;
 
     // 새로운 image를 S3에 저장하고 나서 나오는 imgUrl
