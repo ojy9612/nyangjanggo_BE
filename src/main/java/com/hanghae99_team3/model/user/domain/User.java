@@ -113,11 +113,10 @@ public class User {
         this.userDescription = userDescription;
     }
 
-    public User update(UserReqDto userDto) {
+    public void update(UserReqDto userDto, String userImg) {
         this.nickname = userDto.getNickname();
-        this.userImg = userDto.getImgUrl();
+        this.userImg = userImg;
         this.userDescription = userDto.getUserDescription();
-        return this;
     }
 
     public User(@NotNull String nickname) {
