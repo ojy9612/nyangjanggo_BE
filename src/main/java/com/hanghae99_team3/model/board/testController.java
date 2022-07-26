@@ -85,9 +85,27 @@ public class testController {
         resourceSearchRepository.saveAll(resourceKeywordDocumentList);
     }
 
-    @PostMapping("/test/board22")
+    @PostMapping("/test/board/bad")
     @Transactional
     public void createBoardTest(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                @RequestPart BoardRequestDto boardRequestDto){
+        User user = userService.findUserByAuthEmail(principalDetails);
+
+        Board board = Board.builder()
+                .boardRequestDto(boardRequestDto)
+                .user(user)
+                .build();
+
+        resourceService.createResourceTest(boardRequestDto.getResourceRequestDtoList(), board);
+        recipeStepService.createRecipeStepTest(boardRequestDto.getRecipeStepRequestDtoList(),board);
+
+        boardDocumentService.createBoard(board);
+        boardRepository.save(board);
+    }
+
+    @PostMapping("/test/board/good")
+    @Transactional
+    public void createBoardTest2(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                 @RequestPart BoardRequestDto boardRequestDto){
         User user = userService.findUserByAuthEmail(principalDetails);
 
