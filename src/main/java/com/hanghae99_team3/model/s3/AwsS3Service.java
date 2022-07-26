@@ -98,6 +98,16 @@ public class AwsS3Service {
             amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
         }
     }
+    public void deleteAllFile(List<String> imageLinkList) {
+        DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucket);
+        List<DeleteObjectsRequest.KeyVersion> keyVersionList = new ArrayList<>();
+        imageLinkList.forEach(imageLink -> {
+            String fileName = DIR + imageLink.split("/")[4];
+            keyVersionList.add(new DeleteObjectsRequest.KeyVersion(fileName));
+        });
+        deleteObjectsRequest.setKeys(keyVersionList);
+        amazonS3.deleteObjects(deleteObjectsRequest);
+    }
 
     private String createFileName(String fileName) { // 먼저 파일 업로드 시, 파일명을 난수화하기 위해 random으로 돌립니다.
         return DIR + UUID.randomUUID().toString().concat("_" + getFileExtension(fileName));

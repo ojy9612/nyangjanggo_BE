@@ -124,6 +124,8 @@ public class testController {
 
         System.out.println(processingPort);
 
+        reader.close();
+
         return port;
     }
 
