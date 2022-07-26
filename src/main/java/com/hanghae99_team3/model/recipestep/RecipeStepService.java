@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,14 +20,16 @@ public class RecipeStepService {
     public void createRecipeStep(List<RecipeStepRequestDto> recipeStepRequestDtoList,
                                  Board board) {
 
+        List<RecipeStep> recipeStepList = new ArrayList<>();
         recipeStepRequestDtoList.forEach(recipeStepRequestDto -> {
             RecipeStep recipeStep = RecipeStep.builder()
                     .recipeStepRequestDto(recipeStepRequestDto)
                     .board(board)
                     .build();
 
-            recipeStepRepository.save(recipeStep);
+            recipeStepList.add(recipeStep);
         });
+        recipeStepRepository.saveAll(recipeStepList);
     }
 
     public void updateRecipeStep(List<RecipeStepRequestDto> recipeStepRequestDtoList, Board board){
