@@ -31,6 +31,18 @@ public class RecipeStepService {
         });
         recipeStepRepository.saveAll(recipeStepList);
     }
+    public void createRecipeStepTest(List<RecipeStepRequestDto> recipeStepRequestDtoList,
+                                 Board board) {
+
+        recipeStepRequestDtoList.forEach(recipeStepRequestDto -> {
+            RecipeStep recipeStep = RecipeStep.builder()
+                    .recipeStepRequestDto(recipeStepRequestDto)
+                    .board(board)
+                    .build();
+
+            recipeStepRepository.save(recipeStep);
+        });
+    }
 
     public void updateRecipeStep(List<RecipeStepRequestDto> recipeStepRequestDtoList, Board board){
         this.removeAllRecipeStep(board);
