@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class CommentResponseDto {
+
+    private Long id;
     private String nickname;
     private String userImg;
     private String comment;
@@ -17,6 +19,7 @@ public class CommentResponseDto {
     private LocalDateTime modifiedAt;
 
     public CommentResponseDto(@NotNull Comment comment) {
+        this.id = comment.getId();
         this.nickname = comment.getUser().getNickname();
         this.userImg = comment.getUser().getUserImg();
         this.comment = comment.getContent();
