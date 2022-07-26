@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,6 +25,7 @@ public class ResourceService {
 
     public void createResource(List<ResourceRequestDto> resourceRequestDtoList, Board board) {
 
+        List<Resource> resourceList = new ArrayList<>();
         resourceRequestDtoList.forEach(resourceRequestDto -> {
             Resource resource = Resource.builder()
                     .resourceRequestDto(resourceRequestDto)
@@ -44,8 +46,9 @@ public class ResourceService {
                 );
             }
 
-            resourceRepository.save(resource);
+            resourceList.add(resource);
         });
+        resourceRepository.saveAll(resourceList);
     }
 
     public void updateResource(List<ResourceRequestDto> resourceRequestDtoList, Board board) {
