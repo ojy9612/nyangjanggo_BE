@@ -26,7 +26,6 @@ public class BoardDetailResponseDto {
     private String mainImg;
     private List<ResourceResponseDto> resourceResponseDtoList;
     private List<RecipeStepResponseDto> recipeStepResponseDtoList;
-    private List<CommentResponseDto> commentList;
     private List<GoodResponseDto> goodList;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
@@ -42,7 +41,6 @@ public class BoardDetailResponseDto {
         this.mainImg = board.getMainImageLink();
         this.resourceResponseDtoList = board.getResourceList().stream().map(ResourceResponseDto::new).collect(Collectors.toList());
         this.recipeStepResponseDtoList = board.getRecipeStepList().stream().map(RecipeStepResponseDto::new).collect(Collectors.toList());
-        this.commentList = board.getCommentList().stream().map(CommentResponseDto::new).collect(Collectors.toList());
         this.goodList = board.getGoodList().stream().map(GoodResponseDto::new).collect(Collectors.toList());
         this.createdAt = board.getCreatedAt();
         this.modifiedAt = board.getModifiedAt();

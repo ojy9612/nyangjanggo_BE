@@ -20,7 +20,7 @@ CommentController {
     private final CommentService commentService;
 
     @GetMapping("/api/board/{boardId}/comments")
-    public Page<CommentResponseDto> getAllComment(@PageableDefault(size = 3) @PathVariable Long boardId, Pageable pageable){
+    public Page<CommentResponseDto> getAllComment(@PathVariable Long boardId, Pageable pageable){
         return commentService.getAllComment(boardId, pageable);
     }
 

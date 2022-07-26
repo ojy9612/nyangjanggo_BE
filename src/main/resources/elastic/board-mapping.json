@@ -17,7 +17,7 @@
     "id": {
       "type": "long"
     },
-    "resourceDocumentList": {
+    "resourceInBoardList": {
       "properties": {
         "amount": {
           "type": "text",

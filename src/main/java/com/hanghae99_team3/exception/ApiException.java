@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -116,6 +117,22 @@ public class ApiException extends RuntimeException {
         errors.put("PropertyReferenceException", e.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<Map<String,String>> handleNullPointerException(NullPointerException e) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("NullPointerException", e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
+    @ExceptionHandler(FileNotFoundException.class)
+    public ResponseEntity<Map<String,String>> handleFileNotFoundException(FileNotFoundException e) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("FileNotFoundException", e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
     }
 
 
