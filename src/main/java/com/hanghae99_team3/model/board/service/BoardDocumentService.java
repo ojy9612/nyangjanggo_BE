@@ -3,7 +3,7 @@ package com.hanghae99_team3.model.board.service;
 import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.domain.BoardDocument;
 import com.hanghae99_team3.model.board.repository.BoardRepository;
-import com.hanghae99_team3.model.board.repository.BoardSearchRepository;
+import com.hanghae99_team3.model.board.repository.BoardDocumentRepository;
 import com.hanghae99_team3.model.resource.domain.ResourceKeywordDocument;
 import com.hanghae99_team3.model.resource.repository.ResourceSearchRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -22,13 +21,13 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class BoardDocumentService {
 
-    private final BoardSearchRepository boardSearchRepository;
+    private final BoardDocumentRepository boardDocumentRepository;
     private final BoardRepository boardRepository;
     private final ResourceSearchRepository resourceSearchRepository;
 
     public Page<Board> getBoardDocumentsByResource(String resourceNameWords, Pageable pageable) {
 
-        List<Long> boardIdList = boardSearchRepository.searchByResourceNameWords(resourceNameWords).stream()
+        List<Long> boardIdList = boardDocumentRepository.searchByResourceNameWords(resourceNameWords).stream()
                 .map(BoardDocument::getId).collect(Collectors.toList());
 
         return boardRepository.findAllByIdIn(boardIdList,pageable);
@@ -36,7 +35,7 @@ public class BoardDocumentService {
 
     public Page<Board> getBoardDocumentsByTitle(String titleWords, Pageable pageable) {
 
-        List<Long> boardIdList = boardSearchRepository.findByTitle(titleWords).stream()
+        List<Long> boardIdList = boardDocumentRepository.findByTitle(titleWords).stream()
                 .map(BoardDocument::getId).collect(Collectors.toList());
 
         return boardRepository.findAllByIdIn(boardIdList,pageable);
@@ -50,7 +49,7 @@ public class BoardDocumentService {
 
     public List<String> recommendBoardDocumentByTitle(String titleWords) {
 
-        return boardSearchRepository.findByTitle(titleWords).stream()
+        return boardDocumentRepository.findByTitle(titleWords).stream()
                 .map(BoardDocument::getTitle).collect(Collectors.toList());
     }
 
@@ -60,7 +59,7 @@ public class BoardDocumentService {
                 .board(board)
                 .build();
 
-        boardSearchRepository.save(boardDocument);
+        boardDocumentRepository.save(boardDocument);
     }
 
     public void updateBoard(Board board) {
@@ -69,7 +68,7 @@ public class BoardDocumentService {
     }
 
     public void deleteBoard(Board board){
-        boardSearchRepository.deleteById(board.getId());
+        boardDocumentRepository.deleteById(board.getId());
     }
 
 
