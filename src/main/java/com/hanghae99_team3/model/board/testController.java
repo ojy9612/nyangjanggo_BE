@@ -3,6 +3,7 @@ package com.hanghae99_team3.model.board;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.domain.BoardDocument;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDto;
 import com.hanghae99_team3.model.board.dto.response.BoardResponseDto;
 import com.hanghae99_team3.model.board.repository.BoardRepository;
 import com.hanghae99_team3.model.board.repository.BoardSearchRepository;
@@ -25,10 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -86,6 +84,25 @@ public class testController {
 
         resourceSearchRepository.saveAll(resourceKeywordDocumentList);
     }
+
+    @PostMapping("/test/board22")
+    @Transactional
+    public void createBoardTest(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                @RequestPart BoardRequestDto boardRequestDto){
+        User user = userService.findUserByAuthEmail(principalDetails);
+
+        Board board = Board.builder()
+                .boardRequestDto(boardRequestDto)
+                .user(user)
+                .build();
+
+        resourceService.createResource(boardRequestDto.getResourceRequestDtoList(), board);
+        recipeStepService.createRecipeStep(boardRequestDto.getRecipeStepRequestDtoList(),board);
+
+        boardDocumentService.createBoard(board);
+        boardRepository.save(board);
+    }
+
 
     @PostMapping("/test/boards111")
     @Transactional
