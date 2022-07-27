@@ -1,5 +1,5 @@
 //Test
-package com.hanghae99_team3.model.user.dto;
+package com.hanghae99_team3.model.user.domain.dto;
 
 import com.hanghae99_team3.model.user.domain.UserRole;
 import lombok.AllArgsConstructor;

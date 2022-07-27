@@ -1,5 +1,5 @@
 //Test
-package com.hanghae99_team3.model.user.dto;
+package com.hanghae99_team3.model.user.domain.dto;
 
 import lombok.Getter;
 import lombok.Setter;

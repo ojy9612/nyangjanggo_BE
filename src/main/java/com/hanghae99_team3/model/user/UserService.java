@@ -6,7 +6,8 @@ import com.hanghae99_team3.model.fridge.FridgeService;
 import com.hanghae99_team3.model.fridge.dto.FridgeRequestDto;
 import com.hanghae99_team3.model.s3.AwsS3Service;
 import com.hanghae99_team3.model.user.domain.User;
-import com.hanghae99_team3.model.user.dto.UserReqDto;
+import com.hanghae99_team3.model.user.domain.dto.NicknameDto;
+import com.hanghae99_team3.model.user.domain.dto.UserReqDto;
 import com.hanghae99_team3.model.user.repository.UserRepository;
 import com.hanghae99_team3.login.jwt.JwtTokenProvider;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
@@ -40,6 +41,14 @@ public class UserService {
 
         userReqDto.setImgUrl(awsS3Service.uploadFile(multipartFile));
         user.update(userReqDto);
+    }
+
+    // test용
+    @Transactional
+    public void testUpdateUser(NicknameDto nicknameDto, long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("없음"));
+        UserReqDto userDto = new UserReqDto(nicknameDto.getNickname(), "", "");
+        user.update(userDto);
     }
 
     @Transactional
