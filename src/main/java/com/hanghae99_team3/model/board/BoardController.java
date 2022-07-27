@@ -1,6 +1,7 @@
 package com.hanghae99_team3.model.board;
 
 
+import com.hanghae99_team3.config.CacheKey;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDto;
 import com.hanghae99_team3.model.board.dto.response.BoardDetailResponseDto;
@@ -8,6 +9,7 @@ import com.hanghae99_team3.model.board.dto.response.BoardResponseDto;
 import com.hanghae99_team3.model.board.service.BoardDocumentService;
 import com.hanghae99_team3.model.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,6 +28,7 @@ public class BoardController {
     private final BoardService boardService;
     private final BoardDocumentService boardDocumentService;
 
+    @Cacheable(value = CacheKey.BOARD, key = "#boardId", cacheManager = "cacheManager")
     @GetMapping("/api/board/{boardId}")
     public BoardDetailResponseDto getOneBoard(@PathVariable Long boardId) {
         return new BoardDetailResponseDto(boardService.findBoardById(boardId));

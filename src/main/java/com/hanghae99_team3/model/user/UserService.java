@@ -42,13 +42,7 @@ public class UserService {
         user.update(userReqDto,awsS3Service.uploadFile(multipartFile));
     }
 
-    // test용
-    @Transactional
-    public void testUpdateUser(NicknameDto nicknameDto, long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("없음"));
-        UserReqDto userDto = new UserReqDto(nicknameDto.getNickname(), "", "");
-        user.update(userDto);
-    }
+
 
     @Transactional
     public void deleteUser(PrincipalDetails principalDetails) {

@@ -98,11 +98,10 @@ public class WebSecurityConfig {
                     .antMatchers("/api/publish/**").permitAll()
                     .antMatchers("/sseTest.html").permitAll()
                     .antMatchers("/test/**").permitAll()
-                    .antMatchers("/test/**").permitAll()
                     .antMatchers("/**").hasAnyRole("USER")
 //                    .anyRequest().permitAll()
 //                    .anyRequest().hasAnyRole("USER")
-                    .antMatchers("/**").hasAnyRole("USER")
+
 
 
                 .and()
