@@ -21,7 +21,7 @@ public class
 CommentController {
     private final CommentService commentService;
 
-    @Cacheable(value = CacheKey.COMMENT, key = "#boardId", cacheManager = "cacheManager")
+//    @Cacheable(value = CacheKey.COMMENT, key = "#boardId", cacheManager = "cacheManager")
     @GetMapping("/api/board/{boardId}/comments")
     public Page<CommentResponseDto> getAllComment(@PathVariable Long boardId, Pageable pageable){
         return commentService.getAllComment(boardId, pageable);

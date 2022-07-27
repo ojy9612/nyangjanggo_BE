@@ -28,6 +28,8 @@ public class BoardDocument {
 
     private String userImageLink;
 
+    private String mainImageLink;
+
     private String title;
 
     private String content;
@@ -50,6 +52,7 @@ public class BoardDocument {
         this.id = board.getId();
         this.userNickname = board.getUser().getNickname();
         this.userImageLink = board.getUser().getUserImg();
+        this.mainImageLink = board.getMainImageLink();
         this.title = board.getTitle();
         this.content = board.getContent();
         this.status = board.getStatus();
