@@ -125,22 +125,18 @@ public class testController {
                                  @RequestBody TestBoardDtoList testBoardDtoList){
         User user = userService.findUserByAuthEmail(principalDetails);
 
-        List<Board> boardList = new ArrayList<>();
-
         testBoardDtoList.getBoardRequestDtoList().forEach(boardRequestDto -> {
-            Board board = Board.builder()
-                    .boardRequestDto(boardRequestDto)
+            Board board = Board.emptyBuilder()
                     .user(user)
                     .build();
 
+            board.updateStepMain(boardRequestDto);
             resourceService.createResource(boardRequestDto.getResourceRequestDtoList(), board);
             recipeStepService.createRecipeStep(boardRequestDto.getRecipeStepRequestDtoList(),board);
 
             board.setStatus("complete");
-            boardDocumentService.createBoard(board);
-            boardList.add(board);
+            boardRepository.save(board);
         });
-        boardRepository.saveAll(boardList);
 
     }
 
@@ -151,7 +147,6 @@ public class testController {
                 .map(BoardDocument::new).collect(Collectors.toList());
 
         boardDocumentRepository.saveAll(collect);
-
     }
 
 }

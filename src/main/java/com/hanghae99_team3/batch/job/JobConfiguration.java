@@ -104,7 +104,6 @@ public class JobConfiguration {
     public Step deleteDeadImage(){
         return stepBuilderFactory.get("deleteDeadImage")
                 .tasklet((stepContribution, chunkContext) ->{
-                    log.error("AS?DASDASD?");
                     List<String> allObject = awsS3Service.getAllObject().get(0);
                     List<String> imageLinkList = new ArrayList<>();
 
@@ -127,14 +126,14 @@ public class JobConfiguration {
     public Step updateGoodCount(){
         return stepBuilderFactory.get("updateGoodCount")
                 .tasklet((stepContribution, chunkContext) ->{
-                    log.error("AS?sadsafqwewqe?");
                     List<Long> boardIdList = new ArrayList<>(saveCount.popAllBoardId());
 
                     List<BoardDocument> boardDocumentList = boardDocumentRepository.findAllByIdIn(boardIdList);
                     List<Board> boardList = boardRepository.findAllByIdIn(boardIdList);
 
                     for (int i = 0; i < boardList.size(); i++){
-                        boardDocumentList.get(i).updateGoodCount(boardList.get(i).getGoodCount());
+                        Board board = boardList.get(i);
+                        boardDocumentList.get(i).updateCount(board.getGoodCount(),board.getCommentCount());
                     }
                     boardDocumentRepository.saveAll(boardDocumentList);
                     return RepeatStatus.FINISHED;
