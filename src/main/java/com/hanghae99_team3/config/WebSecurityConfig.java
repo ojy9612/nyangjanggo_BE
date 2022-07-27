@@ -1,4 +1,4 @@
-package com.hanghae99_team3.login.config;
+package com.hanghae99_team3.config;
 
 import com.hanghae99_team3.login.exception.CustomAuthenticationEntryPoint;
 import com.hanghae99_team3.login.handler.TokenAccessDeniedHandler;
@@ -93,7 +93,7 @@ public class WebSecurityConfig {
                     .antMatchers("/refresh/**").permitAll()
                     .antMatchers("/docs/**").permitAll()
 
-                    //SSE
+                    //Test
                     .antMatchers("/api/subscribe/**").permitAll()
                     .antMatchers("/api/publish/**").permitAll()
                     .antMatchers("/sseTest.html").permitAll()

@@ -1,10 +1,12 @@
 package com.hanghae99_team3.model.comment;
 
+import com.hanghae99_team3.config.CacheKey;
 import com.hanghae99_team3.model.comment.dto.CommentRequestDto;
 import com.hanghae99_team3.model.comment.dto.CommentResponseDto;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -19,6 +21,7 @@ public class
 CommentController {
     private final CommentService commentService;
 
+//    @Cacheable(value = CacheKey.COMMENT, key = "#boardId", cacheManager = "cacheManager")
     @GetMapping("/api/board/{boardId}/comments")
     public Page<CommentResponseDto> getAllComment(@PathVariable Long boardId, Pageable pageable){
         return commentService.getAllComment(boardId, pageable);

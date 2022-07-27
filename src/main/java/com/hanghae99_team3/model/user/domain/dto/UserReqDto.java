@@ -1,4 +1,4 @@
-package com.hanghae99_team3.model.user.dto;
+package com.hanghae99_team3.model.user.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResDto {
+public class UserReqDto {
     private String nickname;
-    private String userImg;
     private String userDescription;
 }
