@@ -6,7 +6,8 @@ import com.hanghae99_team3.model.fridge.FridgeService;
 import com.hanghae99_team3.model.fridge.dto.FridgeRequestDto;
 import com.hanghae99_team3.model.s3.AwsS3Service;
 import com.hanghae99_team3.model.user.domain.User;
-import com.hanghae99_team3.model.user.dto.UserReqDto;
+import com.hanghae99_team3.model.user.domain.dto.NicknameDto;
+import com.hanghae99_team3.model.user.domain.dto.UserReqDto;
 import com.hanghae99_team3.model.user.repository.UserRepository;
 import com.hanghae99_team3.login.jwt.JwtTokenProvider;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
@@ -40,6 +41,8 @@ public class UserService {
 
         user.update(userReqDto,awsS3Service.uploadFile(multipartFile));
     }
+
+
 
     @Transactional
     public void deleteUser(PrincipalDetails principalDetails) {

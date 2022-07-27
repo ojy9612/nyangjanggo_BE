@@ -18,16 +18,31 @@ import java.util.Map;
 @ToString
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
-    private final String nickname;
-    private final String userImg;
-    private final String userDescription;
-    private final String email;
-    private final UserRole role;
-    private final AuthProvider authProvider;
-    private final Long userId;
-    private OAuth2UserInfo oAuth2UserInfo;
+    private String nickname;
+    private String userImg;
+    private String userDescription;
+    private String email;
+    private UserRole role;
+    private AuthProvider authProvider;
+    private Long userId;
+//    private OAuth2UserInfo oAuth2UserInfo;
+    private Map<String, Object> attributes;
+    private String providerId;
     private boolean isNew;
 
+    public PrincipalDetails() {
+
+    }
+
+    public PrincipalDetails(String nickname, String userImg, String userDescription, String email, UserRole role, AuthProvider authProvider, Long userId) {
+        this.nickname = nickname;
+        this.userImg = userImg;
+        this.userDescription = userDescription;
+        this.email = email;
+        this.role = role;
+        this.authProvider = authProvider;
+        this.userId = userId;
+    }
 
     //UserDetails: Form 로그인
     public PrincipalDetails(User user) {
@@ -49,7 +64,9 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         this.role = user.getRole();
         this.authProvider = user.getAuthProvider();
         this.userId = user.getId();
-        this.oAuth2UserInfo = oAuth2UserInfo;
+        this.attributes = oAuth2UserInfo.getAttributes();
+        this.providerId = oAuth2UserInfo.getProviderId();
+//        this.oAuth2UserInfo = oAuth2UserInfo;
         this.isNew = isNew;
     }
 
@@ -132,14 +149,13 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
      */
     @Override
     public Map<String, Object> getAttributes() {
-//        return attributes;
-        return oAuth2UserInfo.getAttributes();
+        return attributes;
     }
 
 
     @Override
     public String getName() {
-        return oAuth2UserInfo.getProviderId();
+        return providerId;
     }
 
 }

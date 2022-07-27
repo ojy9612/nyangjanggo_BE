@@ -4,7 +4,7 @@ import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.fridge.Fridge;
 import com.hanghae99_team3.model.good.Good;
-import com.hanghae99_team3.model.user.dto.UserReqDto;
+import com.hanghae99_team3.model.user.domain.dto.UserReqDto;
 import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
