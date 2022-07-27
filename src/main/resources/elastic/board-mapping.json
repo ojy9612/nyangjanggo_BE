@@ -1,10 +1,5 @@
 {
   "properties": {
-    "_class": {
-      "type": "keyword",
-      "index": false,
-      "doc_values": false
-    },
     "content": {
       "type": "text",
       "fields": {
@@ -15,9 +10,12 @@
       }
     },
     "id": {
-      "type": "long"
+      "type": "keyword"
     },
-    "resourceDocumentList": {
+    "goodCount": {
+      "type": "integer"
+    },
+    "resourceInBoardList": {
       "properties": {
         "amount": {
           "type": "text",

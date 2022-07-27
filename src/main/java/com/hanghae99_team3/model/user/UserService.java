@@ -39,8 +39,7 @@ public class UserService {
         //기존 이미지 삭제
         awsS3Service.deleteFile(user.getUserImg());
 
-        userReqDto.setImgUrl(awsS3Service.uploadFile(multipartFile));
-        user.update(userReqDto);
+        user.update(userReqDto,awsS3Service.uploadFile(multipartFile));
     }
 
     // test용

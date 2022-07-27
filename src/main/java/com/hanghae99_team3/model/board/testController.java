@@ -3,9 +3,10 @@ package com.hanghae99_team3.model.board;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.domain.BoardDocument;
+import com.hanghae99_team3.model.board.dto.request.BoardRequestDto;
 import com.hanghae99_team3.model.board.dto.response.BoardResponseDto;
 import com.hanghae99_team3.model.board.repository.BoardRepository;
-import com.hanghae99_team3.model.board.repository.BoardSearchRepository;
+import com.hanghae99_team3.model.board.repository.BoardDocumentRepository;
 import com.hanghae99_team3.model.board.service.BoardDocumentService;
 import com.hanghae99_team3.model.recipestep.RecipeStepService;
 import com.hanghae99_team3.model.resource.domain.Resource;
@@ -16,15 +17,16 @@ import com.hanghae99_team3.model.resource.service.ResourceService;
 import com.hanghae99_team3.model.user.UserService;
 import com.hanghae99_team3.model.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,18 +35,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class testController {
 
-    private final BoardSearchRepository boardSearchRepository;
+    private final BoardDocumentRepository boardDocumentRepository;
     private final BoardRepository boardRepository;
     private final BoardDocumentService boardDocumentService;
     private final ResourceSearchRepository resourceSearchRepository;
     private final UserService userService;
     private final ResourceService resourceService;
     private final RecipeStepService recipeStepService;
+    private final ServletWebServerApplicationContext webServerAppCtxt;
 
 
     @GetMapping("/api/boards/elastic")
     public Page<BoardResponseDto> getAllBoardDocument(Pageable pageable){
-        List<Long> boardIdList = boardSearchRepository.findFirst2By().stream()
+        List<Long> boardIdList = boardDocumentRepository.findFirst2By().stream()
                 .map(BoardDocument::getId).collect(Collectors.toList());
 
         return boardRepository.findAllByIdIn(boardIdList, pageable).map(BoardResponseDto::new);
@@ -77,6 +80,45 @@ public class testController {
         resourceSearchRepository.saveAll(resourceKeywordDocumentList);
     }
 
+    @PostMapping("/test/board/bad")
+    @Transactional
+    public void createBoardTest(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                @RequestPart BoardRequestDto boardRequestDto){
+        User user = userService.findUserByAuthEmail(principalDetails);
+
+        Board board = Board.builder()
+                .boardRequestDto(boardRequestDto)
+                .user(user)
+                .build();
+
+        resourceService.createResourceTest(boardRequestDto.getResourceRequestDtoList(), board);
+        recipeStepService.createRecipeStepTest(boardRequestDto.getRecipeStepRequestDtoList(),board);
+
+        board.setStatus("complete");
+        boardDocumentService.createBoard(board);
+        boardRepository.save(board);
+    }
+
+    @PostMapping("/test/board/good")
+    @Transactional
+    public void createBoardTest2(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                @RequestPart BoardRequestDto boardRequestDto){
+        User user = userService.findUserByAuthEmail(principalDetails);
+
+        Board board = Board.builder()
+                .boardRequestDto(boardRequestDto)
+                .user(user)
+                .build();
+
+        resourceService.createResource(boardRequestDto.getResourceRequestDtoList(), board);
+        recipeStepService.createRecipeStep(boardRequestDto.getRecipeStepRequestDtoList(),board);
+
+        board.setStatus("complete");
+        boardDocumentService.createBoard(board);
+        boardRepository.save(board);
+    }
+
+
     @PostMapping("/test/boards111")
     @Transactional
     public void createManyBoards(@AuthenticationPrincipal PrincipalDetails principalDetails,
@@ -92,9 +134,26 @@ public class testController {
             resourceService.createResource(boardRequestDto.getResourceRequestDtoList(), board);
             recipeStepService.createRecipeStep(boardRequestDto.getRecipeStepRequestDtoList(),board);
 
+            board.setStatus("complete");
             boardDocumentService.createBoard(board);
             boardRepository.save(board);
         });
+
+    }
+
+    @PostMapping("/test/board/ids")
+    @Transactional
+    public void asdas(@RequestBody TestWrapper2 boardIdList1){
+        List<Long> boardIdList = boardIdList1.getBoardIdList();
+
+        List<BoardDocument> boardDocumentList = boardDocumentRepository.findAllByIdIn(boardIdList);
+        List<Board> boardList = boardRepository.findAllByIdIn(boardIdList);
+
+        for (int i = 0; i < boardList.size(); i++){
+            boardDocumentList.get(i).updateGoodCount(2);
+        }
+
+        boardDocumentRepository.saveAll(boardDocumentList);
 
     }
 
