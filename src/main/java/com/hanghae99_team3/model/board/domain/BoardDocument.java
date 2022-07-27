@@ -37,6 +37,7 @@ public class BoardDocument {
     private Integer goodCount;
 
     private Integer commentCount;
+
     private List<ResourceInBoard> resourceInBoardList = new ArrayList<>();
 
     @Field(type = FieldType.Date, format = {date_hour_minute_second_millis, epoch_millis})
@@ -60,7 +61,8 @@ public class BoardDocument {
         this.modifiedAt = board.getModifiedAt();
     }
 
-    public void updateGoodCount(Integer goodCount){
+    public void updateCount(Integer goodCount, Integer commentCount){
         this.goodCount = goodCount;
+        this.commentCount = commentCount;
     }
 }
