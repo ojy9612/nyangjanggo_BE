@@ -125,6 +125,8 @@ public class testController {
                                  @RequestBody TestBoardDtoList testBoardDtoList){
         User user = userService.findUserByAuthEmail(principalDetails);
 
+        List<Board> boardList = new ArrayList<>();
+
         testBoardDtoList.getBoardRequestDtoList().forEach(boardRequestDto -> {
             Board board = Board.builder()
                     .boardRequestDto(boardRequestDto)
@@ -136,24 +138,19 @@ public class testController {
 
             board.setStatus("complete");
             boardDocumentService.createBoard(board);
-            boardRepository.save(board);
+            boardList.add(board);
         });
+        boardRepository.saveAll(boardList);
 
     }
 
-    @PostMapping("/test/board/ids")
-    @Transactional
-    public void asdas(@RequestBody TestWrapper2 boardIdList1){
-        List<Long> boardIdList = boardIdList1.getBoardIdList();
+    @PostMapping("/test/board/doc")
+    public void asdas(){
+        List<Board> all = boardRepository.findAll();
+        List<BoardDocument> collect = all.stream()
+                .map(BoardDocument::new).collect(Collectors.toList());
 
-        List<BoardDocument> boardDocumentList = boardDocumentRepository.findAllByIdIn(boardIdList);
-        List<Board> boardList = boardRepository.findAllByIdIn(boardIdList);
-
-        for (int i = 0; i < boardList.size(); i++){
-            boardDocumentList.get(i).updateGoodCount(2);
-        }
-
-        boardDocumentRepository.saveAll(boardDocumentList);
+        boardDocumentRepository.saveAll(collect);
 
     }
 
