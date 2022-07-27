@@ -26,6 +26,11 @@ public class BoardController {
     private final BoardService boardService;
     private final BoardDocumentService boardDocumentService;
 
+    @GetMapping("/api/health")
+    public void healthCheck(){
+
+    }
+
     @GetMapping("/api/board/{boardId}")
     public BoardDetailResponseDto getOneBoard(@PathVariable Long boardId) {
         return new BoardDetailResponseDto(boardService.findBoardById(boardId));
