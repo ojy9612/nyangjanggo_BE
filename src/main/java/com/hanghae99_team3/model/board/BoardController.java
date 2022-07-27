@@ -30,10 +30,10 @@ public class BoardController {
 
     @GetMapping("/api/health")
     public void healthCheck(){
-
+        // nginx용 헬스체크 함수 (상태코드 200을 반환하는지)
     }
 
-    @Cacheable(value = CacheKey.BOARD, key = "#boardId", cacheManager = "cacheManager")
+//    @Cacheable(value = CacheKey.BOARD, key = "#boardId", cacheManager = "cacheManager")
     @GetMapping("/api/board/{boardId}")
     public BoardDetailResponseDto getOneBoard(@PathVariable Long boardId) {
         return new BoardDetailResponseDto(boardService.findBoardById(boardId));
