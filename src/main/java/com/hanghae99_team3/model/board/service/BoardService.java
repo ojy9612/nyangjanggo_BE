@@ -119,4 +119,7 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
+    public Page<Board> getAllBoardsByEntityName(String columName, Pageable pageable) {
+        return boardRepository.findAllByEntityName(columName,pageable);
+    }
 }
