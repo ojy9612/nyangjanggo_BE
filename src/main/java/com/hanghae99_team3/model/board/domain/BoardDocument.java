@@ -24,6 +24,10 @@ public class BoardDocument {
     @Id
     private Long id;
 
+    private String userNickname;
+
+    private String userImageLink;
+
     private String title;
 
     private String content;
@@ -31,6 +35,8 @@ public class BoardDocument {
     private String status;
 
     private Integer goodCount;
+
+    private Integer commentCount;
     private List<ResourceInBoard> resourceInBoardList = new ArrayList<>();
 
     @Field(type = FieldType.Date, format = {date_hour_minute_second_millis, epoch_millis})
@@ -41,10 +47,13 @@ public class BoardDocument {
     @Builder
     public BoardDocument(Board board) {
         this.id = board.getId();
+        this.userNickname = board.getUser().getNickname();
+        this.userImageLink = board.getUser().getUserImg();
         this.title = board.getTitle();
         this.content = board.getContent();
         this.status = board.getStatus();
         this.goodCount = board.getGoodCount();
+        this.commentCount = board.getCommentCount();
         this.resourceInBoardList = board.getResourceList().stream()
                 .map(ResourceInBoard::new).collect(Collectors.toList());
         this.createdAt = board.getCreatedAt();

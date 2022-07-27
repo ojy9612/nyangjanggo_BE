@@ -8,7 +8,7 @@ import java.util.Set;
 
 @NoArgsConstructor
 @Getter
-public class SaveGoodCount {
+public class SaveCount {
     private Set<Long> boardIdSet = new HashSet<>();
 
     public void appendBoardId(Long boardId){
