@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfig {
 
     @Bean
-    public SaveGoodCount saveGoodCount(){
-        return new SaveGoodCount();
+    public SaveCount saveGoodCount(){
+        return new SaveCount();
     }
 
 }

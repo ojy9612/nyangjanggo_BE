@@ -2,7 +2,6 @@ package com.hanghae99_team3.model.board.service;
 
 
 import com.hanghae99_team3.exception.newException.IdDifferentException;
-import com.hanghae99_team3.model.board.config.SaveGoodCount;
 import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDto;
 import com.hanghae99_team3.model.board.repository.BoardRepository;

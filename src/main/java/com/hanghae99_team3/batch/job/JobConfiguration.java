@@ -1,6 +1,6 @@
 package com.hanghae99_team3.batch.job;
 
-import com.hanghae99_team3.model.board.config.SaveGoodCount;
+import com.hanghae99_team3.model.board.config.SaveCount;
 import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.domain.BoardDocument;
 import com.hanghae99_team3.model.board.repository.BoardDocumentRepository;
@@ -42,7 +42,7 @@ public class JobConfiguration {
     private final ImagesRepository imagesRepository;
     private final AwsS3Service awsS3Service;
     private final ServletWebServerApplicationContext webServerAppCtxt;
-    private final SaveGoodCount saveGoodCount;
+    private final SaveCount saveCount;
     private final BoardRepository boardRepository;
     private final BoardDocumentRepository boardDocumentRepository;
 
@@ -128,7 +128,7 @@ public class JobConfiguration {
         return stepBuilderFactory.get("updateGoodCount")
                 .tasklet((stepContribution, chunkContext) ->{
                     log.error("AS?sadsafqwewqe?");
-                    List<Long> boardIdList = new ArrayList<>(saveGoodCount.popAllBoardId());
+                    List<Long> boardIdList = new ArrayList<>(saveCount.popAllBoardId());
 
                     List<BoardDocument> boardDocumentList = boardDocumentRepository.findAllByIdIn(boardIdList);
                     List<Board> boardList = boardRepository.findAllByIdIn(boardIdList);
