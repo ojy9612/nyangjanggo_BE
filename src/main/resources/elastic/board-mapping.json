@@ -12,7 +12,16 @@
     "id": {
       "type": "keyword"
     },
+    "userImageLink": {
+      "type": "keyword"
+    },
+    "userNickname": {
+      "type": "keyword"
+    },
     "goodCount": {
+      "type": "integer"
+    },
+    "commentCount": {
       "type": "integer"
     },
     "resourceInBoardList": {

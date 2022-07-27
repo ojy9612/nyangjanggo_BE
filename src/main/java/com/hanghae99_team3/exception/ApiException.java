@@ -119,14 +119,6 @@ public class ApiException extends RuntimeException {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
-    @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<Map<String,String>> handleNullPointerException(NullPointerException e) {
-        Map<String, String> errors = new HashMap<>();
-        errors.put("NullPointerException", e.getMessage());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
-    }
-
     @ExceptionHandler(FileNotFoundException.class)
     public ResponseEntity<Map<String,String>> handleFileNotFoundException(FileNotFoundException e) {
         Map<String, String> errors = new HashMap<>();

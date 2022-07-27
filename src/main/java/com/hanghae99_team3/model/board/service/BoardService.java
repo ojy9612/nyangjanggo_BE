@@ -2,7 +2,6 @@ package com.hanghae99_team3.model.board.service;
 
 
 import com.hanghae99_team3.exception.newException.IdDifferentException;
-import com.hanghae99_team3.model.board.config.SaveGoodCount;
 import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDto;
 import com.hanghae99_team3.model.board.repository.BoardRepository;
@@ -120,4 +119,7 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
+    public Page<Board> getAllBoardsByEntityName(String columName, Pageable pageable) {
+        return boardRepository.findAllByEntityName(columName,pageable);
+    }
 }
