@@ -1,6 +1,7 @@
 package com.hanghae99_team3.model.comment;
 
 import com.hanghae99_team3.exception.newException.IdDifferentException;
+import com.hanghae99_team3.model.board.config.SaveCount;
 import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.service.BoardService;
 import com.hanghae99_team3.model.comment.dto.CommentRequestDto;
@@ -23,6 +24,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final BoardService boardService;
     private final UserService userService;
+    private final SaveCount saveCount;
 
     public Page<CommentResponseDto> getAllComment(Long boardId, Pageable pageable) {
         Board board = boardService.findBoardById(boardId);
@@ -43,6 +45,7 @@ public class CommentService {
                 .user(user)
                 .build();
 
+        saveCount.appendBoardId(boardId);
         commentRepository.save(comment);
     }
 
@@ -67,7 +70,7 @@ public class CommentService {
         if (!comment.getBoard().getId().equals(boardId)) throw new IdDifferentException(COMMENT_NOT_FOUND);
         if (!comment.getUser().getEmail().equals(user.getEmail()) ) throw new IdDifferentException(USER_ID_DIFFERENT);
 
-
+        saveCount.appendBoardId(boardId);
         commentRepository.delete(comment);
 
     }

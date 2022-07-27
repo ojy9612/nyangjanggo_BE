@@ -1,6 +1,6 @@
 package com.hanghae99_team3.model.good;
 
-import com.hanghae99_team3.model.board.config.SaveGoodCount;
+import com.hanghae99_team3.model.board.config.SaveCount;
 import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.service.BoardService;
 import com.hanghae99_team3.model.user.UserService;
@@ -18,7 +18,7 @@ public class GoodService {
     private final GoodRepositpory goodRepositpory;
     private final BoardService boardService;
     private final UserService userService;
-    private final SaveGoodCount saveGoodCount;
+    private final SaveCount saveCount;
 
     public void createAndRemoveGood(PrincipalDetails principalDetails, Long boardId) {
         User user = userService.findUserByAuthEmail(principalDetails);
@@ -32,7 +32,7 @@ public class GoodService {
             Good good = Good.builder().board(board).user(user).build();
             goodRepositpory.save(good);
         }
-        saveGoodCount.appendBoardId(board.getId());
+        saveCount.appendBoardId(board.getId());
 
     }
 }

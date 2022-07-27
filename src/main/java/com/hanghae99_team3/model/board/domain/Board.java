@@ -38,6 +38,9 @@ public class Board extends Timestamped {
     @Formula("(select count(*) from Good g where g.board_id=id)")
     private Integer goodCount;
 
+    @Formula("(select count(*) from Comment c where c.board_id=id)")
+    private Integer commentCount;
+
     @Setter
     @Column
     private String status = "modifying";
