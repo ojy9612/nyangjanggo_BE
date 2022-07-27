@@ -5,9 +5,11 @@ import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 import java.util.List;
+import java.util.Set;
 
-public interface BoardSearchRepository extends ElasticsearchRepository<BoardDocument,Long> {
+public interface BoardDocumentRepository extends ElasticsearchRepository<BoardDocument,Long> {
 
+    List<BoardDocument> findAllByIdIn(List<Long> boardIdSet);
     List<BoardDocument> findFirst2By();
 
     List<BoardDocument> findByTitle(String title);

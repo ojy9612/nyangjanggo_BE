@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,6 +24,34 @@ public class ResourceService {
     private final ResourceSearchRepository resourceSearchRepository;
 
     public void createResource(List<ResourceRequestDto> resourceRequestDtoList, Board board) {
+
+        List<Resource> resourceList = new ArrayList<>();
+        resourceRequestDtoList.forEach(resourceRequestDto -> {
+            Resource resource = Resource.builder()
+                    .resourceRequestDto(resourceRequestDto)
+                    .board(board)
+                    .build();
+
+            Optional<ResourceKeywordDocument> optionalResourceKeywordDocument =
+                    resourceSearchRepository.findByResourceNameKeyword(resource.getResourceName());
+
+            if (optionalResourceKeywordDocument.isPresent()) {
+                ResourceKeywordDocument resourceKeywordDocument = optionalResourceKeywordDocument.get();
+                resourceKeywordDocument.plusCnt();
+                resourceSearchRepository.save(resourceKeywordDocument);
+            } else {
+                resourceSearchRepository.save(ResourceKeywordDocument.builder()
+                        .resource(resource)
+                        .build()
+                );
+            }
+
+            resourceList.add(resource);
+        });
+        resourceRepository.saveAll(resourceList);
+    }
+
+    public void createResourceTest(List<ResourceRequestDto> resourceRequestDtoList, Board board) {
 
         resourceRequestDtoList.forEach(resourceRequestDto -> {
             Resource resource = Resource.builder()
