@@ -37,6 +37,7 @@ public class RedisConfig {
     @Value("${spring.redis.port}")
     private int redisPort;
 
+
     /*
         Lettuce: Multi-Thread 에서 Thread-Safe한 Redis 클라이언트로 netty에 의해 관리된다.
                  Sentinel, Cluster, Redis data model 같은 고급 기능들을 지원하며
@@ -65,17 +66,6 @@ public class RedisConfig {
         GenericJackson2JsonRedisSerializer: 객체를 json타입으로 직렬화/역직렬화를 수행한다.
      */
 
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper()));
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper()));
-
-        return redisTemplate;
-    }
 
 //    @Bean
 //    public StringRedisTemplate stringRedisTemplate() {
@@ -86,19 +76,17 @@ public class RedisConfig {
 //        return stringRedisTemplate;
 //    }
 
-    @Bean
-    public ObjectMapper objectMapper() {
+
+    @Bean(name = "cacheManager")
+    public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory) {
+
         ObjectMapper mapper = new ObjectMapper();
         mapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance,ObjectMapper.DefaultTyping.NON_FINAL,JsonTypeInfo.As.PROPERTY);
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // timestamp 형식 안따르도록 설정
         mapper.registerModules(new JavaTimeModule(), new Jdk8Module()); // LocalDateTime 매핑을 위해 모듈 활성화
-        return mapper;
-    }
 
-
-    @Bean(name = "cacheManager")
-    public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+
 //                .disableCachingNullValues()
                 .entryTtl(Duration.ofSeconds(CacheKey.DEFAULT_EXPIRE_SEC))
 //                .computePrefixWith(CacheKeyPrefix.simple())
@@ -106,7 +94,7 @@ public class RedisConfig {
                 .serializeKeysWith(RedisSerializationContext.SerializationPair
                         .fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair
-                        .fromSerializer(new GenericJackson2JsonRedisSerializer(objectMapper())));
+                        .fromSerializer(new GenericJackson2JsonRedisSerializer(mapper)));
 //                        .fromSerializer(new StringRedisSerializer()));
 
         Map<String, RedisCacheConfiguration> cacheConfiguration = new HashMap<>();

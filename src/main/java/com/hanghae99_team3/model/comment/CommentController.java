@@ -27,8 +27,6 @@ CommentController {
         return commentService.getAllComment(boardId, pageable);
     }
 
-
-
     @PostMapping("/api/board/{boardId}/comment")
     public void createComment(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                             @RequestPart CommentRequestDto commentRequestDto,
