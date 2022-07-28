@@ -5,10 +5,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 
 @Getter
 @NoArgsConstructor
-public class RecipeStepResponseDto {
+public class RecipeStepResponseDto implements Serializable {
 
     private Integer stepNum;
     private String stepContent;

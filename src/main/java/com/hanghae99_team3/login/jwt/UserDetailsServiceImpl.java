@@ -14,11 +14,10 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-@EnableCaching
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
     @Override
-//    @Cacheable(value = CacheKey.USER, key = "#email", unless = "#result == null", cacheManager = "cacheManager")
+    @Cacheable(value = CacheKey.USER, key = "#email", unless = "#result == null", cacheManager = "cacheManager")
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = findUser(email);
         return new PrincipalDetails(user,new DummyUserInfo(), false);
