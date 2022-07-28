@@ -1,4 +1,4 @@
-package com.hanghae99_team3.config;
+package com.hanghae99_team3.config.redis;
 
 
 import org.springframework.beans.factory.annotation.Value;
@@ -104,7 +104,7 @@ public class RedisConfig {
 
         Map<String, RedisCacheConfiguration> cacheConfiguration = new HashMap<>();
 
-        cacheConfiguration.put(CacheKey.USER, redisCacheConfiguration.entryTtl(Duration.ofSeconds(CacheKey.DEFAULT_EXPIRE_SEC)));
+        cacheConfiguration.put(CacheKey.USER, redisCacheConfiguration.entryTtl(Duration.ofSeconds(CacheKey.USER_EXPIRE_SEC)));
         cacheConfiguration.put(CacheKey.BOARD, redisCacheConfiguration.entryTtl(Duration.ofSeconds(CacheKey.DEFAULT_EXPIRE_SEC)));
         cacheConfiguration.put(CacheKey.COMMENT, redisCacheConfiguration.entryTtl(Duration.ofSeconds(CacheKey.DEFAULT_EXPIRE_SEC)));
 

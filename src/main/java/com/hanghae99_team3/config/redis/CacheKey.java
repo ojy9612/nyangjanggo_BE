@@ -1,4 +1,4 @@
-package com.hanghae99_team3.config;
+package com.hanghae99_team3.config.redis;
 
 
 public class CacheKey {
