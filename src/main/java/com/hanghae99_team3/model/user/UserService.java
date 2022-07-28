@@ -1,6 +1,7 @@
 package com.hanghae99_team3.model.user;
 
 
+import com.hanghae99_team3.config.redis.CacheKey;
 import com.hanghae99_team3.model.fridge.Fridge;
 import com.hanghae99_team3.model.fridge.FridgeService;
 import com.hanghae99_team3.model.fridge.dto.FridgeRequestDto;
@@ -12,6 +13,7 @@ import com.hanghae99_team3.model.user.repository.UserRepository;
 import com.hanghae99_team3.login.jwt.JwtTokenProvider;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,7 +36,8 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(UserReqDto userReqDto, MultipartFile multipartFile, PrincipalDetails principalDetails) {
+    @CacheEvict(value = CacheKey.USER, key = "#email", cacheManager = "cacheManager")
+    public void updateUser(String email, UserReqDto userReqDto, MultipartFile multipartFile, PrincipalDetails principalDetails) {
         User user = this.findUserByAuthEmail(principalDetails);
         //기존 이미지 삭제
         awsS3Service.deleteFile(user.getUserImg());
@@ -45,7 +48,8 @@ public class UserService {
 
 
     @Transactional
-    public void deleteUser(PrincipalDetails principalDetails) {
+    @CacheEvict(value = CacheKey.USER, key = "#email", cacheManager = "cacheManager")
+    public void deleteUser(String email, PrincipalDetails principalDetails) {
         User user = this.findUserByAuthEmail(principalDetails);
         //기존 이미지 삭제
         awsS3Service.deleteFile(user.getUserImg());
