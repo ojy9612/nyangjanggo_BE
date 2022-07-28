@@ -29,7 +29,7 @@ public class CommentService {
     public Page<CommentResponseDto> getAllComment(Long boardId, Pageable pageable) {
         Board board = boardService.findBoardById(boardId);
 
-        return commentRepository.findAllByBoard(board,pageable)
+        return commentRepository.findAllByBoard(board, pageable)
                 .map(CommentResponseDto::new);
 
     }
@@ -53,10 +53,10 @@ public class CommentService {
     public void updateComment(PrincipalDetails principalDetails, CommentRequestDto commentRequestDto, Long boardId, Long commentId) {
         User user = userService.findUserByAuthEmail(principalDetails);
         Comment comment = commentRepository.findById(commentId).orElseThrow(
-                ()-> new IllegalArgumentException(COMMENT_NOT_FOUND));
+                () -> new IllegalArgumentException(COMMENT_NOT_FOUND));
 
         if (!comment.getBoard().getId().equals(boardId)) throw new IdDifferentException(COMMENT_NOT_FOUND);
-        if (!comment.getUser().getEmail().equals(user.getEmail()) ) throw new IdDifferentException(USER_ID_DIFFERENT);
+        if (!comment.getUser().getEmail().equals(user.getEmail())) throw new IdDifferentException(USER_ID_DIFFERENT);
 
         comment.updateContent(commentRequestDto);
 
@@ -65,10 +65,10 @@ public class CommentService {
     public void removeComment(PrincipalDetails principalDetails, Long boardId, Long commentId) {
         User user = userService.findUserByAuthEmail(principalDetails);
         Comment comment = commentRepository.findById(commentId).orElseThrow(
-                ()-> new IllegalArgumentException(COMMENT_NOT_FOUND));
+                () -> new IllegalArgumentException(COMMENT_NOT_FOUND));
 
         if (!comment.getBoard().getId().equals(boardId)) throw new IdDifferentException(COMMENT_NOT_FOUND);
-        if (!comment.getUser().getEmail().equals(user.getEmail()) ) throw new IdDifferentException(USER_ID_DIFFERENT);
+        if (!comment.getUser().getEmail().equals(user.getEmail())) throw new IdDifferentException(USER_ID_DIFFERENT);
 
         saveCount.appendBoardId(boardId);
         commentRepository.delete(comment);

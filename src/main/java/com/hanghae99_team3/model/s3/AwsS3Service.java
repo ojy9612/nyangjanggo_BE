@@ -43,10 +43,10 @@ public class AwsS3Service {
 
         // forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
         multipartFiles.forEach(file -> {
-            if(file.getContentType() != null){
+            if (file.getContentType() != null) {
                 String fileName = putFile(file);
 
-                fileLinkList.add(OBJECTLINK + amazonS3.getObject(bucket,fileName).getKey());
+                fileLinkList.add(OBJECTLINK + amazonS3.getObject(bucket, fileName).getKey());
             } else {
                 fileLinkList.add("");
             }
@@ -58,26 +58,26 @@ public class AwsS3Service {
     public String uploadFile(MultipartFile multipartFile) {
         // forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
 
-        if(Objects.equals(multipartFile.getOriginalFilename(), "")){
+        if (Objects.equals(multipartFile.getOriginalFilename(), "")) {
             return "";
         } else {
             String fileName = putFile(multipartFile);
-            return OBJECTLINK + amazonS3.getObject(bucket,fileName).getKey();
+            return OBJECTLINK + amazonS3.getObject(bucket, fileName).getKey();
         }
 
     }
 
-    private String putFile(MultipartFile multipartFile){
+    private String putFile(MultipartFile multipartFile) {
         String fileName = createFileName(multipartFile.getOriginalFilename());
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(multipartFile.getSize());
         objectMetadata.setContentType(multipartFile.getContentType());
 
-        try(InputStream inputStream = multipartFile.getInputStream()) {
+        try (InputStream inputStream = multipartFile.getInputStream()) {
             // 파일 유효성 검사
             Tika tika = new Tika();
-            String detectedFile = tika.detect(multipartFile.getBytes());  // getBytes() 사용시 느려질 수 있음
-            if(!(detectedFile.startsWith("image"))){
+            String detectedFile = tika.detect(multipartFile.getBytes());
+            if (!(detectedFile.startsWith("image"))) {
                 throw new IllegalArgumentException("AwsS3 : 올바른 이미지 파일을 올려주세요.");
             }
 
@@ -86,7 +86,7 @@ public class AwsS3Service {
                     .withCannedAcl(CannedAccessControlList.PublicRead));
 
             return fileName;
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new S3UploadFailedException("S3파일 업로드 실패, bucket 에 남겨진 이미지를 확인하세요.");
         }
     }
@@ -98,6 +98,7 @@ public class AwsS3Service {
             amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
         }
     }
+
     public void deleteAllFile(List<String> imageLinkList) {
         DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucket);
         List<DeleteObjectsRequest.KeyVersion> keyVersionList = new ArrayList<>();
@@ -121,8 +122,8 @@ public class AwsS3Service {
         }
     }
 
-    public List<List<String>> getAllObject(){
-        ObjectListing objectListing = amazonS3.listObjects(bucket,DIR);
+    public List<List<String>> getAllObject() {
+        ObjectListing objectListing = amazonS3.listObjects(bucket, DIR);
 
         List<List<String>> keyList = new ArrayList<>();
 
@@ -136,7 +137,7 @@ public class AwsS3Service {
 
             objectListing = amazonS3.listNextBatchOfObjects(objectListing);
 
-        }while (objectListing.isTruncated());
+        } while (objectListing.isTruncated());
 
         return keyList;
     }

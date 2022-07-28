@@ -9,11 +9,8 @@ import lombok.NoArgsConstructor;
 public class FridgeRequestDto {
 
     private String resourceName;
-
     private String amount;
-
     private String category;
-
     private String endTime;
 
     @Builder

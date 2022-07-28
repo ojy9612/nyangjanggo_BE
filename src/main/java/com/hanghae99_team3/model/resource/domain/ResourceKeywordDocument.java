@@ -21,11 +21,11 @@ public class ResourceKeywordDocument {
 
     private Integer cnt;
 
-    public void plusCnt(){
+    public void plusCnt() {
         this.cnt += 1;
     }
 
-    public void minusCnt(){
+    public void minusCnt() {
         if (cnt > 0) this.cnt -= 1;
     }
 

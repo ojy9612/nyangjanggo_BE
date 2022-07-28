@@ -1,12 +1,11 @@
 package com.hanghae99_team3.model.good;
 
+import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.board.config.SaveCount;
 import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.repository.BoardRepository;
-import com.hanghae99_team3.model.board.service.BoardService;
 import com.hanghae99_team3.model.user.UserService;
 import com.hanghae99_team3.model.user.domain.User;
-import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,20 +29,20 @@ public class GoodService {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException(BOARD_NOT_FOUND));
 
-        Optional<Good> optionalGood = goodRepositpory.findByBoardAndUser(board,user);
+        Optional<Good> optionalGood = goodRepositpory.findByBoardAndUser(board, user);
 
-        if (optionalGood.isPresent()){
+        if (optionalGood.isPresent()) {
             goodRepositpory.delete(optionalGood.get());
-        }else{
+        } else {
             Good good = Good.builder().board(board).user(user).build();
             goodRepositpory.save(good);
         }
         saveCount.appendBoardId(board.getId());
     }
 
-    public List<Long> getBoardIdListByUser(User user){
+    public List<Long> getBoardIdListByUser(User user) {
         return goodRepositpory.findAllByUser(user).stream()
                 .map(good -> good.getBoard().getId()).collect(Collectors.toList());
-
     }
+
 }
