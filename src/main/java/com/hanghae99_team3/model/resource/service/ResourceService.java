@@ -77,6 +77,7 @@ public class ResourceService {
         });
     }
 
+    // 사용자가 내용을 한번에 수정할 가능성이 높으므로 항상 데이터를 List 로 받게 함
     public void updateResource(List<ResourceRequestDto> resourceRequestDtoList, Board board) {
         this.removeAllResource(board);
         this.createResource(resourceRequestDtoList, board);
@@ -86,15 +87,13 @@ public class ResourceService {
         List<String> resourceNameList = board.getResourceList().stream()
                 .map(Resource::getResourceName).collect(Collectors.toList());
 
-        resourceNameList.forEach(s -> {
-            resourceSearchRepository.findByResourceNameKeyword(s).ifPresent(resourceKeywordDocument -> {
-                        resourceKeywordDocument.minusCnt();
-                        if (resourceKeywordDocument.getCnt() <= 0) {
-                            resourceSearchRepository.delete(resourceKeywordDocument);
-                        }
+        resourceNameList.forEach(s -> resourceSearchRepository.findByResourceNameKeyword(s).ifPresent(resourceKeywordDocument -> {
+                    resourceKeywordDocument.minusCnt();
+                    if (resourceKeywordDocument.getCnt() <= 0) {
+                        resourceSearchRepository.delete(resourceKeywordDocument);
                     }
-            );
-        });
+                }
+        ));
 
         resourceRepository.deleteAll(resourceRepository.findAllByBoard(board));
     }

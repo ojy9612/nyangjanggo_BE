@@ -20,10 +20,11 @@ import java.util.List;
 
 @Getter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)  // Lazy 방식때문에 기본생성자가 필요함
 public class Board extends Timestamped {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
@@ -35,6 +36,7 @@ public class Board extends Timestamped {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    // DB상에 Colum을 만들지 않고 Size를 가져옴
     @Formula("(select count(*) from Good g where g.board_id=id)")
     private Integer goodCount;
 
@@ -46,7 +48,7 @@ public class Board extends Timestamped {
     private String status = "modifying";
 
     @Setter
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, orphanRemoval = true)
@@ -98,8 +100,8 @@ public class Board extends Timestamped {
         this.mainImageLink = boardRequestDto.getMainImageLink();
     }
 
-    @Builder(builderClassName = "EmptyBuilder",builderMethodName = "emptyBuilder")
-    public Board(@NotNull User user){
+    @Builder(builderClassName = "EmptyBuilder", builderMethodName = "emptyBuilder")
+    public Board(@NotNull User user) {
         user.addBoard(this);
     }
 

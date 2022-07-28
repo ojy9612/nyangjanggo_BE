@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ResourceRepository extends JpaRepository<Resource, Long> {
 
-    List<Resource> findAllByBoard (Board board);
+    List<Resource> findAllByBoard(Board board);
 }

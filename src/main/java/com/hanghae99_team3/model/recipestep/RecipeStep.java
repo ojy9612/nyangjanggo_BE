@@ -21,7 +21,6 @@ public class RecipeStep extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter
     @Column
     private Integer stepNum;
     @Column
@@ -42,7 +41,7 @@ public class RecipeStep extends Timestamped {
         board.addRecipeStep(this);
     }
 
-    public void updateRecipeStep(@NotNull RecipeStepRequestDto recipeStepRequestDto){
+    public void updateRecipeStep(@NotNull RecipeStepRequestDto recipeStepRequestDto) {
         this.stepNum = recipeStepRequestDto.getStepNum();
         this.content = recipeStepRequestDto.getStepContent();
         this.imageLink = recipeStepRequestDto.getImageLink();

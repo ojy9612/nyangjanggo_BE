@@ -2,14 +2,11 @@ package com.hanghae99_team3.model.recipestep;
 
 import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.recipestep.dto.RecipeStepRequestDto;
-import com.hanghae99_team3.model.s3.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -31,8 +28,9 @@ public class RecipeStepService {
         });
         recipeStepRepository.saveAll(recipeStepList);
     }
+
     public void createRecipeStepTest(List<RecipeStepRequestDto> recipeStepRequestDtoList,
-                                 Board board) {
+                                     Board board) {
 
         recipeStepRequestDtoList.forEach(recipeStepRequestDto -> {
             RecipeStep recipeStep = RecipeStep.builder()
@@ -44,9 +42,10 @@ public class RecipeStepService {
         });
     }
 
-    public void updateRecipeStep(List<RecipeStepRequestDto> recipeStepRequestDtoList, Board board){
+    // 사용자가 내용을 한번에 수정할 가능성이 높으므로 항상 데이터를 List 로 받게 함
+    public void updateRecipeStep(List<RecipeStepRequestDto> recipeStepRequestDtoList, Board board) {
         this.removeAllRecipeStep(board);
-        this.createRecipeStep(recipeStepRequestDtoList,board);
+        this.createRecipeStep(recipeStepRequestDtoList, board);
     }
 
 
