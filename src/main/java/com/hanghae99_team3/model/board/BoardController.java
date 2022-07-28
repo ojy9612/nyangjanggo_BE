@@ -6,7 +6,6 @@ import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDto;
 import com.hanghae99_team3.model.board.dto.response.BoardDetailResponseDto;
 import com.hanghae99_team3.model.board.dto.response.BoardResponseDto;
-import com.hanghae99_team3.model.board.service.BoardDocumentService;
 import com.hanghae99_team3.model.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -27,12 +26,6 @@ import java.util.stream.Collectors;
 public class BoardController {
 
     private final BoardService boardService;
-    private final BoardDocumentService boardDocumentService;
-
-    @GetMapping("/api/health")
-    public void healthCheck(){
-        // nginx용 헬스체크 함수 (상태코드 200을 반환하는지)
-    }
 
     @Cacheable(value = CacheKey.BOARD, key = "#boardId", cacheManager = "cacheManager")
     @GetMapping("/api/board/{boardId}")
@@ -42,12 +35,12 @@ public class BoardController {
 
     @GetMapping("/api/boards/user/good")
     public Page<BoardResponseDto> getBoardByUserGood(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                               Pageable pageable){
+                                                     Pageable pageable) {
         return boardService.getBoardByUserGood(principalDetails, pageable).map(BoardResponseDto::new);
     }
 
     @GetMapping("/api/boards/preview")
-    public List<BoardResponseDto> getBoardsBySortPreview(@RequestParam String entityName){
+    public List<BoardResponseDto> getBoardsBySortPreview(@RequestParam String entityName) {
         return boardService.getBoardsBySortPreview(entityName).stream()
                 .map(BoardResponseDto::new).collect(Collectors.toList());
     }
@@ -57,47 +50,9 @@ public class BoardController {
         return boardService.getAllBoards(pageable).map(BoardResponseDto::new);
     }
 
-    @GetMapping("/api/boards/resource")
-    public Page<BoardResponseDto> getBoardDocumentsByResource(@RequestParam String resourceName,
-                                                              Pageable pageable){
-        return boardDocumentService.getBoardDocumentsByResource(resourceName,pageable).map(BoardResponseDto::new);
-    }
-
-    @GetMapping("/api/boards/title")
-    public Page<BoardResponseDto> getBoardDocumentsByTitle(@RequestParam String titleWords,
-                                                           Pageable pageable){
-        return boardDocumentService.getBoardDocumentsByTitle(titleWords,pageable).map(BoardResponseDto::new);
-    }
-
-    @GetMapping("/api/board/resource/recommend")
-    public Map<String, List<String>> recommendResource(@RequestParam String resourceName){
-        Map<String, List<String>> result = new HashMap<>();
-        result.put("resourceRecommendList",
-                boardDocumentService.recommendResource(resourceName)
-        );
-        return result;
-    }
-
-    @GetMapping("/api/board/title/recommend")
-    public Map<String, List<String>> recommendBoardDocumentByTitle(@RequestParam String titleWords){
-        Map<String, List<String>> result = new HashMap<>();
-        result.put("titleRecommendList",
-            boardDocumentService.recommendBoardDocumentByTitle(titleWords)
-        );
-        return result;
-    }
-
-
-//    @GetMapping("/api/boards/resource")
-//    public Page<BoardResponseDto> getByResource(@RequestParam String searchWord,
-//                                                Pageable pageable
-//                                                ){
-//        return boardService.getByResource(searchWord,pageable).map(BoardResponseDto::new);
-//    }
-
     @PostMapping("/api/board/image")
     public Map<String, String> createImage(@RequestPart MultipartFile multipartFile,
-                                           @RequestParam Long boardId){
+                                           @RequestParam Long boardId) {
 
         Map<String, String> result = new HashMap<>();
         result.put("imageLink",
@@ -116,18 +71,18 @@ public class BoardController {
 
     @PutMapping("/api/board/temp")
     public void createTempBoard(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                            @RequestParam Long boardId,
-                            @RequestPart BoardRequestDto boardRequestDto){
+                                @RequestParam Long boardId,
+                                @RequestPart BoardRequestDto boardRequestDto) {
 
-        boardService.createTempBoard(principalDetails,boardId,boardRequestDto);
+        boardService.createTempBoard(principalDetails, boardId, boardRequestDto);
     }
 
     @PostMapping("/api/board")
     public void createBoard(@AuthenticationPrincipal PrincipalDetails principalDetails,
                             @RequestParam Long boardId,
-                            @RequestPart BoardRequestDto boardRequestDto){
+                            @RequestPart BoardRequestDto boardRequestDto) {
 
-        boardService.createBoard(principalDetails,boardId,boardRequestDto);
+        boardService.createBoard(principalDetails, boardId, boardRequestDto);
     }
 
 
@@ -135,9 +90,9 @@ public class BoardController {
     @PutMapping("/api/board")
     public void updateBoard(@AuthenticationPrincipal PrincipalDetails principalDetails,
                             @RequestParam Long boardId,
-                            @RequestPart BoardRequestDto boardRequestDto){
+                            @RequestPart BoardRequestDto boardRequestDto) {
 
-        boardService.updateBoard(principalDetails,boardId,boardRequestDto);
+        boardService.updateBoard(principalDetails, boardId, boardRequestDto);
     }
 
     @DeleteMapping("/api/board")
