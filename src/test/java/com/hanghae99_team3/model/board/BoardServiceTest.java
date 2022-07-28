@@ -149,7 +149,7 @@ class BoardServiceTest {
                     any(Pageable.class)
             )).thenReturn(boardPage);
 
-            Page<Board> resultPageBoard = boardService.getAllBoardsBySort(pageable);
+            Page<Board> resultPageBoard = boardService.getAllBoards(pageable);
 
             //then
             assertThat(resultPageBoard.getContent().get(0).getUser().getEmail()).isEqualTo("email@test.com");
