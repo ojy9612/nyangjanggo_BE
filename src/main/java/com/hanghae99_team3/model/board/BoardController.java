@@ -33,7 +33,7 @@ public class BoardController {
         // nginx용 헬스체크 함수 (상태코드 200을 반환하는지)
     }
 
-//    @Cacheable(value = CacheKey.BOARD, key = "#boardId", cacheManager = "cacheManager")
+    @Cacheable(value = CacheKey.BOARD, key = "#boardId", cacheManager = "cacheManager")
     @GetMapping("/api/board/{boardId}")
     public BoardDetailResponseDto getOneBoard(@PathVariable Long boardId) {
         return new BoardDetailResponseDto(boardService.findBoardById(boardId));
@@ -46,8 +46,8 @@ public class BoardController {
     }
 
     @GetMapping("/api/boards")
-    public Page<BoardResponseDto> getAllBoardsByEntityName(@RequestParam String columName, Pageable pageable) {
-        return boardService.getAllBoardsByEntityName(columName, pageable).map(BoardResponseDto::new);
+    public Page<BoardResponseDto> getAllBoards(Pageable pageable) {
+        return boardService.getAllBoards(pageable).map(BoardResponseDto::new);
     }
 
     @GetMapping("/api/boards/resource")
