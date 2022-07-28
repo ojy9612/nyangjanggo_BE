@@ -5,6 +5,7 @@ import com.hanghae99_team3.exception.newException.IdDifferentException;
 import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDto;
 import com.hanghae99_team3.model.board.repository.BoardRepository;
+import com.hanghae99_team3.model.good.GoodService;
 import com.hanghae99_team3.model.images.ImagesService;
 import com.hanghae99_team3.model.recipestep.RecipeStepService;
 import com.hanghae99_team3.model.resource.service.ResourceService;
@@ -33,6 +34,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardDocumentService boardDocumentService;
     private final UserService userService;
+    private final GoodService goodService;
     private final ImagesService imagesService;
     private final ResourceService resourceService;
     private final RecipeStepService recipeStepService;
@@ -50,6 +52,14 @@ public class BoardService {
 
     public Page<Board> getAllBoards(Pageable pageable) {
         return boardRepository.findAll(pageable);
+    }
+
+
+    public Page<Board> getBoardByUserGood(PrincipalDetails principalDetails,Pageable pageable) {
+        User user = userService.findUserByAuthEmail(principalDetails);
+        List<Long> boardIdList = goodService.getBoardIdListByUser(user);
+
+        return boardRepository.findAllByIdIn(boardIdList,pageable);
     }
 
     @Transactional
@@ -119,7 +129,4 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
-    public Page<Board> getAllBoardsByEntityName(String columName, Pageable pageable) {
-        return boardRepository.findAllByEntityName(columName,pageable);
-    }
 }
