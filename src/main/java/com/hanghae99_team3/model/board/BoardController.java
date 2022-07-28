@@ -40,6 +40,12 @@ public class BoardController {
         return new BoardDetailResponseDto(boardService.findBoardById(boardId));
     }
 
+    @GetMapping("/api/boards/user/good")
+    public Page<BoardResponseDto> getBoardByUserGood(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                               Pageable pageable){
+        return boardService.getBoardByUserGood(principalDetails, pageable).map(BoardResponseDto::new);
+    }
+
     @GetMapping("/api/boards/preview")
     public List<BoardResponseDto> getBoardsBySortPreview(@RequestParam String entityName){
         return boardService.getBoardsBySortPreview(entityName).stream()
