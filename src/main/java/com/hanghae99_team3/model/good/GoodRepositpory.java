@@ -5,10 +5,13 @@ import com.hanghae99_team3.model.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
+import java.util.List;
 import java.util.Optional;
 
 
 public interface GoodRepositpory extends JpaRepository<Good, Long> {
     Optional<Good> findByBoardAndUser(Board board, User user);
+
+    List<Good> findAllByUser(User user);
 
 }

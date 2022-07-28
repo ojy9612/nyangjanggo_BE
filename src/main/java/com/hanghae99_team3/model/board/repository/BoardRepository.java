@@ -21,9 +21,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Page<Board> findAllByIdIn(List<Long> boardIdList, Pageable pageable);
     List<Board> findAllByIdIn(List<Long> boardIdSet);
 
-
     @Query("select b from Board b order by :columName")
-    Page<Board> findAllByEntityName(@Param(value = "columName") String columName, Pageable pageable);
+    Page<Board> getBoardByUserGood(@Param(value = "columName") String columName, Pageable pageable);
 
     Optional<Board> findByUserAndStatus(User user, String status);
 
