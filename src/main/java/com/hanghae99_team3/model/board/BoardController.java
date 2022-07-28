@@ -47,8 +47,8 @@ public class BoardController {
     }
 
     @GetMapping("/api/boards")
-    public Page<BoardResponseDto> getAllBoardsByEntityName(@RequestParam String columName, Pageable pageable) {
-        return boardService.getAllBoardsByEntityName(columName, pageable).map(BoardResponseDto::new);
+    public Page<BoardResponseDto> getAllBoards(Pageable pageable) {
+        return boardService.getAllBoards(pageable).map(BoardResponseDto::new);
     }
 
     @GetMapping("/api/boards/resource")
