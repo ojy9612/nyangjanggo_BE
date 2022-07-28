@@ -18,6 +18,9 @@
     "userNickname": {
       "type": "keyword"
     },
+    "mainImageLink": {
+      "type": "keyword"
+    },
     "goodCount": {
       "type": "integer"
     },
