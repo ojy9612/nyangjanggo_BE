@@ -1,13 +1,14 @@
 package com.hanghae99_team3.model.board;
 
 
-import com.hanghae99_team3.config.CacheKey;
+import com.hanghae99_team3.config.redis.CacheKey;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDto;
 import com.hanghae99_team3.model.board.dto.response.BoardDetailResponseDto;
 import com.hanghae99_team3.model.board.dto.response.BoardResponseDto;
 import com.hanghae99_team3.model.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -84,6 +85,8 @@ public class BoardController {
         boardService.createBoard(principalDetails, boardId, boardRequestDto);
     }
 
+
+    @CacheEvict(value = CacheKey.BOARD, key = "#boardId", cacheManager = "cacheManager")
     @PutMapping("/api/board")
     public void updateBoard(@AuthenticationPrincipal PrincipalDetails principalDetails,
                             @RequestParam Long boardId,
