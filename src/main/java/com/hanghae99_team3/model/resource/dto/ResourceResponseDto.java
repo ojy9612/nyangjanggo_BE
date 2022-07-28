@@ -6,10 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Getter
 @NoArgsConstructor
-public class ResourceResponseDto {
+public class ResourceResponseDto implements Serializable {
 
     private String resourceName;
     private String amount;

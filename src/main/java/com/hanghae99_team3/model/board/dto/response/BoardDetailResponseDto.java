@@ -9,13 +9,14 @@ import com.hanghae99_team3.model.resource.dto.ResourceResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-public class BoardDetailResponseDto {
+public class BoardDetailResponseDto implements Serializable {
 
     private Long boardId;
     private String status;

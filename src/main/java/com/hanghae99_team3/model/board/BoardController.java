@@ -1,7 +1,7 @@
 package com.hanghae99_team3.model.board;
 
 
-import com.hanghae99_team3.config.CacheKey;
+import com.hanghae99_team3.config.redis.CacheKey;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.board.dto.request.BoardRequestDto;
 import com.hanghae99_team3.model.board.dto.response.BoardDetailResponseDto;
@@ -9,6 +9,7 @@ import com.hanghae99_team3.model.board.dto.response.BoardResponseDto;
 import com.hanghae99_team3.model.board.service.BoardDocumentService;
 import com.hanghae99_team3.model.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +34,7 @@ public class BoardController {
         // nginx용 헬스체크 함수 (상태코드 200을 반환하는지)
     }
 
-//    @Cacheable(value = CacheKey.BOARD, key = "#boardId", cacheManager = "cacheManager")
+    @Cacheable(value = CacheKey.BOARD, key = "#boardId", cacheManager = "cacheManager")
     @GetMapping("/api/board/{boardId}")
     public BoardDetailResponseDto getOneBoard(@PathVariable Long boardId) {
         return new BoardDetailResponseDto(boardService.findBoardById(boardId));
@@ -46,8 +47,8 @@ public class BoardController {
     }
 
     @GetMapping("/api/boards")
-    public Page<BoardResponseDto> getAllBoardsByEntityName(@RequestParam String columName, Pageable pageable) {
-        return boardService.getAllBoardsByEntityName(columName, pageable).map(BoardResponseDto::new);
+    public Page<BoardResponseDto> getAllBoards(Pageable pageable) {
+        return boardService.getAllBoards(pageable).map(BoardResponseDto::new);
     }
 
     @GetMapping("/api/boards/resource")
@@ -123,6 +124,8 @@ public class BoardController {
         boardService.createBoard(principalDetails,boardId,boardRequestDto);
     }
 
+
+    @CacheEvict(value = CacheKey.BOARD, key = "#boardId", cacheManager = "cacheManager")
     @PutMapping("/api/board")
     public void updateBoard(@AuthenticationPrincipal PrincipalDetails principalDetails,
                             @RequestParam Long boardId,

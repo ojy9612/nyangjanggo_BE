@@ -46,12 +46,12 @@ public class UserController {
     public void updateUser(@RequestPart UserReqDto userDto,
                            @RequestPart MultipartFile multipartFile,
                            @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        userService.updateUser(userDto, multipartFile, principalDetails);
+        userService.updateUser(principalDetails.getUsername(), userDto, multipartFile, principalDetails);
     }
 
     @DeleteMapping("/api/user")
     public void deleteUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        userService.deleteUser(principalDetails);
+        userService.deleteUser(principalDetails.getUsername(), principalDetails);
     }
 
     // 닉네임 중복 확인

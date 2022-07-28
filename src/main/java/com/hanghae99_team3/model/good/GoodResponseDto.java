@@ -4,10 +4,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Getter
 @NoArgsConstructor
-public class GoodResponseDto {
+public class GoodResponseDto implements Serializable {
 
     private String nickname;
     private String userImg;

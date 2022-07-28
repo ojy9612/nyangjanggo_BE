@@ -48,7 +48,7 @@ public class BoardService {
         return boardRepository.findFirst10By(Sort.by(entityName));
     }
 
-    public Page<Board> getAllBoardsBySort(Pageable pageable) {
+    public Page<Board> getAllBoards(Pageable pageable) {
         return boardRepository.findAll(pageable);
     }
 
