@@ -25,7 +25,7 @@ public class ElasticSearchConfig extends AbstractElasticsearchConfiguration {
     public RestHighLevelClient elasticsearchClient() {
 
         RestClientBuilder builder = RestClient.builder(
-                        new HttpHost("localhost", 9200))
+                        new HttpHost("localhost", 9200,"https"))
                 .setHttpClientConfigCallback(httpClientBuilder -> httpClientBuilder
                         .setDefaultCredentialsProvider(credentialsProvider()));
 
