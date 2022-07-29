@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @RestController
 public class UserController {
 
-    //Test
     private final UserService userService;
 
     @Autowired
@@ -30,6 +29,11 @@ public class UserController {
     }
 
 
+    /**
+     * User 정보 조회 API
+     * @param principalDetails : 인증된 유저 정보
+     * @return UserResDto : 닉네임, 유저사진, 자기소개글
+     */
     @GetMapping("/api/user")
     public UserResDto getUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         return new UserResDto(
@@ -39,6 +43,13 @@ public class UserController {
         );
     }
 
+
+    /**
+     * User 정보 수정 API
+     * @param userDto : 변경할 nickname, userDescription
+     * @param multipartFile : 변경할 유저 사진
+     * @param principalDetails : 인증된 유저 정보
+     */
     @PutMapping("/api/user")
     public void updateUser(@RequestPart UserReqDto userDto,
                            @RequestPart MultipartFile multipartFile,
@@ -46,12 +57,22 @@ public class UserController {
         userService.updateUser(principalDetails.getUsername(), userDto, multipartFile, principalDetails);
     }
 
+
+    /**
+     * User 탈퇴 API
+     * @param principalDetails 인증된 유저 정보
+     */
     @DeleteMapping("/api/user")
     public void deleteUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         userService.deleteUser(principalDetails.getUsername(), principalDetails);
     }
 
-    // 닉네임 중복 확인
+
+    /**
+     * User Nickname 중복 확인 API
+     * @param nickname : 중복 확인할 nickname
+     * @return 사용할 수 있다면 true, 중복된 닉네임이면 false
+     */
     @GetMapping("/api/user/checkNickname")
     public ResponseEntity<Map<String, String>> checkNickname(@RequestParam String nickname) {
         Map<String, String> response = new HashMap<>();
@@ -62,6 +83,8 @@ public class UserController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+
 
     @GetMapping("/api/user/fridge")
     public List<FridgeResponseDto> getFridge(@AuthenticationPrincipal PrincipalDetails principalDetails){

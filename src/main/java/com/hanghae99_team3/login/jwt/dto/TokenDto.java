@@ -10,6 +10,7 @@ public class TokenDto {
     private String refreshToken;
     private Long accessTokenExpireDate;
     private Long refreshTokenExpireDate;
+
     @Builder
     public TokenDto(String accessToken, String refreshToken, Long accessTokenExpireDate, Long refreshTokenExpireDate) {
         this.accessToken = accessToken;

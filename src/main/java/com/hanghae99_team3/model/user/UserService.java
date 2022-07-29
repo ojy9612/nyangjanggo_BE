@@ -7,12 +7,9 @@ import com.hanghae99_team3.model.fridge.FridgeService;
 import com.hanghae99_team3.model.fridge.dto.FridgeRequestDto;
 import com.hanghae99_team3.model.s3.AwsS3Service;
 import com.hanghae99_team3.model.user.domain.User;
-import com.hanghae99_team3.model.user.domain.dto.NicknameDto;
 import com.hanghae99_team3.model.user.domain.dto.UserReqDto;
-import com.hanghae99_team3.model.user.repository.UserRepository;
-import com.hanghae99_team3.login.jwt.JwtTokenProvider;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,20 +18,40 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private final JwtTokenProvider jwtTokenProvider;
     private final AwsS3Service awsS3Service;
     private final FridgeService fridgeService;
 
 
+    @Autowired
+    public UserService(UserRepository userRepository, AwsS3Service awsS3Service, FridgeService fridgeService) {
+        this.userRepository = userRepository;
+        this.awsS3Service = awsS3Service;
+        this.fridgeService = fridgeService;
+    }
+
+
+    /**
+     * PrincipalDetails 에서 User 객체가 필요할 때 사용
+     * @param principalDetails : 인증된 user 정보
+     * @return User 객체
+     */
     public User findUserByAuthEmail(PrincipalDetails principalDetails) {
         return userRepository.findByEmail(principalDetails.getUsername()).orElseThrow(
                 () -> new IllegalArgumentException("유저 정보가 없습니다."));
     }
 
+
+    /**
+     * User update method
+     * @param email : 캐싱된 데이터의 Key 구분자
+     * @param userReqDto : nickname, userDescription
+     * @param multipartFile : 변경할 유저 사진
+     * @param principalDetails : 인증된 user 정보
+     */
     @Transactional
     @CacheEvict(value = CacheKey.USER, key = "#email", cacheManager = "cacheManager")
     public void updateUser(String email, UserReqDto userReqDto, MultipartFile multipartFile, PrincipalDetails principalDetails) {
@@ -49,20 +66,29 @@ public class UserService {
             awsS3Service.deleteFile(user.getUserImg());
             user.update(userReqDto, newImg);
         }
-
     }
 
 
-
+    /**
+     * User delete method
+     * @param email : 캐싱된 데이터의 Key 구분자
+     * @param principalDetails : 인증된 user 정보
+     */
     @Transactional
     @CacheEvict(value = CacheKey.USER, key = "#email", cacheManager = "cacheManager")
     public void deleteUser(String email, PrincipalDetails principalDetails) {
-        User user = this.findUserByAuthEmail(principalDetails);
-        //기존 이미지 삭제
-        awsS3Service.deleteFile(user.getUserImg());
-        userRepository.deleteById(user.getId());
+        // 기존 이미지 삭제
+        awsS3Service.deleteFile(principalDetails.getUserImg());
+        // User 삭제
+        userRepository.deleteById(principalDetails.getUserId());
     }
 
+
+    /**
+     * Duplicated nickname check method
+     * @param nickname : 중복 확인할 nickname
+     * @return : 사용할 수 있다면 true, 중복된 닉네임이면 false
+     */
     public boolean checkNicknameDup(String nickname) {
         Optional<User> user = userRepository.findByNickname(nickname);
         return user.isEmpty();
@@ -88,31 +114,5 @@ public class UserService {
 
         fridgeService.updateFridge(fridgeRequestDtoList,user);
     }
-
-
-
-//    public Long join(SignupMemberDto memberDto) {
-//        String username = memberDto.getUsername();
-//        Optional<User> found = userRepository.findByEmail(username);
-//        if (found.isPresent()) {
-//            throw new IllegalArgumentException("중복된 사용자 ID 가 존재합니다.");
-//        }
-//
-//        User user = new User(username);
-//        return userRepository.save(user).getId();
-//    }
-
-//    public Map<String, String> login(LoginMemberDto memberDto) {
-//        Map<String, String> token = new HashMap<>();
-//
-//        User user = userRepository.findByEmail(memberDto.getUsername())
-//                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 username 입니다."));
-//
-//        token.put("Access-Token", jwtTokenProvider.createToken(user.getEmail(), user.getRole()));
-//        return token;
-//    }
-
-
-
 
 }

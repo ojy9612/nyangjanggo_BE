@@ -10,7 +10,6 @@ import com.hanghae99_team3.model.user.domain.AuthProvider;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.domain.UserRole;
 import com.hanghae99_team3.model.user.domain.dto.UserReqDto;
-import com.hanghae99_team3.model.user.repository.UserRepository;
 import com.hanghae99_team3.security.MockSpringSecurityFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
