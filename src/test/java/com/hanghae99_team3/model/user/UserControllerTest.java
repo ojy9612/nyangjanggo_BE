@@ -1,18 +1,17 @@
 package com.hanghae99_team3.model.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hanghae99_team3.login.jwt.JwtTokenProvider;
+import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.fridge.Fridge;
 import com.hanghae99_team3.model.fridge.FridgeService;
 import com.hanghae99_team3.model.fridge.dto.FridgeRequestDto;
-import com.hanghae99_team3.model.fridge.dto.FridgeResponseDto;
-import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;
 import com.hanghae99_team3.model.user.domain.AuthProvider;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.domain.UserRole;
+import com.hanghae99_team3.model.user.domain.dto.UserReqDto;
 import com.hanghae99_team3.model.user.repository.UserRepository;
 import com.hanghae99_team3.security.MockSpringSecurityFilter;
-import com.hanghae99_team3.login.jwt.JwtTokenProvider;
-import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,7 +42,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -54,7 +52,6 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -128,49 +125,82 @@ class UserControllerTest {
                 ));
 
     }
-//
-//    @Test
-//    @DisplayName("회원정보 수정")
-//    void updateUser() throws Exception {
-//        //given
-//        MockMultipartFile image = new MockMultipartFile(
-//                "userImg",
-//                "userImg.png",
-//                "image/png",
-//                "<<png data>>".getBytes(StandardCharsets.UTF_8));
-//
-//        //when
-//        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/user");
-//        builder.with(request -> {
-//            request.setMethod("PUT");
-//            return request;
-//        });
-//
-//        ResultActions resultActions = this.mockMvc.perform(builder
-//                .file(image)
-//                        .param("nickname", "nickname")
-//                        .param("userDescription", "userDescription")
-//                .header("Access-Token", accessToken)
-//                .contentType(MediaType.MULTIPART_FORM_DATA)
-//                .principal(mockPrincipal));
-//
-//        //then
-//        resultActions.andExpect(status().isOk())
-//                .andDo(print())
-//                .andDo(document("put-user",
-//                        requestHeaders(
-//                                headerWithName("Access-Token").description("Jwt Access-Token")
-//                        ),
-//                        requestParameters(
-//                                parameterWithName("nickname").description("변경할 닉네임"),
-//                                parameterWithName("userDescription").description("변경할 유저 소개글")
-//                        ),
-//                        requestParts(
-//                                partWithName("userImg").description("변경할 프로필 이미지 ")
-//                        )
-//                ));
-//
-//    }
+
+
+    @Test
+    @DisplayName("닉네임 중복 확인")
+    void checkNickname() throws Exception {
+        //given
+
+        //when
+        ResultActions resultActions = this.mockMvc.perform(get("/api/user/checkNickname?nickname=nickname")
+                        .header("Access-Token", accessToken));
+
+        //then
+        resultActions.andDo(print())
+                .andExpect(status().isOk())
+
+                .andDo(document("check-nickname",
+                        requestHeaders(headerWithName("Access-Token").description("Jwt Access-Token")),
+                        requestParameters(
+                                parameterWithName("nickname").description("중복확인할 닉네임")
+                        ),
+                        responseFields(
+                                fieldWithPath("check").description("사용 가능하면 true, 불가능하면 false")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("회원정보 수정")
+    void updateUser() throws Exception {
+        //given
+        UserReqDto userReqDto = UserReqDto.builder()
+                .nickname("변경할 닉네임")
+                .userDescription("변경할 유저 소개글")
+                .build();
+        MockMultipartFile mockUserReqDto = new MockMultipartFile(
+                "userDto",
+                "userDto",
+                "application/json",
+                objectMapper.writeValueAsString(userReqDto).getBytes(StandardCharsets.UTF_8)
+        );
+
+        MockMultipartFile multipartFile = new MockMultipartFile(
+                "multipartFile",
+                "userImg.png",
+                "image/png",
+                "<<png data>>".getBytes(StandardCharsets.UTF_8));
+
+        //when
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/api/user");
+        builder.with(request -> {
+            request.setMethod("PUT");
+            return request;
+        });
+
+        ResultActions resultActions = this.mockMvc.perform(builder
+                .file(multipartFile)
+                .file(mockUserReqDto)
+                .header("Access-Token", accessToken)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .principal(mockPrincipal));
+
+        //then
+        resultActions.andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("put-user",
+                        requestHeaders(
+                                headerWithName("Access-Token").description("Jwt Access-Token")
+                        ),
+
+                        requestParts(
+                                partWithName("multipartFile").description("변경할 프로필 이미지"),
+                                partWithName("userDto").description(objectMapper.writeValueAsString(userReqDto))
+                        )
+                ));
+
+    }
 
     @Test
     @DisplayName("회원 탈퇴")

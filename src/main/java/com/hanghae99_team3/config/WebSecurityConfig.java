@@ -1,11 +1,10 @@
 package com.hanghae99_team3.config;
 
 import com.hanghae99_team3.login.exception.CustomAuthenticationEntryPoint;
+import com.hanghae99_team3.login.handler.OAuth2SuccessHandler;
 import com.hanghae99_team3.login.handler.TokenAccessDeniedHandler;
 import com.hanghae99_team3.login.jwt.JwtAuthFilter;
 import com.hanghae99_team3.login.jwt.JwtTokenProvider;
-import com.hanghae99_team3.login.handler.OAuth2SuccessHandler;
-import com.hanghae99_team3.model.user.domain.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +30,6 @@ import java.util.Arrays;
 public class WebSecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
-//    private final PrincipalOauth2UserService oAuth2UserService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final TokenAccessDeniedHandler tokenAccessDeniedHandler;
 

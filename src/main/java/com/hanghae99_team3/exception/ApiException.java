@@ -48,11 +48,6 @@ public class ApiException extends RuntimeException {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errors);
     }
 
-    /**
-     * SseEmitter Exception Handler
-     */
-
-
 
     /**
      * Refresh Token Exception Handler
