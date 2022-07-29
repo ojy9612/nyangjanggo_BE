@@ -53,6 +53,7 @@ public class ResourceService {
 
     public void createResourceTest(List<ResourceRequestDto> resourceRequestDtoList, Board board) {
 
+        List<ResourceKeywordDocument> resourceKeywordDocumentList = new ArrayList<>();
         resourceRequestDtoList.forEach(resourceRequestDto -> {
             Resource resource = Resource.builder()
                     .resourceRequestDto(resourceRequestDto)
@@ -65,13 +66,14 @@ public class ResourceService {
             if (optionalResourceKeywordDocument.isPresent()) {
                 ResourceKeywordDocument resourceKeywordDocument = optionalResourceKeywordDocument.get();
                 resourceKeywordDocument.plusCnt();
-                resourceSearchRepository.save(resourceKeywordDocument);
+                resourceKeywordDocumentList.add(resourceKeywordDocument);
             } else {
-                resourceSearchRepository.save(ResourceKeywordDocument.builder()
+                resourceKeywordDocumentList.add(ResourceKeywordDocument.builder()
                         .resource(resource)
                         .build()
                 );
             }
+            resourceSearchRepository.saveAll(resourceKeywordDocumentList);
 
             resourceRepository.save(resource);
         });
@@ -87,13 +89,15 @@ public class ResourceService {
         List<String> resourceNameList = board.getResourceList().stream()
                 .map(Resource::getResourceName).collect(Collectors.toList());
 
+        List<ResourceKeywordDocument> resourceKeywordDocumentList = new ArrayList<>();
         resourceNameList.forEach(s -> resourceSearchRepository.findByResourceNameKeyword(s).ifPresent(resourceKeywordDocument -> {
                     resourceKeywordDocument.minusCnt();
                     if (resourceKeywordDocument.getCnt() <= 0) {
-                        resourceSearchRepository.delete(resourceKeywordDocument);
+                        resourceKeywordDocumentList.add(resourceKeywordDocument);
                     }
                 }
         ));
+        resourceSearchRepository.deleteAll(resourceKeywordDocumentList);
 
         resourceRepository.deleteAll(resourceRepository.findAllByBoard(board));
     }
