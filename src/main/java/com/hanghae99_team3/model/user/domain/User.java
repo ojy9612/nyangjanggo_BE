@@ -5,12 +5,13 @@ import com.hanghae99_team3.model.comment.Comment;
 import com.hanghae99_team3.model.fridge.Fridge;
 import com.hanghae99_team3.model.good.Good;
 import com.hanghae99_team3.model.user.domain.dto.UserReqDto;
-import com.sun.istack.NotNull;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 

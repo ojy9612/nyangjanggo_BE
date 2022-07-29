@@ -39,22 +39,19 @@ public class JwtAuthFilter extends GenericFilterBean {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         // 검증
-        log.info("[Verifying Token]");
+//        log.info("[Verifying Token]");
 
-        // 헤더에서 JWT 를 받아옵니다.
-
+        // 헤더에서 JWT 추출
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
 
-        // 유효한 토큰인지 확인합니다.
+        // 유효한 토큰인지 확인, 예외는 AuthenticationEntryPoint 로 보내준다.
         try {
             if (token != null && jwtTokenProvider.validateToken(token)) {
                 // 토큰이 유효하면 토큰으로부터 유저 정보를 받아옵니다.
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 // SecurityContext 에 Authentication 객체를 저장합니다.
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-
             }
-
         } catch (ExpiredJwtException e) {
             log.error(e.getMessage());
             request.setAttribute("exception", ErrorCode.EXPIRED_ACCESS_TOKEN);

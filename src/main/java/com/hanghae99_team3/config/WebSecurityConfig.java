@@ -5,7 +5,7 @@ import com.hanghae99_team3.login.handler.OAuth2SuccessHandler;
 import com.hanghae99_team3.login.handler.TokenAccessDeniedHandler;
 import com.hanghae99_team3.login.jwt.JwtAuthFilter;
 import com.hanghae99_team3.login.jwt.JwtTokenProvider;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -24,7 +24,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
-@RequiredArgsConstructor
+
 @EnableWebSecurity
 @Configuration
 public class WebSecurityConfig {
@@ -32,6 +32,14 @@ public class WebSecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final TokenAccessDeniedHandler tokenAccessDeniedHandler;
+
+    @Autowired
+    public WebSecurityConfig(JwtTokenProvider jwtTokenProvider, OAuth2SuccessHandler oAuth2SuccessHandler, TokenAccessDeniedHandler tokenAccessDeniedHandler) {
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.oAuth2SuccessHandler = oAuth2SuccessHandler;
+        this.tokenAccessDeniedHandler = tokenAccessDeniedHandler;
+    }
+
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
@@ -50,7 +58,7 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         // h2-console 사용에 대한 허용 (CSRF, FrameOptions 무시)
-        return (web) ->
+        return web ->
                 web
                         .ignoring()
                         .antMatchers("/h2-console/**");
@@ -91,11 +99,7 @@ public class WebSecurityConfig {
                     .antMatchers("/refresh/**").permitAll()
                     .antMatchers("/docs/**").permitAll()
 
-                    //Test
-                    .antMatchers("/api/subscribe/**").permitAll()
-                    .antMatchers("/api/publish/**").permitAll()
-                    .antMatchers("/sseTest.html").permitAll()
-                    .antMatchers("/test/**").permitAll()
+
                     .antMatchers("/api/health").permitAll()
                     .antMatchers("/**").hasAnyRole("USER")
 //                    .anyRequest().permitAll()

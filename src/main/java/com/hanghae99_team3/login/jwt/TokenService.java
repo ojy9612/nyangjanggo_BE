@@ -8,7 +8,6 @@ import com.hanghae99_team3.login.jwt.dto.TokenDto;
 import com.hanghae99_team3.login.jwt.dto.TokenResponseDto;
 import com.hanghae99_team3.login.jwt.entity.RefreshToken;
 import com.hanghae99_team3.login.jwt.repository.RefreshTokenRepository;
-import com.hanghae99_team3.model.user.repository.UserRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,13 +85,10 @@ public class TokenService {
         // accessToken 에서 User 불러오기
         String userPk = jwtTokenProvider.getUserPkFromToken(accessToken);
         PrincipalDetails principalDetails = (PrincipalDetails) userDetailsService.loadUserByUsername(userPk);
-//        User user = userRepository.findByEmail(userPk).orElseThrow(
-//                () -> new UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다."));
 
 
         // refreshToken valid 검증
         jwtTokenProvider.validateToken(refreshToken);
-
 
 
         // DB에 저장된 refreshToken과 일치하는지 검증

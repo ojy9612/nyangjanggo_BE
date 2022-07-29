@@ -22,7 +22,7 @@ import java.util.Map;
 
 @Slf4j
 @RestControllerAdvice
-public class ApiException extends RuntimeException {
+public class GlobalControllerAdvice extends RuntimeException {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException e) {
@@ -54,10 +54,11 @@ public class ApiException extends RuntimeException {
      */
     @ExceptionHandler(RefreshTokenException.class)
     public ResponseEntity<ExceptionCode> handleRefreshTokenException(RefreshTokenException e) {
-        ErrorCode errorCode;
-        log.error(e.getMessage());
-        switch (e.getMessage()) {
 
+        log.error(e.getMessage());
+
+        ErrorCode errorCode;
+        switch (e.getMessage()) {
             case "RefreshToken을 찾을 수 없습니다.":
                 errorCode = ErrorCode.REFRESH_TOKEN_NOT_FOUND;
                 return ResponseEntity.status(errorCode.getStatus())
@@ -81,6 +82,7 @@ public class ApiException extends RuntimeException {
     public ResponseEntity<ExceptionCode> handleTokenExpiredYetException(NotExpiredTokenYetException e) {
         log.error(e.getMessage());
         ErrorCode errorCode = ErrorCode.NOT_EXPIRED_TOKEN_YET;
+
         return ResponseEntity.status(errorCode.getStatus()).body(new ExceptionCode(errorCode));
     }
 
@@ -89,6 +91,7 @@ public class ApiException extends RuntimeException {
     public ResponseEntity<ExceptionCode> handleExpiredRefreshTokenException(ExpiredJwtException e) {
         log.error(e.getMessage());
         ErrorCode errorCode = ErrorCode.EXPIRED_REFRESH_TOKEN;
+
         return ResponseEntity.status(errorCode.getStatus()).body(new ExceptionCode(errorCode));
     }
 
@@ -96,6 +99,7 @@ public class ApiException extends RuntimeException {
     public ResponseEntity<ExceptionCode> handleRefreshSignException(SignatureException e) {
         log.error(e.getMessage());
         ErrorCode errorCode = ErrorCode.REFRESH_SIGNATURE_NOT_MATCH;
+
         return ResponseEntity.status(errorCode.getStatus()).body(new ExceptionCode(errorCode));
     }
 
@@ -103,6 +107,7 @@ public class ApiException extends RuntimeException {
     public ResponseEntity<ExceptionCode> handleRefreshTokenException(JwtException e) {
         log.error(e.getMessage());
         ErrorCode errorCode = ErrorCode.INVALID_TOKEN;
+
         return ResponseEntity.status(errorCode.getStatus()).body(new ExceptionCode(errorCode));
     }
 

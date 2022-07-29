@@ -3,7 +3,6 @@ package com.hanghae99_team3.model.user.domain.dto;
 import lombok.*;
 
 @Getter
-@Setter
 @NoArgsConstructor
 public class UserReqDto {
     private String nickname;
