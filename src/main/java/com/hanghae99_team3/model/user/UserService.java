@@ -39,10 +39,17 @@ public class UserService {
     @CacheEvict(value = CacheKey.USER, key = "#email", cacheManager = "cacheManager")
     public void updateUser(String email, UserReqDto userReqDto, MultipartFile multipartFile, PrincipalDetails principalDetails) {
         User user = this.findUserByAuthEmail(principalDetails);
-        //기존 이미지 삭제
-        awsS3Service.deleteFile(user.getUserImg());
 
-        user.update(userReqDto,awsS3Service.uploadFile(multipartFile));
+        String newImg = awsS3Service.uploadFile(multipartFile);
+        if (newImg.equals("")) {
+            user.update(userReqDto, user.getUserImg());
+        }
+        else {
+            //기존 이미지 삭제
+            awsS3Service.deleteFile(user.getUserImg());
+            user.update(userReqDto, newImg);
+        }
+
     }
 
 
