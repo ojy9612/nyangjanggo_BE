@@ -1,15 +1,17 @@
 package com.hanghae99_team3.model.user.domain.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class UserReqDto {
     private String nickname;
     private String userDescription;
+
+    @Builder
+    public UserReqDto(String nickname, String userDescription) {
+        this.nickname = nickname;
+        this.userDescription = userDescription;
+    }
 }

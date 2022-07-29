@@ -95,6 +95,7 @@ public class BoardController {
         boardService.updateBoard(principalDetails, boardId, boardRequestDto);
     }
 
+    @CacheEvict(value = CacheKey.BOARD, key = "#boardId", cacheManager = "cacheManager")
     @DeleteMapping("/api/board")
     public void deleteBoard(@AuthenticationPrincipal PrincipalDetails principalDetails,
                             @RequestParam Long boardId) {
