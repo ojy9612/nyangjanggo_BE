@@ -3,9 +3,7 @@ package com.hanghae99_team3.model.user;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.fridge.dto.FridgeRequestDto;
 import com.hanghae99_team3.model.fridge.dto.FridgeResponseDto;
-import com.hanghae99_team3.model.user.domain.UserRole;
 import com.hanghae99_team3.model.user.domain.dto.NicknameDto;
-import com.hanghae99_team3.model.user.domain.dto.UserInfoDto;
 import com.hanghae99_team3.model.user.domain.dto.UserReqDto;
 import com.hanghae99_team3.model.user.domain.dto.UserResDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +54,9 @@ public class UserController {
 
     // 닉네임 중복 확인
     @GetMapping("/api/user/checkNickname")
-    public ResponseEntity<Map<String, String>> checkNickname(@RequestBody NicknameDto nicknameDto) {
+    public ResponseEntity<Map<String, String>> checkNickname(@RequestParam String nickname) {
         Map<String, String> response = new HashMap<>();
-        if (userService.checkNicknameDup(nicknameDto.getNickname())) {
+        if (userService.checkNicknameDup(nickname)) {
             response.put("check", "true");
         } else {
             response.put("check", "false");
@@ -83,31 +81,5 @@ public class UserController {
                              @RequestPart List<FridgeRequestDto> fridgeRequestDtoList){
         userService.updateFridge(principalDetails,fridgeRequestDtoList);
     }
-
-
-//    @RequestMapping("/auth")
-//    public Authentication auth() {
-//        return SecurityContextHolder.getContext()
-//                .getAuthentication();
-//    }
-
-//    @PostMapping("/join")
-//    public Long join(@RequestBody SignupMemberDto signupMemberDto) {
-//        return userService.join(signupMemberDto);
-//    }
-
-//    @PostMapping("/login")
-//    public Map<String, String> login(@RequestBody LoginMemberDto loginMemberDto) {
-//        return userService.login(loginMemberDto);
-//    }
-
-    @PostMapping("/member/memberInfo")
-    public UserInfoDto getUserInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        System.out.println("principalDetails = " + principalDetails);
-        String username = principalDetails.getUsername();
-        UserRole roles = principalDetails.getRole();
-        return new UserInfoDto(username, roles);
-    }
-
 
 }

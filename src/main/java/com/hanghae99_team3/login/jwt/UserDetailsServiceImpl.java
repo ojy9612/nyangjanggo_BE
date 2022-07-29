@@ -1,7 +1,6 @@
 package com.hanghae99_team3.login.jwt;
 
 import com.hanghae99_team3.config.redis.CacheKey;
-import com.hanghae99_team3.login.oauth2.userinfo.DummyUserInfo;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

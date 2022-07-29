@@ -2,19 +2,16 @@ package com.hanghae99_team3.login.jwt;
 
 
 import com.hanghae99_team3.login.cookie.CookieUtil;
-import com.hanghae99_team3.login.exception.RefreshTokenException;
 import com.hanghae99_team3.login.exception.NotExpiredTokenYetException;
+import com.hanghae99_team3.login.exception.RefreshTokenException;
 import com.hanghae99_team3.login.jwt.dto.TokenDto;
-import com.hanghae99_team3.login.jwt.dto.TokenRequestDto;
 import com.hanghae99_team3.login.jwt.dto.TokenResponseDto;
 import com.hanghae99_team3.login.jwt.entity.RefreshToken;
 import com.hanghae99_team3.login.jwt.repository.RefreshTokenRepository;
-import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.repository.UserRepository;
 import io.jsonwebtoken.ExpiredJwtException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,13 +22,18 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class TokenService {
 
-    private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    public TokenService(JwtTokenProvider jwtTokenProvider, RefreshTokenRepository refreshTokenRepository, UserDetailsServiceImpl userDetailsService) {
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.refreshTokenRepository = refreshTokenRepository;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Transactional
     public TokenDto login (PrincipalDetails principalDetails) {

@@ -23,7 +23,7 @@ public class JobScheduler {
 //    private final JobLauncher jobLauncher;
 //    private final JobConfiguration jobConfiguration;
 //
-////    @Scheduled(cron = "0 0 6 * * ?", zone = "Asia/Seoul")
+//    @Scheduled(cron = "0 0 6 * * ?", zone = "Asia/Seoul")
 //    public void runDeleteImageJob() {
 //        Map<String, JobParameter> confMap = new HashMap<>();
 //        confMap.put("time", new JobParameter(System.currentTimeMillis()));
@@ -39,7 +39,7 @@ public class JobScheduler {
 //        }
 //    }
 //
-////    @Scheduled(initialDelay = 10000, fixedDelay = 30000)
+//    @Scheduled(initialDelay = 10000, fixedDelay = 30000)
 //    public void runUpdateGoodCountJob(){
 //        Map<String, JobParameter> confMap = new HashMap<>();
 //        confMap.put("time", new JobParameter(System.currentTimeMillis()));

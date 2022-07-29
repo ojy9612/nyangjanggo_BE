@@ -100,13 +100,13 @@ public class RedisConfig {
                         .fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair
                         .fromSerializer(new JdkSerializationRedisSerializer()));
-//                        .fromSerializer(new StringRedisSerializer()));
+
 
         Map<String, RedisCacheConfiguration> cacheConfiguration = new HashMap<>();
 
         cacheConfiguration.put(CacheKey.USER, redisCacheConfiguration.entryTtl(Duration.ofSeconds(CacheKey.USER_EXPIRE_SEC)));
         cacheConfiguration.put(CacheKey.BOARD, redisCacheConfiguration.entryTtl(Duration.ofSeconds(CacheKey.DEFAULT_EXPIRE_SEC)));
-        cacheConfiguration.put(CacheKey.COMMENT, redisCacheConfiguration.entryTtl(Duration.ofSeconds(CacheKey.DEFAULT_EXPIRE_SEC)));
+
 
         return RedisCacheManager
                 .RedisCacheManagerBuilder
