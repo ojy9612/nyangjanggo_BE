@@ -3,7 +3,6 @@ package com.hanghae99_team3.model.user;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.fridge.dto.FridgeRequestDto;
 import com.hanghae99_team3.model.fridge.dto.FridgeResponseDto;
-import com.hanghae99_team3.model.user.domain.dto.NicknameDto;
 import com.hanghae99_team3.model.user.domain.dto.UserReqDto;
 import com.hanghae99_team3.model.user.domain.dto.UserResDto;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -20,11 +20,9 @@ public class GoodController {
     @CacheEvict(value = CacheKey.BOARD, key = "#boardId", cacheManager = "cacheManager")
     @GetMapping("/api/board/{boardId}/good")
     public void createAndRemoveGood(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                     @PathVariable Long boardId){
+                                    @PathVariable Long boardId) {
 
-        goodService.createAndRemoveGood(principalDetails,boardId);
+        goodService.createAndRemoveGood(principalDetails, boardId);
     }
-
-
 
 }
