@@ -1,11 +1,15 @@
 package com.hanghae99_team3.login.oauth2.userinfo;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Map;
 
+@Slf4j
 public class KakaoUserInfo implements OAuth2UserInfo{
     private final Map<String, Object> attributes;
     private final Map<String, Object> attributesAccount;
     private final Map<String, Object> attributesProfile;
+
 
     public KakaoUserInfo(Map<String, Object> attributes) {
         /*
@@ -24,6 +28,7 @@ public class KakaoUserInfo implements OAuth2UserInfo{
             }
         */
         this.attributes = attributes;
+
         this.attributesAccount = (Map<String, Object>) attributes.get("kakao_account");
         this.attributesProfile = (Map<String, Object>) attributesAccount.get("profile");
     }
@@ -55,7 +60,14 @@ public class KakaoUserInfo implements OAuth2UserInfo{
 
     @Override
     public String getUserImg() {
-        return "";
+        try {
+            return attributesProfile.get("thumbnail_image_url").toString();
+        } catch (NullPointerException e) {
+            log.info("thumbnail_img 없음");
+            return null;
+        }
+
+
     }
 
 

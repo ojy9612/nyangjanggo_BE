@@ -36,12 +36,7 @@ public class CookieUtil {
 
         response.addHeader("Set-Cookie", cookie.toString());
 
-//        Cookie cookie = new Cookie(name, value);
-//        cookie.setPath("/");
-//        cookie.setHttpOnly(true);
-//        cookie.setMaxAge(maxAge);
-//        cookie.setSecure(true);
-//        response.addCookie(cookie);
+
     }
 
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
