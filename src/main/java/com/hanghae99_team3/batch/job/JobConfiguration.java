@@ -49,11 +49,13 @@ public class JobConfiguration {
     public Job deleteDeadImageJob(){
         return jobBuilderFactory.get("deleteDeadImagejob")
                 .start(checkPort())
-                .on("FAILED")
-                .end()
+                    .on("FAILED")
+                    .end()
                 .from(checkPort())
-                .on("COMPLETE")
-                .to(deleteDeadImage())
+                    .on("COMPLETED")
+                    .to(deleteDeadImage())
+                    .on("*")
+                    .end()
                 .end()
                 .build();
     }
@@ -62,11 +64,13 @@ public class JobConfiguration {
     public Job updateGoodCountJob(){
         return jobBuilderFactory.get("updateGoodCountJob")
                 .start(checkPort())
-                .on("FAILED")
-                .end()
+                    .on("FAILED")
+                    .end()
                 .from(checkPort())
-                .on("COMPLETE")
-                .to(updateGoodCount())
+                    .on("COMPLETED")
+                    .to(updateGoodCount())
+                    .on("*")
+                    .end()
                 .end()
                 .build();
     }
@@ -91,9 +95,8 @@ public class JobConfiguration {
                         // Port 번호가 다르다면 Failed 같다면 Complete
                         if (!processingPort.equals(port)) {
                             log.error("checkPort 실패");
-                            stepContribution.setExitStatus(ExitStatus.FAILED);
-                        }else {
                             log.info("현재 포트번호 : " + port + "사용중인 포트번호 : " + processingPort);
+                            stepContribution.setExitStatus(ExitStatus.FAILED);
                         }
 
                     } catch (IOException | NumberFormatException e) {
@@ -133,7 +136,6 @@ public class JobConfiguration {
         return stepBuilderFactory.get("updateGoodCount")
                 .tasklet((stepContribution, chunkContext) ->{
                     // 변경이 감지된 BoardId를 받아옴
-                    System.out.println("??실행되지?");
                     List<Long> boardIdList = new ArrayList<>(saveCount.popAllBoardId());
 
                     // BoardDocument와 Board를 가져와서 영속성 컨텍스트에 등록
@@ -147,8 +149,6 @@ public class JobConfiguration {
                     }
                     boardDocumentRepository.saveAll(boardDocumentList);
                     log.info("업데이트된 Board ID : " + boardIdList);
-                    if (!boardIdList.isEmpty())
-                        log.info("업데이트된 Board ID : " + boardIdList.get(0));
                     return RepeatStatus.FINISHED;
                 }).build();
     }
