@@ -97,6 +97,8 @@ public class JobConfiguration {
                             log.error("checkPort 실패");
                             log.info("현재 포트번호 : " + port + "사용중인 포트번호 : " + processingPort);
                             stepContribution.setExitStatus(ExitStatus.FAILED);
+                        }else {
+                            log.info("현재 포트번호 : " + port + "사용중인 포트번호 : " + processingPort);
                         }
 
                     } catch (IOException | NumberFormatException e) {
