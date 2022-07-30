@@ -38,6 +38,8 @@ public class GoodService {
             goodRepositpory.save(good);
         }
         saveCount.appendBoardId(board.getId());
+        System.out.println("보드아이디 :" + board.getId());
+        System.out.println("보드 :" + board.getGoodCount());
     }
 
     public List<Long> getBoardIdListByUser(User user) {
