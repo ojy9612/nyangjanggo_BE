@@ -133,6 +133,7 @@ public class JobConfiguration {
         return stepBuilderFactory.get("updateGoodCount")
                 .tasklet((stepContribution, chunkContext) ->{
                     // 변경이 감지된 BoardId를 받아옴
+                    System.out.println("??실행되지?");
                     List<Long> boardIdList = new ArrayList<>(saveCount.popAllBoardId());
 
                     // BoardDocument와 Board를 가져와서 영속성 컨텍스트에 등록
