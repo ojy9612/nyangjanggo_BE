@@ -92,6 +92,8 @@ public class JobConfiguration {
                         if (!processingPort.equals(port)) {
                             log.error("checkPort 실패");
                             stepContribution.setExitStatus(ExitStatus.FAILED);
+                        }else {
+                            log.info("현재 포트번호 : " + port + "사용중인 포트번호 : " + processingPort);
                         }
 
                     } catch (IOException | NumberFormatException e) {
@@ -143,6 +145,9 @@ public class JobConfiguration {
                         boardDocumentList.get(i).updateCount(board.getGoodCount(),board.getCommentCount());
                     }
                     boardDocumentRepository.saveAll(boardDocumentList);
+                    log.info("업데이트된 Board ID : " + boardIdList);
+                    if (!boardIdList.isEmpty())
+                        log.info("업데이트된 Board ID : " + boardIdList.get(0));
                     return RepeatStatus.FINISHED;
                 }).build();
     }
