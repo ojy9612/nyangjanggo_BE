@@ -24,16 +24,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-public class testController {
+public class TestController {
 
     private final BoardDocumentRepository boardDocumentRepository;
     private final BoardRepository boardRepository;
@@ -50,7 +47,7 @@ public class testController {
         List<Long> boardIdList = boardDocumentRepository.findFirst2By().stream()
                 .map(BoardDocument::getId).collect(Collectors.toList());
 
-        return boardRepository.findAllByIdIn(boardIdList, pageable).map(BoardResponseDto::new);
+        return boardRepository.findAllByIdInAndStatus(boardIdList, pageable, "complete").map(BoardResponseDto::new);
     }
     @GetMapping("/api/resources/elastic")
     public List<ResourceKeywordDocument> getAllResourceKeywordDocument(Pageable pageable){
@@ -149,5 +146,19 @@ public class testController {
         boardDocumentRepository.saveAll(collect);
     }
 
+    @GetMapping("/test/boards/elastic")
+    public Page<BoardDocument> findAllBoardDocument(Pageable pageable){
+        return boardDocumentRepository.findAll(pageable);
+    }
+
+    @GetMapping("/test/resources/elastic")
+    public Page<ResourceKeywordDocument> findAllResourceKeyword(Pageable pageable){
+        return resourceSearchRepository.findAll(pageable);
+    }
+
+    @DeleteMapping("/test/boards/elastic")
+    public void deleteBoardDocuments(){
+        boardDocumentRepository.deleteAll();
+    }
 }
 
