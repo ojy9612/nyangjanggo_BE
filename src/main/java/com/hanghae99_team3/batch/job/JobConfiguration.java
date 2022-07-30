@@ -94,8 +94,8 @@ public class JobConfiguration {
 
                         // Port 번호가 다르다면 Failed 같다면 Complete
                         if (!processingPort.equals(port)) {
-                            log.error("checkPort 실패");
-                            log.info("현재 포트번호 : " + port + "사용중인 포트번호 : " + processingPort);
+                            log.warn("checkPort 실패");
+                            log.warn("현재 포트번호 : " + port + "사용중인 포트번호 : " + processingPort);
                             stepContribution.setExitStatus(ExitStatus.FAILED);
                         }
 
