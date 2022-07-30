@@ -49,11 +49,13 @@ public class JobConfiguration {
     public Job deleteDeadImageJob(){
         return jobBuilderFactory.get("deleteDeadImagejob")
                 .start(checkPort())
-                .on("FAILED")
-                .end()
+                    .on("FAILED")
+                    .end()
                 .from(checkPort())
-                .on("COMPLETE")
-                .to(deleteDeadImage())
+                    .on("COMPLETED")
+                    .to(deleteDeadImage())
+                    .on("*")
+                    .end()
                 .end()
                 .build();
     }
@@ -62,11 +64,13 @@ public class JobConfiguration {
     public Job updateGoodCountJob(){
         return jobBuilderFactory.get("updateGoodCountJob")
                 .start(checkPort())
-                .on("FAILED")
-                .end()
+                    .on("FAILED")
+                    .end()
                 .from(checkPort())
-                .on("COMPLETE")
-                .to(updateGoodCount())
+                    .on("COMPLETED")
+                    .to(updateGoodCount())
+                    .on("*")
+                    .end()
                 .end()
                 .build();
     }
@@ -91,6 +95,7 @@ public class JobConfiguration {
                         // Port 번호가 다르다면 Failed 같다면 Complete
                         if (!processingPort.equals(port)) {
                             log.error("checkPort 실패");
+                            log.info("현재 포트번호 : " + port + "사용중인 포트번호 : " + processingPort);
                             stepContribution.setExitStatus(ExitStatus.FAILED);
                         }
 
@@ -143,6 +148,7 @@ public class JobConfiguration {
                         boardDocumentList.get(i).updateCount(board.getGoodCount(),board.getCommentCount());
                     }
                     boardDocumentRepository.saveAll(boardDocumentList);
+                    log.info("업데이트된 Board ID : " + boardIdList);
                     return RepeatStatus.FINISHED;
                 }).build();
     }
