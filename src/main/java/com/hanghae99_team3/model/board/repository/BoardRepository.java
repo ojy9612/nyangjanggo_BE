@@ -3,7 +3,6 @@ package com.hanghae99_team3.model.board.repository;
 
 import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.user.domain.User;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,13 +15,13 @@ import java.util.Optional;
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
 
-    Page<Board> findAllByIdIn(List<Long> boardIdList, Pageable pageable);
+    Page<Board> findAllByIdInAndStatus(List<Long> boardIdList, Pageable pageable, String status);
 
     List<Board> findAllByIdIn(List<Long> boardIdSet);
 
     Optional<Board> findByUserAndStatus(User user, String status);
 
-    List<Board> findFirst10By(Sort sort);
+    List<Board> findFirst10ByStatus(Sort sort, String status);
 
-    @NotNull Page<Board> findAll(@NotNull Pageable pageable);
+    Page<Board> findAllByStatus(Pageable pageable, String status);
 }

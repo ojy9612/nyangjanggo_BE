@@ -48,12 +48,12 @@ public class BoardService {
 
     // 게시글 10개만 보여주기 (colum 이름 기준)
     public List<Board> getBoardsBySortPreview(String columName) {
-        return boardRepository.findFirst10By(Sort.by(Sort.Direction.DESC, columName));
+        return boardRepository.findFirst10ByStatus(Sort.by(Sort.Direction.DESC, columName), "complete");
     }
 
     // 전체 게시글 조회 ex) [url]?page=0&size=10&sort=goodCount,desc
     public Page<Board> getAllBoards(Pageable pageable) {
-        return boardRepository.findAll(pageable);
+        return boardRepository.findAllByStatus(pageable, "complete");
     }
 
     // 좋아요 누른 게시글만 보여주기
@@ -61,7 +61,7 @@ public class BoardService {
         User user = userService.findUserByAuthEmail(principalDetails);
         List<Long> boardIdList = goodService.getBoardIdListByUser(user);
 
-        return boardRepository.findAllByIdIn(boardIdList, pageable);
+        return boardRepository.findAllByIdInAndStatus(boardIdList, pageable, "complete");
     }
 
     // 이미지만 업로드하기
