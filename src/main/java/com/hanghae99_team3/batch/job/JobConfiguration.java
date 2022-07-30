@@ -138,17 +138,20 @@ public class JobConfiguration {
                     // 변경이 감지된 BoardId를 받아옴
                     List<Long> boardIdList = new ArrayList<>(saveCount.popAllBoardId());
 
-                    // BoardDocument와 Board를 가져와서 영속성 컨텍스트에 등록
-                    List<BoardDocument> boardDocumentList = boardDocumentRepository.findAllByIdIn(boardIdList);
-                    List<Board> boardList = boardRepository.findAllByIdIn(boardIdList);
+                    if (!boardIdList.isEmpty()){
+                        // BoardDocument와 Board를 가져와서 영속성 컨텍스트에 등록
+                        List<BoardDocument> boardDocumentList = boardDocumentRepository.findAllByIdIn(boardIdList);
+                        List<Board> boardList = boardRepository.findAllByIdIn(boardIdList);
 
-                    // goodCount와 commentCount를 update
-                    for (int i = 0; i < boardList.size(); i++){
-                        Board board = boardList.get(i);
-                        boardDocumentList.get(i).updateCount(board.getGoodCount(),board.getCommentCount());
+                        // goodCount와 commentCount를 update
+                        for (int i = 0; i < boardList.size(); i++){
+                            Board board = boardList.get(i);
+                            boardDocumentList.get(i).updateCount(board.getGoodCount(),board.getCommentCount());
+                        }
+                        boardDocumentRepository.saveAll(boardDocumentList);
+                        log.info("업데이트된 Board ID : " + boardIdList);
                     }
-                    boardDocumentRepository.saveAll(boardDocumentList);
-                    log.info("업데이트된 Board ID : " + boardIdList);
+
                     return RepeatStatus.FINISHED;
                 }).build();
     }
