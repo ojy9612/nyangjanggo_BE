@@ -2,7 +2,7 @@ package com.hanghae99_team3.login.jwt;
 
 import com.hanghae99_team3.config.redis.CacheKey;
 import com.hanghae99_team3.model.user.domain.User;
-import com.hanghae99_team3.model.user.repository.UserRepository;
+import com.hanghae99_team3.model.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;

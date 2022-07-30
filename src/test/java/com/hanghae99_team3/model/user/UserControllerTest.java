@@ -10,7 +10,6 @@ import com.hanghae99_team3.model.user.domain.AuthProvider;
 import com.hanghae99_team3.model.user.domain.User;
 import com.hanghae99_team3.model.user.domain.UserRole;
 import com.hanghae99_team3.model.user.domain.dto.UserReqDto;
-import com.hanghae99_team3.model.user.repository.UserRepository;
 import com.hanghae99_team3.security.MockSpringSecurityFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -49,8 +48,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -72,6 +70,8 @@ class UserControllerTest {
     private User testUser;
     private Principal mockPrincipal;
     ObjectMapper objectMapper = new ObjectMapper();
+
+
 
     // MockMvc, Spring Rest Docs Setup
     @BeforeEach
@@ -131,7 +131,6 @@ class UserControllerTest {
     @DisplayName("닉네임 중복 확인")
     void checkNickname() throws Exception {
         //given
-
         //when
         ResultActions resultActions = this.mockMvc.perform(get("/api/user/checkNickname?nickname=nickname")
                         .header("Access-Token", accessToken));
@@ -193,7 +192,6 @@ class UserControllerTest {
                         requestHeaders(
                                 headerWithName("Access-Token").description("Jwt Access-Token")
                         ),
-
                         requestParts(
                                 partWithName("multipartFile").description("변경할 프로필 이미지"),
                                 partWithName("userDto").description(objectMapper.writeValueAsString(userReqDto))

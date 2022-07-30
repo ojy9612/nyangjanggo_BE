@@ -18,9 +18,9 @@ public class TokenController {
         this.tokenService = tokenService;
     }
 
+
     @GetMapping("/refresh")
     public TokenResponseDto refresh(HttpServletRequest request, HttpServletResponse response){
-
         return tokenService.refresh(request, response);
     }
 }

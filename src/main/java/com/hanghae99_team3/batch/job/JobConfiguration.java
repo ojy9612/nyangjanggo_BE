@@ -9,7 +9,7 @@ import com.hanghae99_team3.model.images.Images;
 import com.hanghae99_team3.model.images.ImagesRepository;
 import com.hanghae99_team3.model.s3.AwsS3Service;
 import com.hanghae99_team3.model.user.domain.User;
-import com.hanghae99_team3.model.user.repository.UserRepository;
+import com.hanghae99_team3.model.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;

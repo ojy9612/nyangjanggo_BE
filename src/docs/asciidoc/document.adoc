@@ -22,25 +22,55 @@ include::{snippets}/get-user/http-response.adoc[]
 include::{snippets}/get-user/response-fields.adoc[]
 
 
+[[check-nickname]]
+=== 닉네임 중복 확인
+==== curl request
+include::{snippets}/check-nickname/curl-request.adoc[]
+==== HTTP request
+include::{snippets}/check-nickname/http-request.adoc[]
+==== request param
+include::{snippets}/check-nickname/request-parameters.adoc[]
+==== HTTP response
+include::{snippets}/check-nickname/http-response.adoc[]
+==== response body
+include::{snippets}/check-nickname/response-body.adoc[]
+include::{snippets}/check-nickname/response-fields.adoc[]
+
+
 [[user-put]]
 === 회원정보 변경
 ==== curl request
 include::{snippets}/put-user/curl-request.adoc[]
 ==== HTTP request
 include::{snippets}/put-user/http-request.adoc[]
-
+==== request parts
+include::{snippets}/put-user/request-parts.adoc[]
 ==== HTTP response
 include::{snippets}/put-user/http-response.adoc[]
 
+
+[[user-delete]]
+=== 회원 삭제
+==== curl request
+include::{snippets}/delete-user/curl-request.adoc[]
+==== HTTP request
+include::{snippets}/delete-user/http-request.adoc[]
+==== HTTP response
+include::{snippets}/delete-user/http-response.adoc[]
+
+
+[[get-fridge]]
 === 냉장고 조회
 ==== curl request
 include::{snippets}/get-getFridge/curl-request.adoc[]
-==== request header
-include::{snippets}/get-getFridge/request-headers.adoc[]
+==== HTTP request
+include::{snippets}/get-getFridge/http-request.adoc[]
+==== HTTP response
+include::{snippets}/get-getFridge/http-response.adoc[]
 ==== response fields
 include::{snippets}/get-getFridge/response-fields.adoc[]
-==== response data
-include::{snippets}/get-getFridge/response-body.adoc[]
+//==== response data
+//include::{snippets}/get-getFridge/response-body.adoc[]
 
 === 냉장고 등록
 ==== curl request
@@ -55,13 +85,14 @@ include::{snippets}/post-createFridge/request-body.adoc[]
 === 냉장고 수정
 ==== curl request
 include::{snippets}/put-updateFridge/curl-request.adoc[]
-==== request header
-include::{snippets}/put-updateFridge/request-headers.adoc[]
+==== HTTP request
+include::{snippets}/put-updateFridge/http-request.adoc[]
 ==== request fields
 include::{snippets}/put-updateFridge/request-parts.adoc[]
-==== request data
-include::{snippets}/put-updateFridge/request-body.adoc[]
+==== HTTP response
+include::{snippets}/put-updateFridge/http-response.adoc[]
 
+//여기까지 함
 
 == Board Api
 
