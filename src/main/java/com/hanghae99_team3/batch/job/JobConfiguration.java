@@ -49,9 +49,6 @@ public class JobConfiguration {
     public Job deleteDeadImageJob(){
         return jobBuilderFactory.get("deleteDeadImagejob")
                 .start(checkPort())
-                .on("FAILED")
-                .end()
-                .from(checkPort())
                 .on("COMPLETE")
                 .to(deleteDeadImage())
                 .end()
@@ -62,9 +59,6 @@ public class JobConfiguration {
     public Job updateGoodCountJob(){
         return jobBuilderFactory.get("updateGoodCountJob")
                 .start(checkPort())
-                .on("FAILED")
-                .end()
-                .from(checkPort())
                 .on("COMPLETE")
                 .to(updateGoodCount())
                 .end()
