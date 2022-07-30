@@ -104,4 +104,9 @@ public class UserController {
         userService.updateFridge(principalDetails,fridgeRequestDtoList);
     }
 
+    @GetMapping("/test/user/userInfo")
+    public String testUser(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return principalDetails.getUserImg();
+    }
+
 }
