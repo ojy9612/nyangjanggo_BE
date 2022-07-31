@@ -19,23 +19,33 @@
 
 ### Tech Stack
 
-- Elastic Search
+- Spring
+    - Spring Boot
+    
+- DataBase
+    - MySQL
+    - Redis
+    - Spring data JPA
+    
+- 검색 기능
+    - Elastic Search
 
-- Spring Boot
-- Spring Security
-- Spring Batch
-- Spring Rest Docs
+- 로그인
+    - JWT
+    - OAuth2.0
+    - Spring Security
 
-- JWT
-- OAuth2.0
+- 배포
+    - Githup Actions
+    - Code Deploy
+    - Nginx
+    - AWS EC2
+    - AWS S3
+    - AWS RDS
 
-- MySQL
-- Redis
-- Spring Data Jpa
+- 문서화
+    - Spring Rest Docs + Asciidoc
+    
+    
+### Trouble Shooting
 
-- Github Actions
-- Code Deploy
-- Nginx
-- AWS EC2
-- AWS S3
-- AWS RDS
