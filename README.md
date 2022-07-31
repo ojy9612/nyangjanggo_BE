@@ -19,7 +19,9 @@
 
 ### Tech Stack
 
-- spring Boot
+- Elastic Search
+
+- Spring Boot
 - Spring Security
 - Spring Batch
 - Spring Rest Docs
