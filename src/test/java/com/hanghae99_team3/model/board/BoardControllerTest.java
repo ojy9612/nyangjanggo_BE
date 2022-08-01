@@ -235,45 +235,47 @@ class BoardControllerTest {
                         )
                 ));
     }
-//
-//    @Test
-//    @DisplayName("조건별 게시글 전체 조회")
-//    void getAllBoardsBySort() throws Exception {
-//        //given
-//        List<Board> boardList = new ArrayList<>();
-//        for(int i = 0; i < 15; i ++){
-//            boardList.add(Board.emptyBuilder()
-//                    .user(baseUser)
-//                    .build()
-//            );
-//        }
-//
-//        Page<Board> boardPage = new PageImpl<>(boardList);
-//
-//        //when
-//        when(boardService.getAllBoardsBySort(
-//                any(Pageable.class)
-//        ))
-//                .thenReturn(boardPage);
-//
-//        ResultActions resultActions = mockMvc.perform(
-//                get("/api/boards?page=0&size=5&sort=goodCount,desc"));
-//
-//        //then
-//        resultActions
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andDo(document("R_getAllBoardsBySort",
-//                        requestParameters(
-//                                parameterWithName("sort").description("정렬하고자 하는 Entity 의 이름(goodCount,createdAt)과 정렬방식(desc,asc)").optional(),
-//                                parameterWithName("page").description("페이지 번호(0부터 시작)").optional(),
-//                                parameterWithName("size").description("한 페이지에 불러올 게시글 수").optional()
-//                        ),
-//                        responseFields(
-//                                pageBoardResponseDto
-//                        )
-//                ));
-//    }
+
+    @Test
+    @DisplayName("좋아요한 게시글만 불러오기")
+    void getBoardByUserGood() throws Exception {
+        //given
+
+        List<Board> boardList = new ArrayList<>();
+        for (int i = 0 ; i < 15; i++){
+            boardList.add(Board.emptyBuilder()
+                    .user(baseUser)
+                    .build()
+            );
+        }
+
+        Page<Board> boardPage = new PageImpl<>(boardList);
+
+        //when
+        when(boardService.getBoardByUserGood(
+                any(PrincipalDetails.class),
+                any(Pageable.class)
+        ))
+                .thenReturn(boardPage);
+
+        ResultActions resultActions = mockMvc.perform(
+                get("/api/boards/user/good")
+                        .header("Access-Token", accessToken)
+                        .principal(mockPrincipal));
+
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("R_getBoardByUserGood",
+                        requestHeaders(
+                                headerWithName("Access-Token").description("Jwt Access-Token")
+                        ),
+                        responseFields(
+                                pageBoardResponseDto
+                        )
+                ));
+    }
 
     @Test
     @DisplayName("조건별 게시글 10개만 불러오기")
@@ -307,6 +309,46 @@ class BoardControllerTest {
                         ),
                         responseFields(
                                 listBoardResponseDto
+                        )
+                ));
+    }
+
+
+    @Test
+    @DisplayName("조건별 게시글 전체 조회")
+    void getAllBoards() throws Exception {
+        //given
+        List<Board> boardList = new ArrayList<>();
+        for(int i = 0; i < 15; i ++){
+            boardList.add(Board.emptyBuilder()
+                    .user(baseUser)
+                    .build()
+            );
+        }
+
+        Page<Board> boardPage = new PageImpl<>(boardList);
+
+        //when
+        when(boardService.getAllBoards(
+                any(Pageable.class)
+        ))
+                .thenReturn(boardPage);
+
+        ResultActions resultActions = mockMvc.perform(
+                get("/api/boards?page=0&size=5&sort=goodCount,desc"));
+
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("R_getAllBoards",
+                        requestParameters(
+                                parameterWithName("sort").description("정렬하고자 하는 Entity 의 이름(goodCount,createdAt)과 정렬방식(desc,asc)").optional(),
+                                parameterWithName("page").description("페이지 번호(0부터 시작)").optional(),
+                                parameterWithName("size").description("한 페이지에 불러올 게시글 수").optional()
+                        ),
+                        responseFields(
+                                pageBoardResponseDto
                         )
                 ));
     }
