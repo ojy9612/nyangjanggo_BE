@@ -56,7 +56,7 @@ S3에 사용되지 않는 이미지를 삭제하기 위해 스케쥴러를 사�
 - redis   
 
 동일한 데이터를 빈번하게 요청하는 토큰 인증([UserServiceImpl.java](https://github.com/ojy9612/hanghae99_team3/blob/master/src/main/java/com/hanghae99_team3/login/jwt/UserDetailsServiceImpl.java))과
-게시물 정보 요청([BoardController->getOneBoard API](https://github.com/ojy9612/hanghae99_team3/blob/master/src/main/java/com/hanghae99_team3/model/board/BoardController.java))에 redis cache를 적용하여 DB부하를 줄이고
+게시물 데이터 요청([BoardController->getOneBoard API](https://github.com/ojy9612/hanghae99_team3/blob/master/src/main/java/com/hanghae99_team3/model/board/BoardController.java))에 redis cache를 적용하여 DB부하를 줄이고
 보다 빠른 응답을 기대할 수 있습니다.
 
 
