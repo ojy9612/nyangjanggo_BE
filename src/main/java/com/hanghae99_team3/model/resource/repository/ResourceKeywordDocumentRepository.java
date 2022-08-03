@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-public interface ResourceSearchRepository extends ElasticsearchRepository<ResourceKeywordDocument, Long> {
+public interface ResourceKeywordDocumentRepository extends ElasticsearchRepository<ResourceKeywordDocument, Long> {
 
 
     @NotNull List<ResourceKeywordDocument> findAll();
