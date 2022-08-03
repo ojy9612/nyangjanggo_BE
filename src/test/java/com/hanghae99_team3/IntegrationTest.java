@@ -425,22 +425,22 @@ public class IntegrationTest {
             assertThat(baseBoard.getRecipeStepList()).hasSize(2);
         }
 
-        @Test
-        @Transactional
-        @DisplayName("게시글 수정")
-        void updateBoard() {
-            //given
-            boardController.createBoard(baseUserDetails, baseBoard.getId(),baseBoardRequestDto);
-
-            //when
-            boardController.updateBoard(baseUserDetails, baseBoard.getId(),baseBoardRequestDto);
-
-            //then
-            assertThat(baseBoard.getStatus()).isEqualTo("complete");
-            assertThat(baseBoard.getTitle()).isEqualTo("제목");
-            assertThat(baseBoard.getResourceList().get(0).getResourceName()).isEqualTo("재료 이름");
-            assertThat(baseBoard.getRecipeStepList()).hasSize(4);
-        }
+//        @Test
+//        @Transactional
+//        @DisplayName("게시글 수정")
+//        void updateBoard() {
+//            //given
+//            boardController.createBoard(baseUserDetails, baseBoard.getId(),baseBoardRequestDto);
+//
+//            //when
+//            boardController.updateBoard(baseUserDetails, baseBoard.getId(),baseBoardRequestDto);
+//
+//            //then
+//            assertThat(baseBoard.getStatus()).isEqualTo("complete");
+//            assertThat(baseBoard.getTitle()).isEqualTo("제목");
+//            assertThat(baseBoard.getResourceList().get(0).getResourceName()).isEqualTo("재료 이름");
+//            assertThat(baseBoard.getRecipeStepList()).hasSize(4);
+//        }
 
         @Test
         @Transactional
