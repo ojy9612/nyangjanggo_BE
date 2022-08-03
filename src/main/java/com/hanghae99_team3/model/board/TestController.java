@@ -3,21 +3,18 @@ package com.hanghae99_team3.model.board;
 import com.hanghae99_team3.login.jwt.PrincipalDetails;
 import com.hanghae99_team3.model.board.domain.Board;
 import com.hanghae99_team3.model.board.domain.BoardDocument;
-import com.hanghae99_team3.model.board.dto.request.BoardRequestDto;
 import com.hanghae99_team3.model.board.dto.response.BoardResponseDto;
-import com.hanghae99_team3.model.board.repository.BoardRepository;
 import com.hanghae99_team3.model.board.repository.BoardDocumentRepository;
-import com.hanghae99_team3.model.board.service.BoardDocumentService;
+import com.hanghae99_team3.model.board.repository.BoardRepository;
 import com.hanghae99_team3.model.recipestep.RecipeStepService;
 import com.hanghae99_team3.model.resource.domain.Resource;
 import com.hanghae99_team3.model.resource.domain.ResourceKeywordDocument;
 import com.hanghae99_team3.model.resource.dto.ResourceRequestDto;
-import com.hanghae99_team3.model.resource.repository.ResourceSearchRepository;
+import com.hanghae99_team3.model.resource.repository.ResourceKeywordDocumentRepository;
 import com.hanghae99_team3.model.resource.service.ResourceService;
 import com.hanghae99_team3.model.user.UserService;
 import com.hanghae99_team3.model.user.domain.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,12 +31,10 @@ public class TestController {
 
     private final BoardDocumentRepository boardDocumentRepository;
     private final BoardRepository boardRepository;
-    private final BoardDocumentService boardDocumentService;
-    private final ResourceSearchRepository resourceSearchRepository;
+    private final ResourceKeywordDocumentRepository resourceKeywordDocumentRepository;
     private final UserService userService;
     private final ResourceService resourceService;
     private final RecipeStepService recipeStepService;
-    private final ServletWebServerApplicationContext webServerAppCtxt;
 
 
     @GetMapping("/api/boards/elastic")
@@ -50,9 +45,9 @@ public class TestController {
         return boardRepository.findAllByIdInAndStatus(boardIdList, pageable, "complete").map(BoardResponseDto::new);
     }
     @GetMapping("/api/resources/elastic")
-    public List<ResourceKeywordDocument> getAllResourceKeywordDocument(Pageable pageable){
+    public List<ResourceKeywordDocument> getAllResourceKeywordDocument(){
 
-        return resourceSearchRepository.findAll();
+        return resourceKeywordDocumentRepository.findAll();
     }
 
     @PostMapping("/test/resources")
@@ -74,45 +69,7 @@ public class TestController {
             resourceKeywordDocumentList.add(resourceKeywordDocument);
         });
 
-        resourceSearchRepository.saveAll(resourceKeywordDocumentList);
-    }
-
-    @PostMapping("/test/board/bad")
-    @Transactional
-    public void createBoardTest(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                @RequestPart BoardRequestDto boardRequestDto){
-        User user = userService.findUserByAuthEmail(principalDetails);
-
-        Board board = Board.builder()
-                .boardRequestDto(boardRequestDto)
-                .user(user)
-                .build();
-
-        resourceService.createResourceTest(boardRequestDto.getResourceRequestDtoList(), board);
-        recipeStepService.createRecipeStepTest(boardRequestDto.getRecipeStepRequestDtoList(),board);
-
-        board.setStatus("complete");
-        boardDocumentService.createBoard(board);
-        boardRepository.save(board);
-    }
-
-    @PostMapping("/test/board/good")
-    @Transactional
-    public void createBoardTest2(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                @RequestPart BoardRequestDto boardRequestDto){
-        User user = userService.findUserByAuthEmail(principalDetails);
-
-        Board board = Board.builder()
-                .boardRequestDto(boardRequestDto)
-                .user(user)
-                .build();
-
-        resourceService.createResource(boardRequestDto.getResourceRequestDtoList(), board);
-        recipeStepService.createRecipeStep(boardRequestDto.getRecipeStepRequestDtoList(),board);
-
-        board.setStatus("complete");
-        boardDocumentService.createBoard(board);
-        boardRepository.save(board);
+        resourceKeywordDocumentRepository.saveAll(resourceKeywordDocumentList);
     }
 
 
@@ -153,7 +110,7 @@ public class TestController {
 
     @GetMapping("/test/resources/elastic")
     public Page<ResourceKeywordDocument> findAllResourceKeyword(Pageable pageable){
-        return resourceSearchRepository.findAll(pageable);
+        return resourceKeywordDocumentRepository.findAll(pageable);
     }
 
     @DeleteMapping("/test/boards/elastic")

@@ -119,8 +119,9 @@
 //            }
 //
 //            //when
-//            when(boardRepository.findFirst10By(
-//                    any(Sort.class)
+//            when(boardRepository.findFirst10ByStatus(
+//                    any(Sort.class),
+//                    anyString()
 //            )).thenReturn(boardList);
 //
 //            List<Board> resultBoard = boardService.getBoardsBySortPreview("goodCount");
@@ -444,8 +445,9 @@
 //        void getBoardsBySortPreviewWrongEntityName() {
 //            //given
 //            //when
-//            when(boardRepository.findFirst10By(
-//                    any(Sort.class)
+//            when(boardRepository.findFirst10ByStatus(
+//                    any(Sort.class),
+//                    anyString()
 //            )).thenThrow(new MockitoException("PropertyReferenceException 에러 발생"));
 //            // PropertyReferenceException
 //
