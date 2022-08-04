@@ -442,6 +442,7 @@ class BoardControllerTest {
                 ));
     }
 
+
     @Test
     @DisplayName("임시(작성중인) 게시글 저장")
     void createTempBoard() throws Exception {
