@@ -84,6 +84,7 @@ class BoardControllerTest {
             fieldWithPath("status").type(JsonFieldType.STRING).description("게시글 상태(modifying,complete)").optional(),
             fieldWithPath("nickname").type(JsonFieldType.STRING).description("유저 닉네임").optional(),
             fieldWithPath("userImg").type(JsonFieldType.STRING).description("유저 이미지").optional(),
+            fieldWithPath("userDescription").type(JsonFieldType.STRING).description("유저 자기소개").optional(),
             fieldWithPath("title").type(JsonFieldType.STRING).description("게시글 제목").optional(),
             fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 내용").optional(),
             fieldWithPath("mainImg").type(JsonFieldType.STRING).description("게시글 대표 이미지").optional(),

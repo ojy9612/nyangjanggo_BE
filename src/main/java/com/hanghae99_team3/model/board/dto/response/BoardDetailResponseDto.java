@@ -2,7 +2,6 @@ package com.hanghae99_team3.model.board.dto.response;
 
 
 import com.hanghae99_team3.model.board.domain.Board;
-import com.hanghae99_team3.model.comment.dto.CommentResponseDto;
 import com.hanghae99_team3.model.good.GoodResponseDto;
 import com.hanghae99_team3.model.recipestep.dto.RecipeStepResponseDto;
 import com.hanghae99_team3.model.resource.dto.ResourceResponseDto;
@@ -21,6 +20,7 @@ public class BoardDetailResponseDto implements Serializable {
     private Long boardId;
     private String status;
     private String nickname;
+    private String userDescription;
     private String userImg;
     private String title;
     private String content;
@@ -37,6 +37,7 @@ public class BoardDetailResponseDto implements Serializable {
         this.status = board.getStatus();
         this.nickname = board.getUser().getNickname();
         this.userImg = board.getUser().getUserImg();
+        this.userDescription = board.getUser().getUserDescription();
         this.title = board.getTitle();
         this.content = board.getContent();
         this.mainImg = board.getMainImageLink();
