@@ -20,11 +20,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        node-version: [10.x, 12.x, 14.x]
-        redis-version: [4, 5, 6]
-
     steps:
     - uses: actions/checkout@v2
     
@@ -53,24 +48,11 @@ jobs:
       run: chmod +x ./gradlew
       shell: bash
       
-    - name: Git checkout
-      uses: actions/checkout@v2
-
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+    # redis
+    - uses: zhulik/redis-action@1.1.0
       with:
-        node-version: ${{ matrix.node-version }}
-
-    - name: Start Redis
-      uses: supercharge/redis-github-action@1.4.0
-      with:
-        redis-version: ${{ matrix.redis-version }}
-
-    - run: npm install
-
-    - run: npm test
-      env:
-        CI: true
+        redis version: '5'
+        number of databases: 100
         
     #build
     - name: Build with Gradle
