@@ -16,7 +16,9 @@ public enum ErrorCode {
     REFRESH_TOKEN_NOT_FOUND(401, "T005", "Refresh-Token을 찾을 수 없습니다."),
     REFRESH_TOKEN_NOT_MATCH(401, "T006", "Refresh-Token이 일치하지 않습니다."),
     ACCESS_TOKEN_NOT_EXIST(401, "TA007", "Access-Token 내놔"),
-    REFRESH_TOKEN_NOT_EXIST(401, "TR007", "Refresh-Token 내놔");
+    REFRESH_TOKEN_NOT_EXIST(401, "TR007", "Refresh-Token 내놔"),
+
+    ACCESS_DENIED(403, "F001", "접근 권한 없음");
 
     private final int status;
     private final String code;

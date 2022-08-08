@@ -99,7 +99,7 @@ public class WebSecurityConfig {
                     .antMatchers("/refresh/**").permitAll()
                     .antMatchers("/docs/**").permitAll()
 
-
+                    .antMatchers("/test/**").hasAnyRole("ADMIN")
                     .antMatchers("/api/health").permitAll()
                     .antMatchers("/**").hasAnyRole("USER")
 //                    .anyRequest().permitAll()
