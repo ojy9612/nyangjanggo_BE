@@ -1,15 +1,12 @@
 package com.hanghae99_team3.login.jwt;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanghae99_team3.login.exception.ErrorCode;
-import com.hanghae99_team3.login.exception.ExceptionCode;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -20,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
@@ -37,9 +33,6 @@ public class JwtAuthFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
-        // 검증
-//        log.info("[Verifying Token]");
 
         // 헤더에서 JWT 추출
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);

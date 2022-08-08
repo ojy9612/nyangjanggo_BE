@@ -1,18 +1,17 @@
 package com.hanghae99_team3.login.exception;
 
-import lombok.AllArgsConstructor;
+
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
-public class ExceptionCode {
+public class ExceptionResDto {
     private final String code;
     private final String message;
 
 
     @Builder
-    public ExceptionCode(ErrorCode errorCode) {
+    public ExceptionResDto(ErrorCode errorCode) {
         this.code = errorCode.getCode();
         this.message = errorCode.getMessage();
     }

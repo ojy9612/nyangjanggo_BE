@@ -3,7 +3,7 @@ package com.hanghae99_team3.exception;
 import com.hanghae99_team3.exception.newException.IdDifferentException;
 import com.hanghae99_team3.exception.newException.S3UploadFailedException;
 import com.hanghae99_team3.login.exception.ErrorCode;
-import com.hanghae99_team3.login.exception.ExceptionCode;
+import com.hanghae99_team3.login.exception.ExceptionResDto;
 import com.hanghae99_team3.login.exception.RefreshTokenException;
 import com.hanghae99_team3.login.exception.NotExpiredTokenYetException;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -53,7 +53,7 @@ public class GlobalControllerAdvice extends RuntimeException {
      * Refresh Token Exception Handler
      */
     @ExceptionHandler(RefreshTokenException.class)
-    public ResponseEntity<ExceptionCode> handleRefreshTokenException(RefreshTokenException e) {
+    public ResponseEntity<ExceptionResDto> handleRefreshTokenException(RefreshTokenException e) {
 
         log.error(e.getMessage());
 
@@ -62,53 +62,53 @@ public class GlobalControllerAdvice extends RuntimeException {
             case "RefreshToken을 찾을 수 없습니다.":
                 errorCode = ErrorCode.REFRESH_TOKEN_NOT_FOUND;
                 return ResponseEntity.status(errorCode.getStatus())
-                        .body(new ExceptionCode(errorCode));
+                        .body(new ExceptionResDto(errorCode));
             case "RefreshToken이 일치하지 않습니다.":
                 errorCode = ErrorCode.REFRESH_TOKEN_NOT_MATCH;
                 return ResponseEntity.status(errorCode.getStatus())
-                        .body(new ExceptionCode(errorCode));
+                        .body(new ExceptionResDto(errorCode));
             case "RefreshToken이 없습니다.":
                 errorCode = ErrorCode.REFRESH_TOKEN_NOT_EXIST;
                 return ResponseEntity.status(errorCode.getStatus())
-                        .body(new ExceptionCode(errorCode));
+                        .body(new ExceptionResDto(errorCode));
             default:
                 errorCode = ErrorCode.INVALID_TOKEN;
                 return ResponseEntity.status(errorCode.getStatus())
-                        .body(new ExceptionCode(errorCode));
+                        .body(new ExceptionResDto(errorCode));
         }
     }
 
     @ExceptionHandler(NotExpiredTokenYetException.class)
-    public ResponseEntity<ExceptionCode> handleTokenExpiredYetException(NotExpiredTokenYetException e) {
+    public ResponseEntity<ExceptionResDto> handleTokenExpiredYetException(NotExpiredTokenYetException e) {
         log.error(e.getMessage());
         ErrorCode errorCode = ErrorCode.NOT_EXPIRED_TOKEN_YET;
 
-        return ResponseEntity.status(errorCode.getStatus()).body(new ExceptionCode(errorCode));
+        return ResponseEntity.status(errorCode.getStatus()).body(new ExceptionResDto(errorCode));
     }
 
 
     @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<ExceptionCode> handleExpiredRefreshTokenException(ExpiredJwtException e) {
+    public ResponseEntity<ExceptionResDto> handleExpiredRefreshTokenException(ExpiredJwtException e) {
         log.error(e.getMessage());
         ErrorCode errorCode = ErrorCode.EXPIRED_REFRESH_TOKEN;
 
-        return ResponseEntity.status(errorCode.getStatus()).body(new ExceptionCode(errorCode));
+        return ResponseEntity.status(errorCode.getStatus()).body(new ExceptionResDto(errorCode));
     }
 
     @ExceptionHandler(SignatureException.class)
-    public ResponseEntity<ExceptionCode> handleRefreshSignException(SignatureException e) {
+    public ResponseEntity<ExceptionResDto> handleRefreshSignException(SignatureException e) {
         log.error(e.getMessage());
         ErrorCode errorCode = ErrorCode.REFRESH_SIGNATURE_NOT_MATCH;
 
-        return ResponseEntity.status(errorCode.getStatus()).body(new ExceptionCode(errorCode));
+        return ResponseEntity.status(errorCode.getStatus()).body(new ExceptionResDto(errorCode));
     }
 
     @ExceptionHandler(JwtException.class)
-    public ResponseEntity<ExceptionCode> handleRefreshTokenException(JwtException e) {
+    public ResponseEntity<ExceptionResDto> handleRefreshTokenException(JwtException e) {
         log.error(e.getMessage());
         ErrorCode errorCode = ErrorCode.INVALID_TOKEN;
 
-        return ResponseEntity.status(errorCode.getStatus()).body(new ExceptionCode(errorCode));
+        return ResponseEntity.status(errorCode.getStatus()).body(new ExceptionResDto(errorCode));
     }
 
     @ExceptionHandler(PropertyReferenceException.class)
